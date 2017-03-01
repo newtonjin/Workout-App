@@ -20,6 +20,7 @@ public class WeightSelection extends Activity {
     private SeekBar sBar;
     private TextView sBarText;
     private WeightDatabaseAccessor wdb;
+    private LiftDatabaseAccessor ldb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,9 @@ public class WeightSelection extends Activity {
 
         Button submit = (Button)findViewById(R.id.button);
         wdb = new WeightDatabaseAccessor(this);
+        ldb = new LiftDatabaseAccessor(this);
+        ldb.insert("Arms","Curls");
+        //ldb.fillWithData();
 
 
     }
