@@ -9,11 +9,12 @@ import android.util.Log;
 import java.util.Date;
 
 public class WeightDatabaseAccessor extends DatabaseAccessor {
-    private static String databaseName = "Weight.db";
-    public static String tableName = "Weight";
-    public static final String[] COLUMNS = {"ID","USER","DATE","TYPE","LIFT","WEIGHT","REPS"};
+    protected static String databaseName = "Weight.db";
+    protected static String tableName = "Weight";
+    protected static String[] columns = {"ID","USER","DATE","TYPE","LIFT","WEIGHT","REPS"};
+
     public WeightDatabaseAccessor(Context context) {
-        super(context);
+        super(context,tableName, columns);
     }
     public boolean insert(String user,String type,String lift, int weight, int reps) {
         SQLiteDatabase db = this.getWritableDatabase();
