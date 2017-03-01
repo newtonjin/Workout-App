@@ -41,14 +41,20 @@ public class WeightSelection extends Activity {
         super.onDestroy();
     }
     public void submitWeight(View view) {
-        if(reps > 0 && digit1 + digit2 + digit3 > 0) {
-            int weight = digit1*100+digit2*10+digit3;
+        int weight = digit1*100+digit2*10+digit3;
+        if(reps > 0 && weight > 0) {
+
             boolean insertResult = db.insert("Tyler", "Arms", "Curls", weight, reps);
             if(insertResult)
                 Toast.makeText(getApplicationContext(), "Submitted "+weight+" lbs!", Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(getApplicationContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
         }
+        else if(reps < 0)
+            Toast.makeText(getApplicationContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getApplicationContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
+
 
 
     }
