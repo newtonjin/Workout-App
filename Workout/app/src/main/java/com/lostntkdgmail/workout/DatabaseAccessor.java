@@ -16,7 +16,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
 
     public DatabaseAccessor(Context context, String name,String[]cols) {
         super(context, databaseName, null, 1);
-        databaseName = name + ".db";
+        databaseName = name.toLowerCase() + ".db";
         tableName = name;
         col = cols;
         Log.d("Debug", databaseName +" object created");
@@ -24,15 +24,20 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if(col.length == 7)
-            db.execSQL("create table " + tableName +" ("+ col[0]+" INTEGER PRIMARY KEY AUTOINCREMENT,"+ col[1]+" TEXT,"+ col[2]+" TEXT,"+ col[3]+" TEXT,"+ col[4]+" TEXT,"+ col[5]+" INTEGER,"+ col[6]+" INTEGER)");
-        else if(col.length == 3)
-            db.execSQL("create table " + tableName +" ("+ col[0]+" INTEGER PRIMARY KEY AUTOINCREMENT,"+ col[1]+" TEXT,"+ col[2]+" TEXT)");
+        Log.d("Debug","onCreate called for: " + tableName);
+        if(this instanceof WeightDatabaseAccessor) {
+            db.execSQL("create table " + tableName + " (" + col[0] + " INTEGER PRIMARY KEY AUTOINCREMENT," + col[1] + " TEXT," + col[2] + " TEXT," + col[3] + " TEXT," + col[4] + " TEXT," + col[5] + " INTEGER," + col[6] + " INTEGER)");
+            Log.d("Debug","Created Table: "+tableName+"("+col[0]+","+col[1]+","+col[2]+col[3]+","+col[4]+","+col[5]+","+col[6]+")");
+        }
+        else if(this instanceof LiftDatabaseAccessor) {
+            db.execSQL("create table " + tableName + " (" + col[0] + " INTEGER PRIMARY KEY AUTOINCREMENT," + col[1] + " TEXT," + col[2] + " TEXT)");
+            Log.d("Debug","Created Table: "+tableName+"("+col[0]+","+col[1]+","+col[2]+")");
+        }
         else {
-            Log.d("Debug","col.length does not match for Database: "+databaseName);
+            Log.d("Debug","column.length does not match for Database: "+databaseName);
             throw new RuntimeException("Length Mismatched");
         }
-        Log.d("Debug","Database: "+ tableName + " Created");
+        Log.d("Debug","Database: "+ tableName + " Created at: "+databaseName);
     }
 
     @Override
