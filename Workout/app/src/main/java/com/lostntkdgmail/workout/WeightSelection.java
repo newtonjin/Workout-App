@@ -11,8 +11,6 @@ package com.lostntkdgmail.workout;
         import android.widget.NumberPicker;
         import android.widget.Toast;
 
-        import java.util.ArrayList;
-        import java.util.Random;
 
 public class WeightSelection extends Activity {
     private int digit1 = 0;
@@ -50,7 +48,7 @@ public class WeightSelection extends Activity {
             else
                 Toast.makeText(getApplicationContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
         }
-        else if(reps < 0)
+        else if(reps <= 0)
             Toast.makeText(getApplicationContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(getApplicationContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
