@@ -10,13 +10,16 @@ import java.util.ArrayList;
 
 
 public abstract class DatabaseAccessor extends SQLiteOpenHelper {
-    protected static String databaseName = "Name.db";
-    protected static String tableName = "Name";
-    protected static String[] col = {};
+    protected static String databaseName;
+    protected static String tableName;
+    protected static String[] col;
 
-    public DatabaseAccessor(Context context) {
+    public DatabaseAccessor(Context context, String name,String[]cols) {
         super(context, databaseName, null, 1);
-        Log.d("Debug", databaseName +" Created");
+        databaseName = name + ".db";
+        tableName = name;
+        col = cols;
+        Log.d("Debug", databaseName +" object created");
     }
 
     @Override
@@ -45,9 +48,15 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     public ArrayList<String> getAllData() {
         Cursor cursor = getReadableDatabase().query(tableName, col, null, null, null, null, null);
         ArrayList<String> result = new ArrayList<String>();
+
         while(cursor.moveToNext()) {
-            result.add(cursor.getString(0) + "," + cursor.getString(1) + "," + cursor.getString(2) + "," +
-                    cursor.getString(3) + "," + cursor.getString(4) + "," + cursor.getString(5) + "," + cursor.getString(6));
+            String s = "";
+            int i = 0;
+            for(; i < col.length-1; i++) {
+                s += cursor.getString(i) + ",";
+            }
+            s += cursor.getString(i);
+            result.add(s);
         }
         return result;
     }
