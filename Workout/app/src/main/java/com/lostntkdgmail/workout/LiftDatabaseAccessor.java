@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import java.util.Date;
 
 public class LiftDatabaseAccessor extends DatabaseAccessor {
     protected static String databaseName = "Lift.db";
