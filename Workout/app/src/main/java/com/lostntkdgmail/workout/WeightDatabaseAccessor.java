@@ -9,11 +9,15 @@ import android.util.Log;
 import java.util.Date;
 
 public class WeightDatabaseAccessor extends DatabaseAccessor {
-    private static String tableName = "Weight";
-    private static String[] columns = {"ID","USER","DATE","TYPE","LIFT","WEIGHT","REPS"};
+    private static String tableName = "weight";
+    private static final String[] col = {"ID","USER","DATE","TYPE","LIFT","WEIGHT","REPS"};
 
     public WeightDatabaseAccessor(Context context) {
-        super(context,tableName, columns);
+        super(context,tableName, col);
+    }
+    public static void createTable(SQLiteDatabase db) {
+        db.execSQL("create table " + tableName + " (" + col[0] + " INTEGER PRIMARY KEY AUTOINCREMENT," + col[1] + " TEXT," + col[2] + " TEXT," + col[3] + " TEXT," + col[4] + " TEXT," + col[5] + " INTEGER," + col[6] + " INTEGER)");
+        Log.d("Debug","Created Table: "+tableName+"("+col[0]+","+col[1]+","+col[2]+col[3]+","+col[4]+","+col[5]+","+col[6]+")");
     }
     public boolean insert(String user,String type,String lift, int weight, int reps) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -63,7 +67,7 @@ public class WeightDatabaseAccessor extends DatabaseAccessor {
             }
             else {
                 String[] selection = { user};
-                res = db.query(tableName, columns, columns[1] + " = ?", selection, null, null,sorting);
+                res = db.query(tableName, col, col[1] + " = ?", selection, null, null,sorting);
             }
         }
         else {

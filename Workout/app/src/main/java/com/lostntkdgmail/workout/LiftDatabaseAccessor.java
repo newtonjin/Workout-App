@@ -8,11 +8,15 @@ import android.util.Log;
 
 
 public class LiftDatabaseAccessor extends DatabaseAccessor {
-    private static String tableName = "Lift";
-    private static String[] columns = {"ID","Type","Lift"};
+    private static String tableName = "lift";
+    private static final String[] col = {"ID","Type","Lift"};
 
     public LiftDatabaseAccessor(Context context) {
-        super(context, tableName, columns);
+        super(context, tableName, col);
+    }
+    public static void createTable(SQLiteDatabase db) {
+        db.execSQL("create table " + tableName + " (" + col[0] + " INTEGER PRIMARY KEY AUTOINCREMENT," + col[1] + " TEXT," + col[2] + " TEXT)");
+        Log.d("Debug","Created Table: "+tableName+"("+col[0]+","+col[1]+","+col[2]+")");
     }
 
     public boolean insert(String type,String lift) {
