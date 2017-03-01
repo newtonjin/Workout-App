@@ -19,7 +19,7 @@ public class WeightSelection extends Activity {
     private int reps = 0;
     private SeekBar sBar;
     private TextView sBarText;
-    private WeightDatabaseAccessor db;
+    private WeightDatabaseAccessor wdb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,19 +30,21 @@ public class WeightSelection extends Activity {
         setUpNumberPickers();
 
         Button submit = (Button)findViewById(R.id.button);
-        db = new WeightDatabaseAccessor(this);
+        wdb = new WeightDatabaseAccessor(this);
+
+
     }
     @Override
     protected void onDestroy() {
         Log.d("Debug","onDestroy() called");
-        db.close();
+        wdb.close();
         super.onDestroy();
     }
     public void submitWeight(View view) {
         int weight = digit1*100+digit2*10+digit3;
         if(reps > 0 && weight > 0) {
 
-            boolean insertResult = db.insert("Tyler", "Arms", "Curls", weight, reps);
+            boolean insertResult = wdb.insert("Tyler", "Arms", "Curls", weight, reps);
             if(insertResult)
                 Toast.makeText(getApplicationContext(), "Submitted "+weight+" lbs!", Toast.LENGTH_SHORT).show();
             else
