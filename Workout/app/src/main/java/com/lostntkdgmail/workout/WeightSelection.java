@@ -31,7 +31,7 @@ public class WeightSelection extends Activity {
         setUpNumberPickers();
 
         Button submit = (Button)findViewById(R.id.button);
-        db = new DatabaseAccessor(this);
+        db = new WeightDatabaseAccessor(this);
 
 
 
