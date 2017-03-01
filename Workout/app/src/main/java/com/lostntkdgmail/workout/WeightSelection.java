@@ -12,6 +12,7 @@ package com.lostntkdgmail.workout;
         import android.widget.Toast;
 
         import java.util.ArrayList;
+        import java.util.Random;
 
 public class WeightSelection extends Activity {
     private int digit1 = 0;
@@ -20,7 +21,7 @@ public class WeightSelection extends Activity {
     private int reps = 0;
     private SeekBar sBar;
     private TextView sBarText;
-    private DatabaseAccessor db;
+    private WeightDatabaseAccessor db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +33,6 @@ public class WeightSelection extends Activity {
 
         Button submit = (Button)findViewById(R.id.button);
         db = new WeightDatabaseAccessor(this);
-
-
-
-
-
-
     }
     @Override
     protected void onDestroy() {
@@ -46,13 +41,14 @@ public class WeightSelection extends Activity {
         super.onDestroy();
     }
     public void submitWeight(View view) {
-        if(reps > 0 && digit1 + digit2 + digit3 > 0)
-            Toast.makeText(getApplicationContext(),"Submitted!",Toast.LENGTH_SHORT).show();
-        //db.insert("Tyler","Arms","Curls",100,20);
-        ArrayList<String> data = db.getAllData();
-        for(String d : data) {
-            //Log.d("Debug",d);
+        if(reps > 0 && digit1 + digit2 + digit3 > 0) {
+            boolean insertResult = db.insert("Tyler", "Arms", "Curls", ((digit1*100)+(digit2*10)+digit3), reps);
+            if(insertResult)
+                Toast.makeText(getApplicationContext(), "Submitted "+((digit1*100)+(digit2*10)+digit3)+"lbs!", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getApplicationContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
         }
+
 
     }
     public void setUpNumberPickers() {
