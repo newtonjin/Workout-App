@@ -9,9 +9,8 @@ import android.util.Log;
 import java.util.Date;
 
 public class WeightDatabaseAccessor extends DatabaseAccessor {
-    protected static String databaseName = "Weight.db";
-    protected static String tableName = "Weight";
-    protected static String[] columns = {"ID","USER","DATE","TYPE","LIFT","WEIGHT","REPS"};
+    private static String tableName = "Weight";
+    private static String[] columns = {"ID","USER","DATE","TYPE","LIFT","WEIGHT","REPS"};
 
     public WeightDatabaseAccessor(Context context) {
         super(context,tableName, columns);
@@ -64,7 +63,7 @@ public class WeightDatabaseAccessor extends DatabaseAccessor {
             }
             else {
                 String[] selection = { user};
-                res = db.query(tableName, col, col[1] + " = ?", selection, null, null,sorting);
+                res = db.query(tableName, columns, columns[1] + " = ?", selection, null, null,sorting);
             }
         }
         else {
@@ -94,7 +93,7 @@ public class WeightDatabaseAccessor extends DatabaseAccessor {
      * @return Cursor object with all selected values
      */
     public Cursor getCursor(String user, String type, String lift) {
-        return getCursor(user,type,lift,col[2] + " ASC, " +col[3] + " ASC, " + col[5] + " ASC, " + col[2] + " ASC");
+        return getCursor(user,type,lift, col[2] + " ASC, " + col[3] + " ASC, " + col[5] + " ASC, " + col[2] + " ASC");
     }
     public boolean updateData(String id,String user,String date, String type,String lift, int weight, int reps) {
         Log.d("Debug","Replacing id: " + id + " with: " + user +" "+ date +" "+ type +" "+ lift +" "+ weight +" "+ reps + " into " + tableName);
