@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 
 public class LiftDatabaseAccessor extends DatabaseAccessor {
     private static String tableName = "lift";
@@ -86,6 +88,29 @@ public class LiftDatabaseAccessor extends DatabaseAccessor {
             }
         }
         return true;
+    }
+    public String[] getTypes() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] c = {col[1]};
+        Cursor cursor = db.query(true,tableName,c,null,null,null,null,col[1]+" ASC",null);
+        ArrayList<String> types = new ArrayList<String>();
+        while(cursor.moveToNext()) {
+            types.add(cursor.getString(0));
+        }
+
+        return types.toArray(new String[types.size()]);
+    }
+    public String[] getLifts(String type) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] c = {col[2]};
+        String[] sel = {type};
+        Cursor cursor = db.query(true,tableName,c,col[1]+" =?",sel,null,null,col[1]+" ASC",null);
+        ArrayList<String> types = new ArrayList<String>();
+        while(cursor.moveToNext()) {
+            types.add(cursor.getString(0));
+        }
+
+        return types.toArray(new String[types.size()]);
     }
 
 }
