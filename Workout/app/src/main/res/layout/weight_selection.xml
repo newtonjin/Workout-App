@@ -36,7 +36,6 @@
         android:layout_height="120dp"
         android:descendantFocusability="blocksDescendants"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/np2"
         android:layout_toStartOf="@+id/np2"
         android:solidColor="#000000"
         android:background="#000000"/>
@@ -45,7 +44,7 @@
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:text="Select Weight"
         android:layout_marginTop="53dp"
         android:layout_alignParentTop="true"
@@ -63,7 +62,7 @@
         android:layout_alignStart="@+id/np1"
         android:background="#0000FF"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textColor="#FFFFFF"
         android:onClick="submitWeight"/>
 
@@ -79,9 +78,74 @@
         android:id="@+id/tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:text="12 reps"
         android:layout_centerHorizontal="true"
         android:layout_alignTop="@+id/seekBar"
         android:layout_marginTop="28dp" />
+
+    <TextView
+        android:text="100 reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/np1"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="40dp"
+        android:layout_toLeftOf="@+id/Rep2"
+        android:id="@+id/Rep1" />
+
+    <TextView
+        android:text="200 reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/np2"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/Rep2" />
+
+    <TextView
+        android:text="300 reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/np3"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_toEndOf="@+id/Rep2"
+        android:id="@+id/Rep3" />
+
+    <TextView
+        android:text="100 lbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Weight1"
+        android:layout_above="@+id/Rep1"
+        android:layout_alignStart="@+id/Rep1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Previous Weights"
+        android:layout_above="@+id/Weight1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/previousWeights" />
+
+    <TextView
+        android:text="300 lbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Weight3"
+        android:layout_above="@+id/Rep3"
+        android:layout_alignStart="@+id/Rep3" />
+
+    <TextView
+        android:text="200 lbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Weight2"
+        android:layout_below="@+id/previousWeights"
+        android:layout_alignStart="@+id/Rep2" />
 </RelativeLayout>
