@@ -66,4 +66,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(tableName, "ID = ?",new String[] {id});
     }
+    public String[] getCol() {
+        return col;
+    }
 }
