@@ -1,5 +1,11 @@
 package com.lostntkdgmail.workout;
 
+//TODO: Add side menu
+//TODO: Add ability to view/edit past entries
+//TODO: Add ability to edit types of workouts
+//TODO: Pull press/Pull press are switched
+//TODO: Lock orientation to portrait
+//TODO: Add Users
 
         import android.database.Cursor;
         import android.os.Bundle;
@@ -12,7 +18,6 @@ package com.lostntkdgmail.workout;
         import android.widget.NumberPicker;
         import android.widget.Toast;
 
-        import java.lang.reflect.Array;
         import java.util.ArrayList;
 
 
