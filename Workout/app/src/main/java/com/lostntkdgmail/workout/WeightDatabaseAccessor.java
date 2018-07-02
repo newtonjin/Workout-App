@@ -55,7 +55,7 @@ public class WeightDatabaseAccessor extends DatabaseAccessor {
      */
     public Cursor getCursor(String user, String type, String lift, String sorting, String limit) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = null;
+        Cursor res;
         if(user != null) {
             if (type != null && lift != null) {
                 String[] selection = {type, lift, user};

@@ -37,7 +37,7 @@ public class LiftSelection extends Activity {
     public void setUpListView() {
         String[] lifts = ldb.getLifts(getIntent().getStringExtra("TYPE"));
         liftList = (ListView)findViewById(R.id.listvlift);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.list_item,R.id.listText,lifts);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,R.id.listText,lifts);
         liftList.setAdapter(adapter);
 
         liftList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

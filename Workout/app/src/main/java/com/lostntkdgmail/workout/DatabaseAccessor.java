@@ -28,7 +28,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     }
 
     /**
-     * Creates the table in the Database. Must be overriden in the table class extinding this one
+     * Creates the table in the Database. Must be overridden in the table class extending this one
      * @param db database to create the table in
      */
     public static void createTable(SQLiteDatabase db) {
@@ -47,17 +47,18 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     }
     public ArrayList<String> getAllData() {
         Cursor cursor = getReadableDatabase().query(tableName, col, null, null, null, null, null);
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
 
         while(cursor.moveToNext()) {
-            String s = "";
+            StringBuilder builder = new StringBuilder();
             int i = 0;
             for(; i < col.length-1; i++) {
-                s += cursor.getString(i) + ",";
+                builder.append(cursor.getString(i)).append(",");
             }
-            s += cursor.getString(i);
-            result.add(s);
+            builder.append(cursor.getString(i));
+            result.add(builder.toString());
         }
+        cursor.close();
         return result;
     }
 

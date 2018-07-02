@@ -144,7 +144,7 @@ public class WeightSelection extends Activity {
     }
     public ArrayList<int[]> getPreviousWeights() {
         Cursor c = wdb.getCursor(user,type,lift,wdb.getCol()[0]+" DESC","3");
-        ArrayList<int[]> result = new ArrayList<int[]>(3);
+        ArrayList<int[]> result = new ArrayList<>(3);
         while(c.moveToNext()) {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
             result.add(arr);
@@ -155,45 +155,47 @@ public class WeightSelection extends Activity {
         TextView rep1 = (TextView)findViewById(R.id.Rep1);
         TextView rep2 = (TextView)findViewById(R.id.Rep2);
         TextView rep3 = (TextView)findViewById(R.id.Rep3);
-        if(result.size() == 3) {
-            weight3.setText(result.get(0)[0]+" lbs");
-            rep3.setText(result.get(0)[1]+ " reps");
+        switch (result.size()) {
+            case 3:
+                weight3.setText(result.get(0)[0] + " lbs");
+                rep3.setText(result.get(0)[1] + " reps");
 
-            weight2.setText(result.get(1)[0]+" lbs");
-            rep2.setText(result.get(1)[1]+ " reps");
+                weight2.setText(result.get(1)[0] + " lbs");
+                rep2.setText(result.get(1)[1] + " reps");
 
-            weight1.setText(result.get(2)[0]+" lbs");
-            rep1.setText(result.get(2)[1]+ " reps");
-        }
-        else if(result.size() == 2) {
-            weight2.setText(result.get(1)[0]+" lbs");
-            rep2.setText(result.get(1)[1]+ " reps");
+                weight1.setText(result.get(2)[0] + " lbs");
+                rep1.setText(result.get(2)[1] + " reps");
+                break;
+            case 2:
+                weight2.setText(result.get(1)[0] + " lbs");
+                rep2.setText(result.get(1)[1] + " reps");
 
-            weight3.setText(result.get(0)[0]+" lbs");
-            rep3.setText(result.get(0)[1]+ " reps");
+                weight3.setText(result.get(0)[0] + " lbs");
+                rep3.setText(result.get(0)[1] + " reps");
 
-            weight1.setText("-- lbs");
-            rep1.setText("-- reps");
-        }
-        else if(result.size() == 1) {
-            weight3.setText(result.get(0)[0]+" lbs");
-            rep3.setText(result.get(0)[1]+ " reps");
+                weight1.setText("-- lbs");
+                rep1.setText("-- reps");
+                break;
+            case 1:
+                weight3.setText(result.get(0)[0] + " lbs");
+                rep3.setText(result.get(0)[1] + " reps");
 
-            weight2.setText("-- lbs");
-            rep2.setText("-- reps");
+                weight2.setText("-- lbs");
+                rep2.setText("-- reps");
 
-            weight1.setText("-- lbs");
-            rep1.setText("-- reps");
-        }
-        else if(result.size() ==0) {
-            weight1.setText("-- lbs");
-            rep1.setText("-- reps");
+                weight1.setText("-- lbs");
+                rep1.setText("-- reps");
+                break;
+            case 0:
+                weight1.setText("-- lbs");
+                rep1.setText("-- reps");
 
-            weight2.setText("-- lbs");
-            rep2.setText("-- reps");
+                weight2.setText("-- lbs");
+                rep2.setText("-- reps");
 
-            weight3.setText("-- lbs");
-            rep3.setText("-- reps");
+                weight3.setText("-- lbs");
+                rep3.setText("-- reps");
+                break;
         }
         return result;
     }

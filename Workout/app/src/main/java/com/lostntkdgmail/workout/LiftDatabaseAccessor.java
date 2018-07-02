@@ -48,7 +48,7 @@ public class LiftDatabaseAccessor extends DatabaseAccessor {
     }
     public Cursor getCursor(String type, String lift, String sorting) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = null;
+        Cursor res;
         if(type != null && lift != null) {
             String[] selection = {type,lift};
             res = db.query(tableName, col, col[1] + " = ? and " + col[2] + " = ?", selection, null, null,sorting);
@@ -69,11 +69,11 @@ public class LiftDatabaseAccessor extends DatabaseAccessor {
         return getCursor(type,lift,col[1]+" ASC");
     }
     public Boolean fillWithData() {
-        String[] arms = {"Arms", "Arm Extensions", "Skullcrunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbell Curls", "Barbell Curls"};
-        String[] back = {"Back", "Push Press", "Toe Touches", "Deadlift"};
+        String[] arms = {"Arms", "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
+        String[] back = {"Back", "Push Press", "Toe Touches", "Dead lift"};
         String[] chest = {"Chest", "Flys", "Pull Press", "Upright Rows", "Incline Bench", "Bench"};
         String[] forearms = {"Forearms", "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
-        String[] legs = {"Legs", "Dumbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+        String[] legs = {"Legs", "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
         String[] shoulders = {"Shoulders", "Shrugs", "Shoulder Press"};
         String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
         for (String[] arr : lifts) {
@@ -93,11 +93,11 @@ public class LiftDatabaseAccessor extends DatabaseAccessor {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] c = {col[1]};
         Cursor cursor = db.query(true,tableName,c,null,null,null,null,col[1]+" ASC",null);
-        ArrayList<String> types = new ArrayList<String>();
+        ArrayList<String> types = new ArrayList<>();
         while(cursor.moveToNext()) {
             types.add(cursor.getString(0));
         }
-
+        cursor.close();
         return types.toArray(new String[types.size()]);
     }
     public String[] getLifts(String type) {
@@ -105,11 +105,11 @@ public class LiftDatabaseAccessor extends DatabaseAccessor {
         String[] c = {col[2]};
         String[] sel = {type};
         Cursor cursor = db.query(true,tableName,c,col[1]+" =?",sel,null,null,col[1]+" ASC",null);
-        ArrayList<String> types = new ArrayList<String>();
+        ArrayList<String> types = new ArrayList<>();
         while(cursor.moveToNext()) {
             types.add(cursor.getString(0));
         }
-
+        cursor.close();
         return types.toArray(new String[types.size()]);
     }
 

@@ -2,16 +2,13 @@ package com.lostntkdgmail.workout;
 
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 
 
@@ -39,7 +36,7 @@ public class TypeSelection extends Activity {
             ldb.fillWithData();
         String[] types = ldb.getTypes();
         typeList = (ListView)findViewById(R.id.listv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.list_item,R.id.listText,types);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,R.id.listText,types);
         typeList.setAdapter(adapter);
 
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
