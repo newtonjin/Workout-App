@@ -70,8 +70,8 @@ public class LiftDatabaseAccessor extends DatabaseAccessor {
     }
     public Boolean fillWithData() {
         String[] arms = {"Arms", "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
-        String[] back = {"Back", "Push Press", "Toe Touches", "Dead lift"};
-        String[] chest = {"Chest", "Flys", "Pull Press", "Upright Rows", "Incline Bench", "Bench"};
+        String[] back = {"Back", "Pull Press", "Toe Touches", "Dead lift"};
+        String[] chest = {"Chest", "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
         String[] forearms = {"Forearms", "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
         String[] legs = {"Legs", "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
         String[] shoulders = {"Shoulders", "Shrugs", "Shoulder Press"};

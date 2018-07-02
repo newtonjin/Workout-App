@@ -22,7 +22,7 @@ public class LiftSelection extends Activity {
         super.onCreate(savedInstanceState);
         Log.d("Debug","Launching Activity LiftSelection");
         setContentView(R.layout.lift_selection);
-        text = (TextView)findViewById(R.id.tvlift);
+        text = findViewById(R.id.tvlift);
         text.setText(getIntent().getStringExtra("TYPE"));
         ldb = new LiftDatabaseAccessor(this);
         setUpListView();
@@ -36,7 +36,7 @@ public class LiftSelection extends Activity {
     }
     public void setUpListView() {
         String[] lifts = ldb.getLifts(getIntent().getStringExtra("TYPE"));
-        liftList = (ListView)findViewById(R.id.listvlift);
+        liftList = findViewById(R.id.listvlift);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,R.id.listText,lifts);
         liftList.setAdapter(adapter);
 

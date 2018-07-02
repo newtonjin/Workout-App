@@ -3,22 +3,22 @@ package com.lostntkdgmail.workout;
 //TODO: Add side menu
 //TODO: Add ability to view/edit past entries
 //TODO: Add ability to edit types of workouts
-//TODO: Pull press/Pull press are switched
 //TODO: Add Users
-//TODO: Eventually add Landscape support
+//TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?
+//TODO: Replace hardcoded text with resource strings
+//TODO: Replace hardcoded colors with color resources, possibly add color customization to users?
 
-        import android.database.Cursor;
-        import android.os.Bundle;
-        import android.app.Activity;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.SeekBar;
-        import android.widget.TextView;
-        import android.widget.NumberPicker;
-        import android.widget.Toast;
-
-        import java.util.ArrayList;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.app.Activity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.NumberPicker;
+import android.widget.Toast;
+import java.util.ArrayList;
 
 
 public class WeightSelection extends Activity {
@@ -43,7 +43,7 @@ public class WeightSelection extends Activity {
         setUpSeekBar();
         setUpNumberPickers();
 
-        Button submit = (Button)findViewById(R.id.button);
+        Button submit = findViewById(R.id.button);
         wdb = new WeightDatabaseAccessor(this);
         ldb = new LiftDatabaseAccessor(this);
 
@@ -80,9 +80,9 @@ public class WeightSelection extends Activity {
 
     }
     public void setUpNumberPickers() {
-        NumberPicker np1 = (NumberPicker) findViewById(R.id.np1);
-        NumberPicker np2 = (NumberPicker) findViewById(R.id.np2);
-        NumberPicker np3 = (NumberPicker) findViewById(R.id.np3);
+        NumberPicker np1 = findViewById(R.id.np1);
+        NumberPicker np2 = findViewById(R.id.np2);
+        NumberPicker np3 = findViewById(R.id.np3);
 
         //Setting up first Number picker
         np1.setMinValue(0);
@@ -122,8 +122,8 @@ public class WeightSelection extends Activity {
         });
     }
     public void setUpSeekBar() {
-        sBarText = (TextView)findViewById(R.id.tv2);
-        sBar=(SeekBar)findViewById(R.id.seekBar);
+        sBarText = findViewById(R.id.tv2);
+        sBar= findViewById(R.id.seekBar);
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean b) {
@@ -149,12 +149,12 @@ public class WeightSelection extends Activity {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
             result.add(arr);
         }
-        TextView weight1 = (TextView)findViewById(R.id.Weight1);
-        TextView weight2 = (TextView)findViewById(R.id.Weight2);
-        TextView weight3 = (TextView)findViewById(R.id.Weight3);
-        TextView rep1 = (TextView)findViewById(R.id.Rep1);
-        TextView rep2 = (TextView)findViewById(R.id.Rep2);
-        TextView rep3 = (TextView)findViewById(R.id.Rep3);
+        TextView weight1 = findViewById(R.id.Weight1);
+        TextView weight2 = findViewById(R.id.Weight2);
+        TextView weight3 = findViewById(R.id.Weight3);
+        TextView rep1 = findViewById(R.id.Rep1);
+        TextView rep2 = findViewById(R.id.Rep2);
+        TextView rep3 = findViewById(R.id.Rep3);
         switch (result.size()) {
             case 3:
                 weight3.setText(result.get(0)[0] + " lbs");

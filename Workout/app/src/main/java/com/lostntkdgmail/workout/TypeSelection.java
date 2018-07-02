@@ -35,7 +35,7 @@ public class TypeSelection extends Activity {
         if(ldb.getSize() <1)
             ldb.fillWithData();
         String[] types = ldb.getTypes();
-        typeList = (ListView)findViewById(R.id.listv);
+        typeList = findViewById(R.id.listv);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,R.id.listText,types);
         typeList.setAdapter(adapter);
 

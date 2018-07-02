@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.NoActionBar">
         <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:background">#000000</item>
     </style>
 
 </resources>
