@@ -2,6 +2,7 @@ package com.lostntkdgmail.workout;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -69,12 +70,12 @@ public class LiftDatabaseAccessor extends DatabaseAccessor {
         return getCursor(type,lift,col[1]+" ASC");
     }
     public Boolean fillWithData() {
-        String[] arms = {"Arms", "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
-        String[] back = {"Back", "Pull Press", "Toe Touches", "Dead lift"};
-        String[] chest = {"Chest", "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
-        String[] forearms = {"Forearms", "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
-        String[] legs = {"Legs", "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
-        String[] shoulders = {"Shoulders", "Shrugs", "Shoulder Press"};
+        String[] arms = {Resources.getSystem().getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
+        String[] back = {Resources.getSystem().getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
+        String[] chest = {Resources.getSystem().getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
+        String[] forearms = {Resources.getSystem().getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
+        String[] legs = {Resources.getSystem().getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+        String[] shoulders = {Resources.getSystem().getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
         String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
         for (String[] arr : lifts) {
             String name = arr[0];

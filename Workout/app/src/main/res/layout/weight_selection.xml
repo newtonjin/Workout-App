@@ -44,14 +44,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:text="Select Weight"
+        android:text="@string/select_weight"
         android:layout_marginTop="53dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
 
     <Button
-        android:text="Submit"
+        android:text="@string/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button"
@@ -78,13 +78,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:text="12 reps"
+        android:text="@string/default_reps"
         android:layout_centerHorizontal="true"
         android:layout_alignTop="@+id/seekBar"
         android:layout_marginTop="28dp" />
 
     <TextView
-        android:text="100 reps"
+        android:text="@string/default_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/np1"
@@ -95,7 +95,7 @@
         android:id="@+id/Rep1" />
 
     <TextView
-        android:text="200 reps"
+        android:text="@string/default_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/np2"
@@ -105,7 +105,7 @@
         android:id="@+id/Rep2" />
 
     <TextView
-        android:text="300 reps"
+        android:text="@string/default_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/np3"
@@ -116,7 +116,7 @@
         android:id="@+id/Rep3" />
 
     <TextView
-        android:text="100 lbs"
+        android:text="@string/default_weights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Weight1"
@@ -126,14 +126,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Previous Weights"
+        android:text="@string/previous_weights"
         android:layout_above="@+id/Weight1"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:id="@+id/previousWeights" />
 
     <TextView
-        android:text="300 lbs"
+        android:text="@string/default_weights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Weight3"
@@ -141,7 +141,7 @@
         android:layout_alignStart="@+id/Rep3" />
 
     <TextView
-        android:text="200 lbs"
+        android:text="@string/default_weights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Weight2"
