@@ -48,8 +48,8 @@ public class TypeSelection extends Activity {
         if(liftTable.getNumberOfRows() < 1)
             liftTable.fillWithData();
         String[] types = liftTable.getTypes();
-        typeList = findViewById(R.id.listv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,R.id.listText,types);
+        typeList = findViewById(R.id.typeList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,R.id.listEntry,types);
         typeList.setAdapter(adapter);
 
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:id="@+id/listText"
+        android:id="@+id/listEntry"
         android:textSize="28sp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>

@@ -1,46 +1,14 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rl"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".WeightSelection"
-    >
-
-    <NumberPicker
-        android:id="@+id/np2"
-        android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:descendantFocusability="blocksDescendants"
-        android:solidColor="@color/colorPrimary"
-        android:background="@color/colorPrimary"
-        />
-    <NumberPicker
-        android:id="@+id/np3"
-        android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/np2"
-        android:descendantFocusability="blocksDescendants"
-        android:solidColor="@color/colorPrimary"
-        android:background="@color/colorPrimary"
-        />
-
-    <NumberPicker
-        android:id="@+id/np1"
-        android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:descendantFocusability="blocksDescendants"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/np2"
-        android:solidColor="@color/colorPrimary"
-        android:background="@color/colorPrimary"/>
+    tools:context=".WeightSelection">
 
     <TextView
-        android:id="@+id/tv"
+        android:id="@+id/selectWeightText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
@@ -49,32 +17,110 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-
-    <Button
-        android:text="@string/submit_button"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_alignEnd="@+id/np3"
-        android:layout_alignStart="@+id/np1"
-        android:background="@color/submitButton"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-        android:textSize="30sp"
-        android:textColor="@color/textPrimary"
-        android:onClick="submitWeight"/>
+        android:text="@string/previous_weights"
+        android:layout_above="@+id/pastWeightText1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/previousWeightText" />
+
+    <TextView
+        android:text="@string/default_weights"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pastWeightText1"
+        android:layout_above="@+id/pastRepText1"
+        android:layout_alignStart="@+id/pastRepText1" />
+
+    <TextView
+        android:id="@+id/pastWeightText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/pastRepText2"
+        android:layout_below="@+id/previousWeightText"
+        android:text="@string/default_weights" />
+
+    <TextView
+        android:text="@string/default_weights"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pastWeightText3"
+        android:layout_above="@+id/pastRepText3"
+        android:layout_alignStart="@+id/pastRepText3" />
+
+    <TextView
+        android:text="@string/default_reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/numberPicker1"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="40dp"
+        android:layout_toStartOf="@+id/pastRepText2"
+        android:id="@+id/pastRepText1" />
+
+    <TextView
+        android:text="@string/default_reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/numberPicker2"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/pastRepText2" />
+
+    <TextView
+        android:text="@string/default_reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/numberPicker3"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="40dp"
+        android:layout_toEndOf="@+id/pastRepText2"
+        android:id="@+id/pastRepText3" />
+
+    <NumberPicker
+    android:id="@+id/numberPicker1"
+    android:layout_width="wrap_content"
+    android:layout_height="120dp"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_centerVertical="true"
+    android:layout_toStartOf="@+id/numberPicker2"
+    android:solidColor="@color/colorPrimary"
+    android:background="@color/colorPrimary"/>
+
+    <NumberPicker
+        android:id="@+id/numberPicker2"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:descendantFocusability="blocksDescendants"
+        android:solidColor="@color/colorPrimary"
+        android:background="@color/colorPrimary" />
+
+    <NumberPicker
+        android:id="@+id/numberPicker3"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/numberPicker2"
+        android:descendantFocusability="blocksDescendants"
+        android:solidColor="@color/colorPrimary"
+        android:background="@color/colorPrimary" />
 
     <SeekBar
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/np1"
+        android:layout_below="@id/numberPicker1"
         android:max="20"
-        android:id="@+id/seekBar"
-        />
+        android:id="@+id/seekBar" />
 
     <TextView
-        android:id="@+id/tv2"
+        android:id="@+id/scrollBarText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
@@ -83,68 +129,19 @@
         android:layout_alignTop="@+id/seekBar"
         android:layout_marginTop="28dp" />
 
-    <TextView
-        android:text="@string/default_reps"
+    <Button
+        android:text="@string/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/np1"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="40dp"
-        android:layout_toStartOf="@+id/Rep2"
-        android:id="@+id/Rep1" />
+        android:id="@+id/submitButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_alignEnd="@+id/numberPicker3"
+        android:layout_alignStart="@+id/numberPicker1"
+        android:background="@color/submitButton"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+        android:textSize="30sp"
+        android:textColor="@color/textPrimary"
+        android:onClick="submitWeight"/>
 
-    <TextView
-        android:text="@string/default_reps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/np2"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/Rep2" />
-
-    <TextView
-        android:text="@string/default_reps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/np3"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginStart="40dp"
-        android:layout_toEndOf="@+id/Rep2"
-        android:id="@+id/Rep3" />
-
-    <TextView
-        android:text="@string/default_weights"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Weight1"
-        android:layout_above="@+id/Rep1"
-        android:layout_alignStart="@+id/Rep1" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/previous_weights"
-        android:layout_above="@+id/Weight1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/previousWeights" />
-
-    <TextView
-        android:text="@string/default_weights"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Weight3"
-        android:layout_above="@+id/Rep3"
-        android:layout_alignStart="@+id/Rep3" />
-
-    <TextView
-        android:text="@string/default_weights"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Weight2"
-        android:layout_below="@+id/previousWeights"
-        android:layout_alignStart="@+id/Rep2" />
 </RelativeLayout>

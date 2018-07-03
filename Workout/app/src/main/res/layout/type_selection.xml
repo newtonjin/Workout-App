@@ -3,7 +3,7 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tvtype"
+        android:id="@+id/selectTypeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
@@ -16,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:id="@+id/listv"
-        android:layout_below="@+id/tvtype"
+        android:id="@+id/typeList"
+        android:layout_below="@+id/selectTypeText"
         android:textSize="25sp"
         android:textAlignment="center"
         android:background="@color/colorPrimary"

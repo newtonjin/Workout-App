@@ -91,9 +91,9 @@ public class WeightSelection extends Activity {
      * Initializes the 3 number pickers
      */
     public void setUpNumberPickers() {
-        NumberPicker np1 = findViewById(R.id.np1);
-        NumberPicker np2 = findViewById(R.id.np2);
-        NumberPicker np3 = findViewById(R.id.np3);
+        NumberPicker np1 = findViewById(R.id.numberPicker1);
+        NumberPicker np2 = findViewById(R.id.numberPicker2);
+        NumberPicker np3 = findViewById(R.id.numberPicker3);
 
         //Setting up first Number picker
         np1.setMinValue(0);
@@ -156,7 +156,7 @@ public class WeightSelection extends Activity {
      * Initializes the seek bar
      */
     public void setUpSeekBar() {
-        sBarText = findViewById(R.id.tv2);
+        sBarText = findViewById(R.id.scrollBarText);
         SeekBar sBar = findViewById(R.id.seekBar);
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             /**
@@ -203,12 +203,12 @@ public class WeightSelection extends Activity {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
             result.add(arr);
         }
-        TextView weight1 = findViewById(R.id.Weight1);
-        TextView weight2 = findViewById(R.id.Weight2);
-        TextView weight3 = findViewById(R.id.Weight3);
-        TextView rep1 = findViewById(R.id.Rep1);
-        TextView rep2 = findViewById(R.id.Rep2);
-        TextView rep3 = findViewById(R.id.Rep3);
+        TextView weight1 = findViewById(R.id.pastWeightText1);
+        TextView weight2 = findViewById(R.id.pastWeightText2);
+        TextView weight3 = findViewById(R.id.pastWeightText3);
+        TextView rep1 = findViewById(R.id.pastRepText1);
+        TextView rep2 = findViewById(R.id.pastRepText2);
+        TextView rep3 = findViewById(R.id.pastRepText3);
         switch (result.size()) {
             case 0: //No previous weights
                 weight1.setText(getResources().getString(R.string.null_lbs));
