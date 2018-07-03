@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context=".WeightSelection"
-    android:background="#000000"
     >
 
     <NumberPicker
@@ -24,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="120dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/np2"
+        android:layout_toEndOf="@id/np2"
         android:descendantFocusability="blocksDescendants"
         android:solidColor="#000000"
         android:background="#000000"
@@ -45,14 +44,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:text="Select Weight"
+        android:text="@string/select_weight"
         android:layout_marginTop="53dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
 
     <Button
-        android:text="Submit"
+        android:text="@string/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button"
@@ -79,24 +78,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:text="12 reps"
+        android:text="@string/default_reps"
         android:layout_centerHorizontal="true"
         android:layout_alignTop="@+id/seekBar"
         android:layout_marginTop="28dp" />
 
     <TextView
-        android:text="100 reps"
+        android:text="@string/default_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/np1"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginRight="40dp"
-        android:layout_toLeftOf="@+id/Rep2"
+        android:layout_marginEnd="40dp"
+        android:layout_toStartOf="@+id/Rep2"
         android:id="@+id/Rep1" />
 
     <TextView
-        android:text="200 reps"
+        android:text="@string/default_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/np2"
@@ -106,18 +105,18 @@
         android:id="@+id/Rep2" />
 
     <TextView
-        android:text="300 reps"
+        android:text="@string/default_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/np3"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_toEndOf="@+id/Rep2"
         android:id="@+id/Rep3" />
 
     <TextView
-        android:text="100 lbs"
+        android:text="@string/default_weights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Weight1"
@@ -127,14 +126,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Previous Weights"
+        android:text="@string/previous_weights"
         android:layout_above="@+id/Weight1"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:id="@+id/previousWeights" />
 
     <TextView
-        android:text="300 lbs"
+        android:text="@string/default_weights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Weight3"
@@ -142,7 +141,7 @@
         android:layout_alignStart="@+id/Rep3" />
 
     <TextView
-        android:text="200 lbs"
+        android:text="@string/default_weights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Weight2"
