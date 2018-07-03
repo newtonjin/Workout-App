@@ -2,8 +2,10 @@ package com.lostntkdgmail.workout;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,15 +36,18 @@ public class LiftSelection extends Activity {
         setUpListView();
 
     }
+
+   /* @Override
+    public void onAttach(Context context) {
+        Log.d("Debug","onDestroy() called for LiftSelection");
+        liftTable.close();
+        super.onAttach(context);
+    }*/
     /**
      * Cleans up the Activity and closes the database accessors
      */
-    @Override
-    protected void onDestroy() {
-        Log.d("Debug","onDestroy() called for LiftSelection");
-        liftTable.close();
-        super.onDestroy();
-    }
+
+
     /**
      * Sets up the list view which shows all of the different types
      */
