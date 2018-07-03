@@ -20,50 +20,62 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 import java.util.ArrayList;
 
-
+/**
+ * The Activity for selecting a weight
+ */
 public class WeightSelection extends Activity {
-    private String type, lift,user;
+    private String type, lift, user;
     private int digit1 = 0;
     private int digit2 = 0;
     private int digit3 = 0;
     private int reps = 0;
     private SeekBar sBar;
     private TextView sBarText;
-    private WeightDatabaseAccessor wdb;
-    private LiftDatabaseAccessor ldb;
+    private WeightTableAccessor weightTable;
+    private LiftTableAccessor liftTable;
+
+    /**
+     * Creates the Activity and sets up the data
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Debug","Launching Activity: Weight Selection");
         setContentView(R.layout.weight_selection);
-        type = getIntent().getStringExtra("TYPE");
-        lift = getIntent().getStringExtra("LIFT");
-        user = "Tyler";
+        type = getIntent().getStringExtra("TYPE"); //Gets the type of lift from the Intent
+        lift = getIntent().getStringExtra("LIFT"); //Gets the lift name from the Intent
+        user = "Tyler"; //TODO: Actually add users, don't hard code them in
 
         setUpSeekBar();
         setUpNumberPickers();
 
         Button submit = findViewById(R.id.button);
-        wdb = new WeightDatabaseAccessor(this);
-        ldb = new LiftDatabaseAccessor(this);
+        weightTable = new WeightTableAccessor(this);
+        liftTable = new LiftTableAccessor(this);
 
         for(int[] s : getPreviousWeights()) {
             Log.d("Debug",s[0]+" "+s[1]);
         }
-
     }
+    /**
+     * Cleans up the Activity and closes the Accessors
+     */
     @Override
     protected void onDestroy() {
         Log.d("Debug","onDestroy() called for WeightSelection");
-        wdb.close();
-        ldb.close();
+        weightTable.close();
+        liftTable.close();
         super.onDestroy();
     }
-    public void submitWeight(View view) {
+    /**
+     * Submits the weight into the database
+     * @param view The submit button (I think)
+     */
+    public void submitWeight(View view) { //TODO: Can we take out the param? I don't remember why it's there
         int weight = digit1*100+digit2*10+digit3;
         if(reps > 0 && weight > 0) {
-
-            boolean insertResult = wdb.insert("Tyler", type, lift, weight, reps);
+            boolean insertResult = weightTable.insert(user, type, lift, weight, reps);
             if(insertResult) {
                 Toast.makeText(getApplicationContext(), "Submitted!", Toast.LENGTH_SHORT).show();
                 getPreviousWeights();
@@ -75,10 +87,10 @@ public class WeightSelection extends Activity {
             Toast.makeText(getApplicationContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(getApplicationContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
-
-
-
     }
+    /**
+     * Initializes the 3 number pickers
+     */
     public void setUpNumberPickers() {
         NumberPicker np1 = findViewById(R.id.np1);
         NumberPicker np2 = findViewById(R.id.np2);
@@ -90,30 +102,50 @@ public class WeightSelection extends Activity {
         np1.setValue(0);
         np1.setWrapSelectorWheel(true);
         np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            /**
+             * Sets what happens when a value is changed
+             * @param picker The number picker
+             * @param oldVal The last value
+             * @param newVal The new value
+             */
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal){
                 //Display the newly selected number from picker
                 digit1 = newVal;
             }
         });
+
         //Setting up second Number picker
         np2.setMinValue(0);
         np2.setMaxValue(9);
         np2.setValue(0);
         np2.setWrapSelectorWheel(true);
         np2.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            /**
+             * Sets what happens when a value is changed
+             * @param picker The number picker
+             * @param oldVal The last value
+             * @param newVal The new value
+             */
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal){
                 //Display the newly selected number from picker
                 digit2 = newVal;
             }
         });
+
         //Setting up third Number picker
         np3.setMinValue(0);
         np3.setMaxValue(9);
         np3.setValue(0);
         np3.setWrapSelectorWheel(true);
         np3.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            /**
+             * Sets what happens when a value is changed
+             * @param picker The number picker
+             * @param oldVal The last value
+             * @param newVal The new value
+             */
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal){
                 //Display the newly selected number from picker
@@ -121,20 +153,38 @@ public class WeightSelection extends Activity {
             }
         });
     }
+    /**
+     * Initializes the seek bar
+     */
     public void setUpSeekBar() {
         sBarText = findViewById(R.id.tv2);
         sBar= findViewById(R.id.seekBar);
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            /**
+             * Determines what happens when the progress is changed
+             * @param seekBar The seek bar
+             * @param value The value of the seek bar
+             * @param fromUser True if the value was changed by the user
+             */
             @Override
-            public void onProgressChanged(SeekBar seekBar, int value, boolean b) {
+            public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
                 reps = value;
                 sBarText.setText(reps + " reps");
             }
+
+            /**
+             * Determines what happens when the user starts to touch the seek bar (currently nothing)
+             * @param seekBar The seek bar
+             */
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
 
+            /**
+             * Determines what happens when the user stops touching the bar
+             * @param seekBar The seek bar
+             */
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sBarText.setText(reps + " reps");
@@ -142,8 +192,13 @@ public class WeightSelection extends Activity {
         });
         sBarText.setText(sBar.getProgress() + " reps");
     }
+
+    /**
+     * Gets the 3 previous weights to display
+     * @return An ArrayList<int[]> containing the previous weights. Each int[] is an entry set up like: [weight, reps]
+     */
     public ArrayList<int[]> getPreviousWeights() {
-        Cursor c = wdb.getCursor(user,type,lift,wdb.getCol()[0]+" DESC","3");
+        Cursor c = weightTable.getCursor(user,type,lift, weightTable.getColumnNames()[0]+" DESC","3");
         ArrayList<int[]> result = new ArrayList<>(3);
         while(c.moveToNext()) {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
@@ -199,7 +254,4 @@ public class WeightSelection extends Activity {
         }
         return result;
     }
-
-
-
 }

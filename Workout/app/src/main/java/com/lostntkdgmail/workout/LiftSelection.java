@@ -11,12 +11,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
+/**
+ * The activity for Selecting a lift
+ */
 public class LiftSelection extends Activity {
-    private LiftDatabaseAccessor ldb;
+    private LiftTableAccessor liftTable;
     private ListView liftList;
     private TextView text;
 
+    /**
+     * Creates the activity and sets up the data
+     * @param savedInstanceState The last savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,23 +30,36 @@ public class LiftSelection extends Activity {
         setContentView(R.layout.lift_selection);
         text = findViewById(R.id.tvlift);
         text.setText(getIntent().getStringExtra("TYPE"));
-        ldb = new LiftDatabaseAccessor(this);
+        liftTable = new LiftTableAccessor(this);
         setUpListView();
 
     }
+    /**
+     * Cleans up the Activity and closes the database accessors
+     */
     @Override
     protected void onDestroy() {
         Log.d("Debug","onDestroy() called for LiftSelection");
-        ldb.close();
+        liftTable.close();
         super.onDestroy();
     }
+    /**
+     * Sets up the list view which shows all of the different types
+     */
     public void setUpListView() {
-        String[] lifts = ldb.getLifts(getIntent().getStringExtra("TYPE"));
+        String[] lifts = liftTable.getLifts(getIntent().getStringExtra("TYPE"));
         liftList = findViewById(R.id.listvlift);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,R.id.listText,lifts);
         liftList.setAdapter(adapter);
 
         liftList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * Determines what happens when one of the Items is selected
+             * @param adapterView The adapter view
+             * @param view The ListView
+             * @param position The position of the view in the adapter
+             * @param id The row id of the selected item
+             */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String lift = (String)liftList.getItemAtPosition(position);
@@ -52,9 +71,5 @@ public class LiftSelection extends Activity {
 
             }
         });
-
-
     }
-
-
 }
