@@ -1,4 +1,4 @@
-package com.lostntkdgmail.workout;
+package com.lostntkdgmail.workout.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,13 +7,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.lostntkdgmail.workout.R;
+
 import java.util.ArrayList;
 
 /**
  * An Accessor used to access the Lift table in the workout database
  */
 public class LiftTableAccessor extends DatabaseAccessor {
-    private static final String tableName = "lift";
+    private static final String TABLE_NAME = "lift";
+    private static final String TAG = "LiftTableAccessor";
     private enum Columns {
         ID, TYPE, LIFT
     }
@@ -24,7 +27,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @param context The current Context
      */
     public LiftTableAccessor(Context context) {
-        super(context, tableName, col);
+        super(context, TABLE_NAME, col);
     }
 
     /**
@@ -32,8 +35,8 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @param db The Workout database
      */
     public static void createTable(SQLiteDatabase db) {
-        db.execSQL("create table " + tableName + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT)");
-        Log.d("LiftTableAccessorDebug","Created Table: "+tableName+"("+Columns.ID.name()+","+Columns.TYPE.name()+","+Columns.LIFT.name()+")");
+        db.execSQL("create table " + TABLE_NAME + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT)");
+        Log.d(TAG,"Created Table: "+ TABLE_NAME +"("+Columns.ID.name()+","+Columns.TYPE.name()+","+Columns.LIFT.name()+")");
     }
 
     /**
@@ -45,17 +48,17 @@ public class LiftTableAccessor extends DatabaseAccessor {
     public boolean insert(String type,String lift) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Log.d("LiftTableAccessorDebug","Inserting: \"" + type +", "+ lift +"\" into \"" + tableName + "\"");
+        Log.d(TAG,"Inserting: \"" + type +", "+ lift +"\" into \"" + TABLE_NAME + "\"");
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.TYPE.name(),type);
         contentValues.put(Columns.LIFT.name(),lift);
 
-        long result = db.insert(tableName,null ,contentValues);
+        long result = db.insert(TABLE_NAME,null ,contentValues);
         if(result == -1) {
-            Log.d("LiftTableAccessorDebug", "Failed to inserted");
+            Log.d(TAG, "Failed to inserted");
             return false;
         }
-        Log.d("LiftTableAccessorDebug", "Successfully inserted");
+        Log.d(TAG, "Successfully inserted");
         return true;
     }
 
@@ -67,12 +70,12 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean updateData(String id,String type,String lift) {
-        Log.d("LiftTableAccessorDebug","Replacing id: " + id + " with: " + type +" "+ lift + " into " + tableName);
+        Log.d(TAG,"Replacing id: " + id + " with: " + type +" "+ lift + " into " + TABLE_NAME);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.TYPE.name(),type);
         contentValues.put(Columns.LIFT.name(),lift);
-        db.update(tableName, contentValues, "ID = ?",new String[] { id });
+        db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
         return true; //TODO: Eventually have this actually do something, or change the method to return the number of rows affected
     }
     /**
@@ -87,18 +90,18 @@ public class LiftTableAccessor extends DatabaseAccessor {
         Cursor res;
         if(type != null && lift != null) {
             String[] selection = {type,lift};
-            res = db.query(tableName, col, Columns.TYPE.name() + " = ? and " + Columns.LIFT.name() + " = ?", selection, null, null,sorting);
+            res = db.query(TABLE_NAME, col, Columns.TYPE.name() + " = ? and " + Columns.LIFT.name() + " = ?", selection, null, null,sorting);
         }
         else if(type != null) {
             String[] selection = {type};
-            res = db.query(tableName, col, Columns.TYPE.name() + " = ?", selection, null, null,sorting);
+            res = db.query(TABLE_NAME, col, Columns.TYPE.name() + " = ?", selection, null, null,sorting);
         }
         else if(lift != null) {
             String[] selection = {lift};
-            res = db.query(tableName, col, Columns.LIFT.name() + " = ?", selection, null, null,sorting);
+            res = db.query(TABLE_NAME, col, Columns.LIFT.name() + " = ?", selection, null, null,sorting);
         }
         else
-            res = db.query(tableName,col,null,null,null,null,sorting);
+            res = db.query(TABLE_NAME,col,null,null,null,null,sorting);
         return res;
     }
 
@@ -145,7 +148,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
     public String[] getTypes() {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] c = {Columns.TYPE.name()};
-        Cursor cursor = db.query(true,tableName,c,null,null,null,null,Columns.TYPE.name()+" ASC",null);
+        Cursor cursor = db.query(true, TABLE_NAME,c,null,null,null,null,Columns.TYPE.name()+" ASC",null);
         ArrayList<String> types = new ArrayList<>();
         while(cursor.moveToNext()) {
             types.add(cursor.getString(0));
@@ -163,7 +166,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] c = {Columns.LIFT.name()};
         String[] sel = {type};
-        Cursor cursor = db.query(true,tableName,c,Columns.TYPE.name()+" =?",sel,null,null,Columns.TYPE.name()+" ASC",null);
+        Cursor cursor = db.query(true, TABLE_NAME,c,Columns.TYPE.name()+" =?",sel,null,null,Columns.TYPE.name()+" ASC",null);
         ArrayList<String> types = new ArrayList<>();
         while(cursor.moveToNext()) {
             types.add(cursor.getString(0));

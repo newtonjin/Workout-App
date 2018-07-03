@@ -20,12 +20,17 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
+
+import com.lostntkdgmail.workout.database.LiftTableAccessor;
+import com.lostntkdgmail.workout.database.WeightTableAccessor;
+
 import java.util.ArrayList;
 
 /**
  * The Activity for selecting a weight
  */
 public class WeightSelection extends Activity {
+    private static final String TAG = "WeightSelection";
     private String type, lift, user;
     private int digit1 = 0;
     private int digit2 = 0;
@@ -42,7 +47,7 @@ public class WeightSelection extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("WeightSelectionDebug","Launching Activity: Weight Selection");
+        Log.d(TAG,"Launching Activity: Weight Selection");
         setContentView(R.layout.weight_selection);
         type = getIntent().getStringExtra("TYPE"); //Gets the type of lift from the Intent
         lift = getIntent().getStringExtra("LIFT"); //Gets the lift name from the Intent
@@ -54,7 +59,7 @@ public class WeightSelection extends Activity {
         weightTable = new WeightTableAccessor(this);
         liftTable = new LiftTableAccessor(this);
         for(int[] s : getPreviousWeights()) {
-            Log.d("WeightSelectionDebug","("+s[0]+" lbs "+s[1]+" reps)");
+            Log.d(TAG,"("+s[0]+" lbs "+s[1]+" reps)");
         }
     }
     /**
@@ -62,7 +67,7 @@ public class WeightSelection extends Activity {
      */
     @Override
     protected void onDestroy() {
-        Log.d("WeightSelectionDebug","onDestroy() called for WeightSelection");
+        Log.d(TAG,"onDestroy() called for WeightSelection");
         weightTable.close();
         liftTable.close();
         super.onDestroy();

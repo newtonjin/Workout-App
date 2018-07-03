@@ -1,4 +1,4 @@
-package com.lostntkdgmail.workout;
+package com.lostntkdgmail.workout.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,7 +16,8 @@ public class WeightTableAccessor extends DatabaseAccessor {
     private enum Columns {
         ID, USER, DATE, TYPE, LIFT, WEIGHT, REPS
     }
-    private static final String tableName = "weight";
+    private static final String TABLE_NAME = "weight";
+    private static final String TAG = "WeightTableAccess";
     private static final String[] cols = {Columns.ID.name(), Columns.USER.name(),Columns.DATE.name(),Columns.TYPE.name(),Columns.LIFT.name(),Columns.WEIGHT.name(),Columns.REPS.name()};
 
     /**
@@ -24,7 +25,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param context The current context
      */
     public WeightTableAccessor(Context context) {
-        super(context,tableName, cols);
+        super(context, TABLE_NAME, cols);
     }
 
     /**
@@ -32,10 +33,10 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param db The database to add the table to
      */
     public static void createTable(SQLiteDatabase db) {
-        db.execSQL("create table " + tableName + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.USER.name() + " TEXT," + Columns.DATE.name() +
+        db.execSQL("create table " + TABLE_NAME + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.USER.name() + " TEXT," + Columns.DATE.name() +
                 " TEXT," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT," + Columns.WEIGHT.name() + " INTEGER," + Columns.REPS.name() + " INTEGER)");
 
-        Log.d("WeightTableAccessDebug","Created Weight Table");
+        Log.d(TAG,"Created Weight Table");
     }
 
     /**
@@ -54,7 +55,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         printDate = printDate.substring(24)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+printDate.substring(8,10) ;
-        Log.d("WeightTableAccessDebug","Inserting: \"" + user +", "+ printDate +", "+ type +", "+ lift +", "+ weight +", "+ reps + "\" into \"" + tableName + "\"");
+        Log.d(TAG,"Inserting: \"" + user +", "+ printDate +", "+ type +", "+ lift +", "+ weight +", "+ reps + "\" into \"" + TABLE_NAME + "\"");
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.USER.name(),user);
         contentValues.put(Columns.DATE.name(),printDate);
@@ -62,12 +63,12 @@ public class WeightTableAccessor extends DatabaseAccessor {
         contentValues.put(Columns.LIFT.name(),lift);
         contentValues.put(Columns.WEIGHT.name(),weight);
         contentValues.put(Columns.REPS.name(),reps);
-        long result = db.insert(tableName,null ,contentValues);
+        long result = db.insert(TABLE_NAME,null ,contentValues);
         if(result == -1) {
-            Log.d("WeightTableAccessDebug", "Failed to inserted");
+            Log.d(TAG, "Failed to inserted");
             return false;
         }
-        Log.d("WeightTableAccessDebug", "Successfully inserted");
+        Log.d(TAG, "Successfully inserted");
         return true;
     }
     /**
@@ -84,36 +85,36 @@ public class WeightTableAccessor extends DatabaseAccessor {
         if(user != null) {
             if (type != null && lift != null) {
                 String[] selection = {type, lift, user};
-                res = db.query(tableName, cols, Columns.TYPE.name() + " = ? and " + Columns.LIFT.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
+                res = db.query(TABLE_NAME, cols, Columns.TYPE.name() + " = ? and " + Columns.LIFT.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
             }
             else if (type != null) {
                 String[] selection = {type, user};
-                res = db.query(tableName, cols, Columns.TYPE.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
+                res = db.query(TABLE_NAME, cols, Columns.TYPE.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
             }
             else if (lift != null) {
                 String[] selection = {lift, user};
-                res = db.query(tableName, cols, Columns.LIFT.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
+                res = db.query(TABLE_NAME, cols, Columns.LIFT.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
             }
             else {
                 String[] selection = { user};
-                res = db.query(tableName, cols, Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
+                res = db.query(TABLE_NAME, cols, Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
             }
         }
         else {
             if(type != null && lift != null) {
                 String[] selection = {lift, type};
-                res = db.query(tableName, cols, Columns.LIFT.name() + " = ? and " + Columns.TYPE.name() + " = ?", selection, null, null, sorting,limit);
+                res = db.query(TABLE_NAME, cols, Columns.LIFT.name() + " = ? and " + Columns.TYPE.name() + " = ?", selection, null, null, sorting,limit);
             }
             else if(type != null) {
                 String[] selection = {type};
-                res = db.query(tableName, cols, Columns.TYPE.name() + " = ?", selection, null, null,sorting,limit);
+                res = db.query(TABLE_NAME, cols, Columns.TYPE.name() + " = ?", selection, null, null,sorting,limit);
             }
             else if(lift != null) {
                 String[] selection = {lift};
-                res = db.query(tableName, cols, Columns.LIFT.name() + " = ?", selection, null, null,sorting,limit);
+                res = db.query(TABLE_NAME, cols, Columns.LIFT.name() + " = ?", selection, null, null,sorting,limit);
             }
             else {
-                res = db.query(tableName, cols, null, null, null, null, sorting,limit);
+                res = db.query(TABLE_NAME, cols, null, null, null, null, sorting,limit);
             }
         }
         return res;
@@ -141,7 +142,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @return True if the update was successful
      */
     public boolean updateData(String id,String user,String date, String type,String lift, int weight, int reps) {
-        Log.d("WeightTableAccessDebug","Replacing id: " + id + " with: " + user +" "+ date +" "+ type +" "+ lift +" "+ weight +" "+ reps + " into " + tableName);
+        Log.d(TAG,"Replacing id: " + id + " with: " + user +" "+ date +" "+ type +" "+ lift +" "+ weight +" "+ reps + " into " + TABLE_NAME);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.USER.name(),user);
@@ -150,7 +151,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
         contentValues.put(Columns.LIFT.name(),lift);
         contentValues.put(Columns.WEIGHT.name(),weight);
         contentValues.put(Columns.REPS.name(),reps);
-        db.update(tableName, contentValues, "ID = ?",new String[] { id });
+        db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
         return true; //TODO: Eventually have this actually do something, or change the method to return the number of rows affected
     }
 }

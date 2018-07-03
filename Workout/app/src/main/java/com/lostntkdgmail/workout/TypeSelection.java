@@ -9,11 +9,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.lostntkdgmail.workout.database.LiftTableAccessor;
+
 
 /**
  * The Activity for selecting a Type of lift
  */
 public class TypeSelection extends Activity {
+    private static final String TAG = "TypeSelection";
     private LiftTableAccessor liftTable;
     private ListView typeList;
 
@@ -24,7 +27,7 @@ public class TypeSelection extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TypeSelectionDebug","Launching Activity: TypeSelection");
+        Log.d(TAG,"Launching Activity: TypeSelection");
         setContentView(R.layout.type_selection);
         liftTable = new LiftTableAccessor(this);
         setUpListView();
@@ -36,7 +39,7 @@ public class TypeSelection extends Activity {
      */
     @Override
     protected void onDestroy() {
-        Log.d("TypeSelectionDebug","onDestroy() called for Type Selection");
+        Log.d(TAG,"onDestroy() called for Type Selection");
         liftTable.close();
         super.onDestroy();
     }
@@ -63,7 +66,7 @@ public class TypeSelection extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String type = (String)typeList.getItemAtPosition(position);
-                Log.d("TypeSelectionDebug","Selected: "+type);
+                Log.d(TAG,"Selected: "+type);
                 Intent intent = new Intent(getBaseContext(),LiftSelection.class);
                 intent.putExtra("TYPE",type);
                 startActivity(intent);
