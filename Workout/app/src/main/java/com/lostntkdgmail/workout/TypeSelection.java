@@ -24,7 +24,7 @@ public class TypeSelection extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Debug","Launching Activity: TypeSelection");
+        Log.d("TypeSelectionDebug","Launching Activity: TypeSelection");
         setContentView(R.layout.type_selection);
         liftTable = new LiftTableAccessor(this);
         setUpListView();
@@ -36,7 +36,7 @@ public class TypeSelection extends Activity {
      */
     @Override
     protected void onDestroy() {
-        Log.d("Debug","onDestroy() called for Type Selection");
+        Log.d("TypeSelectionDebug","onDestroy() called for Type Selection");
         liftTable.close();
         super.onDestroy();
     }
@@ -63,7 +63,7 @@ public class TypeSelection extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String type = (String)typeList.getItemAtPosition(position);
-                Log.d("Debug","Selected: "+type);
+                Log.d("TypeSelectionDebug","Selected: "+type);
                 Intent intent = new Intent(getBaseContext(),LiftSelection.class);
                 intent.putExtra("TYPE",type);
                 startActivity(intent);

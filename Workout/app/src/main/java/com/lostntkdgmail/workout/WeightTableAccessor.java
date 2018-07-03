@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class WeightTableAccessor extends DatabaseAccessor {
     private enum Columns {
-        ID, USER, DATE, TYPE, LIFT, WEIGHT, REPS;
+        ID, USER, DATE, TYPE, LIFT, WEIGHT, REPS
     }
     private static final String tableName = "weight";
     private static final String[] cols = {Columns.ID.name(), Columns.USER.name(),Columns.DATE.name(),Columns.TYPE.name(),Columns.LIFT.name(),Columns.WEIGHT.name(),Columns.REPS.name()};
@@ -35,7 +35,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
         db.execSQL("create table " + tableName + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.USER.name() + " TEXT," + Columns.DATE.name() +
                 " TEXT," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT," + Columns.WEIGHT.name() + " INTEGER," + Columns.REPS.name() + " INTEGER)");
 
-        Log.d("Debug","Created Weight Table");
+        Log.d("WeightTableAccessDebug","Created Weight Table");
     }
 
     /**
@@ -54,7 +54,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         printDate = printDate.substring(24)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+printDate.substring(8,10) ;
-        Log.d("Debug","Inserting: \"" + user +", "+ printDate +", "+ type +", "+ lift +", "+ weight +", "+ reps + "\" into \"" + tableName + "\"");
+        Log.d("WeightTableAccessDebug","Inserting: \"" + user +", "+ printDate +", "+ type +", "+ lift +", "+ weight +", "+ reps + "\" into \"" + tableName + "\"");
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.USER.name(),user);
         contentValues.put(Columns.DATE.name(),printDate);
@@ -64,10 +64,10 @@ public class WeightTableAccessor extends DatabaseAccessor {
         contentValues.put(Columns.REPS.name(),reps);
         long result = db.insert(tableName,null ,contentValues);
         if(result == -1) {
-            Log.d("Debug", "Failed to inserted");
+            Log.d("WeightTableAccessDebug", "Failed to inserted");
             return false;
         }
-        Log.d("Debug", "Successfully inserted");
+        Log.d("WeightTableAccessDebug", "Successfully inserted");
         return true;
     }
     /**
@@ -141,7 +141,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @return True if the update was successful
      */
     public boolean updateData(String id,String user,String date, String type,String lift, int weight, int reps) {
-        Log.d("Debug","Replacing id: " + id + " with: " + user +" "+ date +" "+ type +" "+ lift +" "+ weight +" "+ reps + " into " + tableName);
+        Log.d("WeightTableAccessDebug","Replacing id: " + id + " with: " + user +" "+ date +" "+ type +" "+ lift +" "+ weight +" "+ reps + " into " + tableName);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.USER.name(),user);

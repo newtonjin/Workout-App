@@ -15,8 +15,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:descendantFocusability="blocksDescendants"
-        android:solidColor="#000000"
-        android:background="#000000"
+        android:solidColor="@color/colorPrimary"
+        android:background="@color/colorPrimary"
         />
     <NumberPicker
         android:id="@+id/np3"
@@ -25,8 +25,8 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/np2"
         android:descendantFocusability="blocksDescendants"
-        android:solidColor="#000000"
-        android:background="#000000"
+        android:solidColor="@color/colorPrimary"
+        android:background="@color/colorPrimary"
         />
 
     <NumberPicker
@@ -36,8 +36,8 @@
         android:descendantFocusability="blocksDescendants"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/np2"
-        android:solidColor="#000000"
-        android:background="#000000"/>
+        android:solidColor="@color/colorPrimary"
+        android:background="@color/colorPrimary"/>
 
     <TextView
         android:id="@+id/tv"
@@ -59,10 +59,10 @@
         android:layout_marginBottom="20dp"
         android:layout_alignEnd="@+id/np3"
         android:layout_alignStart="@+id/np1"
-        android:background="#0000FF"
+        android:background="@color/submitButton"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault"
         android:textSize="30sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/textPrimary"
         android:onClick="submitWeight"/>
 
     <SeekBar

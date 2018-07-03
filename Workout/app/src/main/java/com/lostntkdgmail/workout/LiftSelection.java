@@ -17,7 +17,6 @@ import android.widget.TextView;
 public class LiftSelection extends Activity {
     private LiftTableAccessor liftTable;
     private ListView liftList;
-    private TextView text;
 
     /**
      * Creates the activity and sets up the data
@@ -26,9 +25,9 @@ public class LiftSelection extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Debug","Launching Activity LiftSelection");
+        Log.d("LiftSelectionDebug","Launching Activity LiftSelection");
         setContentView(R.layout.lift_selection);
-        text = findViewById(R.id.tvlift);
+        TextView text = findViewById(R.id.tvlift);
         text.setText(getIntent().getStringExtra("TYPE"));
         liftTable = new LiftTableAccessor(this);
         setUpListView();
@@ -39,7 +38,7 @@ public class LiftSelection extends Activity {
      */
     @Override
     protected void onDestroy() {
-        Log.d("Debug","onDestroy() called for LiftSelection");
+        Log.d("LiftSelectionDebug","onDestroy() called for LiftSelection");
         liftTable.close();
         super.onDestroy();
     }
@@ -63,7 +62,7 @@ public class LiftSelection extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String lift = (String)liftList.getItemAtPosition(position);
-                Log.d("Debug","Selected: "+lift);
+                Log.d("LiftSelectionDebug","Selected: "+lift);
                 Intent intent = new Intent(getBaseContext(),WeightSelection.class);
                 intent.putExtra("LIFT",lift);
                 intent.putExtra("TYPE",getIntent().getStringExtra("TYPE"));

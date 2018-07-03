@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * An Accessor used to access the Lift table in the workout database
  */
 public class LiftTableAccessor extends DatabaseAccessor {
-    private static String tableName = "lift";
+    private static final String tableName = "lift";
     private enum Columns {
         ID, TYPE, LIFT
     }
@@ -33,7 +33,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
      */
     public static void createTable(SQLiteDatabase db) {
         db.execSQL("create table " + tableName + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT)");
-        Log.d("Debug","Created Table: "+tableName+"("+Columns.ID.name()+","+Columns.TYPE.name()+","+Columns.LIFT.name()+")");
+        Log.d("LiftTableAccessorDebug","Created Table: "+tableName+"("+Columns.ID.name()+","+Columns.TYPE.name()+","+Columns.LIFT.name()+")");
     }
 
     /**
@@ -45,17 +45,17 @@ public class LiftTableAccessor extends DatabaseAccessor {
     public boolean insert(String type,String lift) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Log.d("Debug","Inserting: \"" + type +", "+ lift +"\" into \"" + tableName + "\"");
+        Log.d("LiftTableAccessorDebug","Inserting: \"" + type +", "+ lift +"\" into \"" + tableName + "\"");
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.TYPE.name(),type);
         contentValues.put(Columns.LIFT.name(),lift);
 
         long result = db.insert(tableName,null ,contentValues);
         if(result == -1) {
-            Log.d("Debug", "Failed to inserted");
+            Log.d("LiftTableAccessorDebug", "Failed to inserted");
             return false;
         }
-        Log.d("Debug", "Successfully inserted");
+        Log.d("LiftTableAccessorDebug", "Successfully inserted");
         return true;
     }
 
@@ -67,7 +67,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean updateData(String id,String type,String lift) {
-        Log.d("Debug","Replacing id: " + id + " with: " + type +" "+ lift + " into " + tableName);
+        Log.d("LiftTableAccessorDebug","Replacing id: " + id + " with: " + type +" "+ lift + " into " + tableName);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.TYPE.name(),type);
@@ -116,7 +116,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * Initializes the table with default values
      * @return True if it was successful
      */
-    public Boolean fillWithData() {
+    public boolean fillWithData() {
         String[] arms = {Resources.getSystem().getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
         String[] back = {Resources.getSystem().getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
         String[] chest = {Resources.getSystem().getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};

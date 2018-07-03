@@ -21,7 +21,7 @@
         android:layout_below="@+id/tvlift"
         android:textSize="25sp"
         android:textAlignment="center"
-        android:background="#000"
+        android:background="@color/colorPrimary"
        />
 
 </RelativeLayout>

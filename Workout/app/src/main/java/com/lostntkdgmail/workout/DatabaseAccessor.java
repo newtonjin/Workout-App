@@ -15,8 +15,8 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
      * The name of the Database
      */
     public static final String databaseName = "Workout.db";
-    private String tableName;
-    private String[] col;
+    private final String tableName;
+    private final String[] col;
 
     /**
      * Creates a new DatabaseAccessor
@@ -28,7 +28,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
         super(context, databaseName, null, 1);
         tableName = name;
         col = cols;
-        Log.d("Debug", databaseName.substring(0,databaseName.length()-3) +"."+tableName+" accessor created");
+        Log.d("DatabaseAccessorDebug", databaseName.substring(0,databaseName.length()-3) +"."+tableName+" accessor created");
     }
 
     /**
@@ -40,14 +40,6 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
         WeightTableAccessor.createTable(db);
         LiftTableAccessor.createTable(db);
     }
-
-    /**
-     * Creates the table in the Database. Must be overridden in the table classes extending this one
-     * @param db database to create the table in
-     */
-    public static void createTable(SQLiteDatabase db) {
-        throw new RuntimeException("This method must be overridden");
-    }
     /**
      * Specifies what should happen when the schema is upgraded
      * @param db The database being upgraded
@@ -56,7 +48,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.d("Debug","Upgrading Database: "+ tableName+" from version: "+oldVersion+" to version: "+newVersion);
+        Log.d("DatabaseAccessorDebug","Upgrading Database: "+ tableName+" from version: "+oldVersion+" to version: "+newVersion);
         db.execSQL("DROP TABLE IF EXISTS "+ tableName);
         onCreate(db);
     }
@@ -96,7 +88,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
      * @return The number of rows affected by the delete
      */
     public int deleteData (String id) {
-        Log.d("Debug","Deleting data at id: " + id);
+        Log.d("DatabaseAccessorDebug","Deleting data at id: " + id);
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(tableName, "ID = ?",new String[] {id});
     }
@@ -115,6 +107,6 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     @Override
     public void close() {
         super.close();
-        Log.d("Debug","Closing: "+databaseName.substring(0,databaseName.length()-3) +"."+tableName + " accessor");
+        Log.d("DatabaseAccessorDebug","Closing: "+databaseName.substring(0,databaseName.length()-3) +"."+tableName + " accessor");
     }
 }

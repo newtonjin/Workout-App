@@ -20,7 +20,7 @@
         android:layout_below="@+id/tvtype"
         android:textSize="25sp"
         android:textAlignment="center"
-        android:background="#000"
+        android:background="@color/colorPrimary"
          />
 
 </RelativeLayout>
