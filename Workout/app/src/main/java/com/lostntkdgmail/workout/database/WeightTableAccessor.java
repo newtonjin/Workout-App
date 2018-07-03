@@ -151,7 +151,12 @@ public class WeightTableAccessor extends DatabaseAccessor {
         contentValues.put(Columns.LIFT.name(),lift);
         contentValues.put(Columns.WEIGHT.name(),weight);
         contentValues.put(Columns.REPS.name(),reps);
-        db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
-        return true; //TODO: Eventually have this actually do something, or change the method to return the number of rows affected
+        int num = db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
+        if(num > 0)
+            return true;
+        else {
+            Log.d(TAG,"Update affected: " + num + " rows");
+            return false;
+        }
     }
 }

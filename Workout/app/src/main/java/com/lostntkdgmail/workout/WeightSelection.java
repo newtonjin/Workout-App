@@ -5,8 +5,7 @@ package com.lostntkdgmail.workout;
 //TODO: Add ability to edit types of workouts
 //TODO: Add Users
 //TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?
-//TODO: Replace hardcoded text with resource strings
-//TODO: Replace hardcoded colors with color resources, possibly add color customization to users?
+//TODO: Possibly add color customization to users?
 //TODO: Allow users to adjust max value on rep bar
 //TODO: Home screen
 //TODO: An actual app icon/logo
