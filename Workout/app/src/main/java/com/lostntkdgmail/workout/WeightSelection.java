@@ -1,47 +1,52 @@
 package com.lostntkdgmail.workout;
 
 //TODO: Add side menu
-//TODO: Add ability to view/edit past entries
+//TODO: Add ability to view/edit/delete past entries
 //TODO: Add ability to edit types of workouts
 //TODO: Add Users
 //TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?
-//TODO: Replace hardcoded text with resource strings
-//TODO: Replace hardcoded colors with color resources, possibly add color customization to users?
+//TODO: Possibly add color customization to users?
+//TODO: Allow users to adjust max value on rep bar
+//TODO: Home screen
+//TODO: An actual app icon/logo
 
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
+
+import com.lostntkdgmail.workout.database.LiftTableAccessor;
+import com.lostntkdgmail.workout.database.WeightTableAccessor;
+
 import java.util.ArrayList;
 
 /**
  * The Activity for selecting a weight
  */
 public class WeightSelection extends Activity {
+    private static final String TAG = "WeightSelection";
     private String type, lift, user;
     private int digit1 = 0;
     private int digit2 = 0;
     private int digit3 = 0;
     private int reps = 0;
-    private SeekBar sBar;
     private TextView sBarText;
     private WeightTableAccessor weightTable;
     private LiftTableAccessor liftTable;
 
     /**
      * Creates the Activity and sets up the data
-     * @param savedInstanceState
+     * @param savedInstanceState The last saved state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Debug","Launching Activity: Weight Selection");
+        Log.d(TAG,"Launching Activity: Weight Selection");
         setContentView(R.layout.weight_selection);
         type = getIntent().getStringExtra("TYPE"); //Gets the type of lift from the Intent
         lift = getIntent().getStringExtra("LIFT"); //Gets the lift name from the Intent
@@ -50,12 +55,10 @@ public class WeightSelection extends Activity {
         setUpSeekBar();
         setUpNumberPickers();
 
-        Button submit = findViewById(R.id.button);
         weightTable = new WeightTableAccessor(this);
         liftTable = new LiftTableAccessor(this);
-
         for(int[] s : getPreviousWeights()) {
-            Log.d("Debug",s[0]+" "+s[1]);
+            Log.d(TAG,"("+s[0]+" lbs "+s[1]+" reps)");
         }
     }
     /**
@@ -63,16 +66,16 @@ public class WeightSelection extends Activity {
      */
     @Override
     protected void onDestroy() {
-        Log.d("Debug","onDestroy() called for WeightSelection");
+        Log.d(TAG,"onDestroy() called for WeightSelection");
         weightTable.close();
         liftTable.close();
         super.onDestroy();
     }
     /**
      * Submits the weight into the database
-     * @param view The submit button (I think)
+     * @param view The Submit button
      */
-    public void submitWeight(View view) { //TODO: Can we take out the param? I don't remember why it's there
+    public void submitWeight(View view) {
         int weight = digit1*100+digit2*10+digit3;
         if(reps > 0 && weight > 0) {
             boolean insertResult = weightTable.insert(user, type, lift, weight, reps);
@@ -92,9 +95,9 @@ public class WeightSelection extends Activity {
      * Initializes the 3 number pickers
      */
     public void setUpNumberPickers() {
-        NumberPicker np1 = findViewById(R.id.np1);
-        NumberPicker np2 = findViewById(R.id.np2);
-        NumberPicker np3 = findViewById(R.id.np3);
+        NumberPicker np1 = findViewById(R.id.numberPicker1);
+        NumberPicker np2 = findViewById(R.id.numberPicker2);
+        NumberPicker np3 = findViewById(R.id.numberPicker3);
 
         //Setting up first Number picker
         np1.setMinValue(0);
@@ -157,8 +160,8 @@ public class WeightSelection extends Activity {
      * Initializes the seek bar
      */
     public void setUpSeekBar() {
-        sBarText = findViewById(R.id.tv2);
-        sBar= findViewById(R.id.seekBar);
+        sBarText = findViewById(R.id.scrollBarText);
+        SeekBar sBar = findViewById(R.id.seekBar);
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             /**
              * Determines what happens when the progress is changed
@@ -169,7 +172,7 @@ public class WeightSelection extends Activity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
                 reps = value;
-                sBarText.setText(reps + " reps");
+                sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
             }
 
             /**
@@ -187,10 +190,10 @@ public class WeightSelection extends Activity {
              */
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sBarText.setText(reps + " reps");
+                sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
             }
         });
-        sBarText.setText(sBar.getProgress() + " reps");
+        sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
     }
 
     /**
@@ -198,58 +201,58 @@ public class WeightSelection extends Activity {
      * @return An ArrayList<int[]> containing the previous weights. Each int[] is an entry set up like: [weight, reps]
      */
     public ArrayList<int[]> getPreviousWeights() {
-        Cursor c = weightTable.getCursor(user,type,lift, weightTable.getColumnNames()[0]+" DESC","3");
+        Cursor c = weightTable.select(user,type,lift, weightTable.getColumnNames()[0]+" DESC","3");
         ArrayList<int[]> result = new ArrayList<>(3);
         while(c.moveToNext()) {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
             result.add(arr);
         }
-        TextView weight1 = findViewById(R.id.Weight1);
-        TextView weight2 = findViewById(R.id.Weight2);
-        TextView weight3 = findViewById(R.id.Weight3);
-        TextView rep1 = findViewById(R.id.Rep1);
-        TextView rep2 = findViewById(R.id.Rep2);
-        TextView rep3 = findViewById(R.id.Rep3);
+        TextView weight1 = findViewById(R.id.pastWeightText1);
+        TextView weight2 = findViewById(R.id.pastWeightText2);
+        TextView weight3 = findViewById(R.id.pastWeightText3);
+        TextView rep1 = findViewById(R.id.pastRepText1);
+        TextView rep2 = findViewById(R.id.pastRepText2);
+        TextView rep3 = findViewById(R.id.pastRepText3);
         switch (result.size()) {
-            case 3:
-                weight3.setText(result.get(0)[0] + " lbs");
-                rep3.setText(result.get(0)[1] + " reps");
+            case 0: //No previous weights
+                weight1.setText(getResources().getString(R.string.null_lbs));
+                rep1.setText(getResources().getString(R.string.null_reps));
 
-                weight2.setText(result.get(1)[0] + " lbs");
-                rep2.setText(result.get(1)[1] + " reps");
+                weight2.setText(getResources().getString(R.string.null_lbs));
+                rep2.setText(getResources().getString(R.string.null_reps));
 
-                weight1.setText(result.get(2)[0] + " lbs");
-                rep1.setText(result.get(2)[1] + " reps");
+                weight3.setText(getResources().getString(R.string.null_lbs));
+                rep3.setText(getResources().getString(R.string.null_reps));
                 break;
-            case 2:
-                weight2.setText(result.get(1)[0] + " lbs");
-                rep2.setText(result.get(1)[1] + " reps");
+            case 1: //Only 1 previous weight
+                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
+                rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
 
-                weight3.setText(result.get(0)[0] + " lbs");
-                rep3.setText(result.get(0)[1] + " reps");
+                weight2.setText(getResources().getString(R.string.null_lbs));
+                rep2.setText(getResources().getString(R.string.null_reps));
 
-                weight1.setText("-- lbs");
-                rep1.setText("-- reps");
+                weight1.setText(getResources().getString(R.string.null_lbs));
+                rep1.setText(getResources().getString(R.string.null_reps));
                 break;
-            case 1:
-                weight3.setText(result.get(0)[0] + " lbs");
-                rep3.setText(result.get(0)[1] + " reps");
+            case 2: //Only 2 previous weights
+                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
+                rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
 
-                weight2.setText("-- lbs");
-                rep2.setText("-- reps");
+                weight2.setText(getResources().getString(R.string.lbs,result.get(1)[0]));
+                rep2.setText(getResources().getQuantityString(R.plurals.reps,result.get(1)[1],result.get(1)[1]));
 
-                weight1.setText("-- lbs");
-                rep1.setText("-- reps");
+                weight1.setText(getResources().getString(R.string.null_lbs));
+                rep1.setText(getResources().getString(R.string.null_reps));
                 break;
-            case 0:
-                weight1.setText("-- lbs");
-                rep1.setText("-- reps");
+            default: //All 3 previous weights
+                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
+                rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
 
-                weight2.setText("-- lbs");
-                rep2.setText("-- reps");
+                weight2.setText(getResources().getString(R.string.lbs,result.get(1)[0]));
+                rep2.setText(getResources().getQuantityString(R.plurals.reps,result.get(1)[1],result.get(1)[1]));
 
-                weight3.setText("-- lbs");
-                rep3.setText("-- reps");
+                weight1.setText(getResources().getString(R.string.lbs,result.get(2)[0]));
+                rep1.setText(getResources().getQuantityString(R.plurals.reps,result.get(2)[1],result.get(2)[1]));
                 break;
         }
         return result;

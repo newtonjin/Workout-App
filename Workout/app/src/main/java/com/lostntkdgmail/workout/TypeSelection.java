@@ -9,11 +9,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.lostntkdgmail.workout.database.LiftTableAccessor;
+
 
 /**
  * The Activity for selecting a Type of lift
  */
 public class TypeSelection extends Activity {
+    private static final String TAG = "TypeSelection";
     private LiftTableAccessor liftTable;
     private ListView typeList;
 
@@ -24,7 +27,7 @@ public class TypeSelection extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Debug","Launching Activity: TypeSelection");
+        Log.d(TAG,"Launching Activity: TypeSelection");
         setContentView(R.layout.type_selection);
         liftTable = new LiftTableAccessor(this);
         setUpListView();
@@ -36,7 +39,7 @@ public class TypeSelection extends Activity {
      */
     @Override
     protected void onDestroy() {
-        Log.d("Debug","onDestroy() called for Type Selection");
+        Log.d(TAG,"onDestroy() called for Type Selection");
         liftTable.close();
         super.onDestroy();
     }
@@ -48,8 +51,8 @@ public class TypeSelection extends Activity {
         if(liftTable.getNumberOfRows() < 1)
             liftTable.fillWithData();
         String[] types = liftTable.getTypes();
-        typeList = findViewById(R.id.listv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,R.id.listText,types);
+        typeList = findViewById(R.id.typeList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.listEntry, types);
         typeList.setAdapter(adapter);
 
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,7 +66,7 @@ public class TypeSelection extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String type = (String)typeList.getItemAtPosition(position);
-                Log.d("Debug","Selected: "+type);
+                Log.d(TAG,"Selected: "+type);
                 Intent intent = new Intent(getBaseContext(),LiftSelection.class);
                 intent.putExtra("TYPE",type);
                 startActivity(intent);
