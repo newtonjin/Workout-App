@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
+import com.lostntkdgmail.workout.LiftSelection;
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.TypeSelection;
 
@@ -21,25 +22,30 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Setting up the View Pager
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+
         viewPager = (ViewPager) findViewById(R.id.container);
-        fragmentManager = getSupportFragmentManager();
-        pagerAdapter = new PagerAdapter(fragmentManager);
 
         // This is where the control of which fragment appears first occurs.
         viewPager.setAdapter(pagerAdapter);
-        // Displays the Dashboard first.
         viewPager.setCurrentItem(pagerAdapter.HOME);
+        setUpViewPager(viewPager);
+
+        System.out.println("Test 9");
+
 
     }
 
-    private void setViewPagersAdapter(ViewPager vp) {
+    private void setUpViewPager(ViewPager vp) {
+        System.out.println("Test 8");
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new TypeSelection(), "TypeSelection");
+        adapter.addFragment(new LiftSelection(), "LiftSelection");
         viewPager.setAdapter(adapter);
     }
 
     public void setViewPager(int fragmentNum) {
+        System.out.println("Test 10");
         viewPager.setCurrentItem(fragmentNum);
     }
 

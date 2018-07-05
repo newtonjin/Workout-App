@@ -13,6 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.lostntkdgmail.workout.main.MainActivity;
 
 
 /**
@@ -27,9 +30,11 @@ public class TypeSelection extends Fragment {
 
     public TypeSelection() {
         //required and empty constructor
+        System.out.println("TEst 3?!");
     }
 
     public static TypeSelection newInstance() {
+        System.out.println("Test 4");
         TypeSelection fragment = new TypeSelection();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -38,9 +43,40 @@ public class TypeSelection extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        System.out.println("Test 5");
         View view = inflater.inflate(R.layout.type_selection, container, false);
+        System.out.println("Test 6");
         liftTable = new LiftTableAccessor(this.getContext());
-        view = setUpListView(view);
+
+
+        if(liftTable.getNumberOfRows() < 1)
+            liftTable.fillWithData();
+        String[] types = liftTable.getTypes();
+        typeList = view.findViewById(R.id.listv);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(),R.layout.list_item,R.id.listText,types);
+        typeList.setAdapter(adapter);
+
+        System.out.println("Test 1");
+        typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * Determines what happens when one of the Items is selected
+             * @param adapterView The adapter view
+             * @param view The ListView
+             * @param position The position of the view in the adapter
+             * @param id The row id of the selected item
+             */
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                System.out.println("test");
+                String type = (String)typeList.getItemAtPosition(position);
+                Log.d("Debug","Selected: "+type);
+
+                Toast.makeText(getActivity(), "Going to " + type, Toast.LENGTH_SHORT);
+                ((MainActivity)getActivity()).setViewPager(1);
+
+            }
+        });
+        System.out.println("Test 2");
         return view;
     }
 
@@ -58,6 +94,7 @@ public class TypeSelection extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        System.out.println("Test 7");
     }
 
     @Override
@@ -65,47 +102,6 @@ public class TypeSelection extends Fragment {
         super.onDetach();
     }
 
-    /**
-     * Cleans up the Activity and closes the database accessors
-     */
-    @Override
-    public void onDestroy() {
-        Log.d("Debug","onDestroy() called for Type Selection");
-        liftTable.close();
-        super.onDestroy();
-    }
-
-    /**
-     * Sets up the ListView which holds all of the different lifts
-     */
-    public View setUpListView(View v) {
-        if(liftTable.getNumberOfRows() < 1)
-            liftTable.fillWithData();
-        String[] types = liftTable.getTypes();
-        typeList = v.findViewById(R.id.listv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(),R.layout.list_item,R.id.listText,types);
-        typeList.setAdapter(adapter);
-
-        typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            /**
-             * Determines what happens when one of the Items is selected
-             * @param adapterView The adapter view
-             * @param view The ListView
-             * @param position The position of the view in the adapter
-             * @param id The row id of the selected item
-             */
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String type = (String)typeList.getItemAtPosition(position);
-                Log.d("Debug","Selected: "+type);
-                //Intent intent = new Intent(getBaseContext(),LiftSelection.class);
-                //intent.putExtra("TYPE",type);
-                //startActivity(intent);
-
-            }
-        });
-        return v;
-    }
 
 
 
