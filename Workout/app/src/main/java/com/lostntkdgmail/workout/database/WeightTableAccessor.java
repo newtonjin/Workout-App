@@ -72,62 +72,52 @@ public class WeightTableAccessor extends DatabaseAccessor {
         return true;
     }
     /**
-     * Used to select things from inside of the table
-     * @param user The user to be selected (Can be left null to return all users)
-     * @param type The type of lift to be selected (Can be left null to return all types)
-     * @param lift The lift to be selected (Can be left null to return all lifts)
+     * Used to select things from inside of the table. Values can be left at null to not filter the data by those columns, however user, type, and lift cannot all be null. One has to be non null.
+     * @param user The user to be selected
+     * @param type The type of lift to be selected
+     * @param lift The lift to be selected
      * @param sorting SQLite sorting algorithm
      * @return Cursor object with all selected values
      */
-    public Cursor getCursor(String user, String type, String lift, String sorting, String limit) {
+    public Cursor select(String user, String type, String lift, String sorting, String limit) { //TODO: change limit to int eventually
+        Log.d(TAG, "select called");
+        if(user == null && type == null && lift == null) {
+            Log.d(TAG, "All values passed to select are null");
+            return null;
+        }
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res;
+        StringBuilder builder = new StringBuilder();
+        builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
         if(user != null) {
-            if (type != null && lift != null) {
-                String[] selection = {type, lift, user};
-                res = db.query(TABLE_NAME, cols, Columns.TYPE.name() + " = ? and " + Columns.LIFT.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
-            }
-            else if (type != null) {
-                String[] selection = {type, user};
-                res = db.query(TABLE_NAME, cols, Columns.TYPE.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
-            }
-            else if (lift != null) {
-                String[] selection = {lift, user};
-                res = db.query(TABLE_NAME, cols, Columns.LIFT.name() + " = ? and " + Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
-            }
-            else {
-                String[] selection = { user};
-                res = db.query(TABLE_NAME, cols, Columns.USER.name() + " = ?", selection, null, null,sorting,limit);
-            }
+            builder.append(" ").append(Columns.USER.name()).append(" = '").append(user).append("'");
+            if(type != null || lift != null)
+                builder.append(" AND");
         }
-        else {
-            if(type != null && lift != null) {
-                String[] selection = {lift, type};
-                res = db.query(TABLE_NAME, cols, Columns.LIFT.name() + " = ? and " + Columns.TYPE.name() + " = ?", selection, null, null, sorting,limit);
-            }
-            else if(type != null) {
-                String[] selection = {type};
-                res = db.query(TABLE_NAME, cols, Columns.TYPE.name() + " = ?", selection, null, null,sorting,limit);
-            }
-            else if(lift != null) {
-                String[] selection = {lift};
-                res = db.query(TABLE_NAME, cols, Columns.LIFT.name() + " = ?", selection, null, null,sorting,limit);
-            }
-            else {
-                res = db.query(TABLE_NAME, cols, null, null, null, null, sorting,limit);
-            }
+        if(type != null) {
+            builder.append(" ").append(Columns.TYPE.name()).append(" = '").append(type).append("'");
+            if(lift != null)
+                builder.append(" AND");
         }
-        return res;
+        if(lift != null)
+            builder.append(" ").append(Columns.LIFT.name()).append(" = '").append(lift).append("'");
+        if(sorting != null)
+            builder.append(" ORDER BY ").append(sorting);
+        if(Integer.parseInt(limit) > -1)
+            builder.append(" LIMIT ").append(limit);
+        String sql = builder.toString();
+        Log.d(TAG, "Executing query: "+ sql);
+        return db.rawQuery(sql, new String[0]);
     }
     /**
-     * Used to select things from inside of the table
-     * @param user The user to be selected (Can be left null to return all users)
-     * @param type The type of lift to be selected (Can be left null to return all types)
-     * @param lift The lift to be selected (Can be left null to return all lifts)
+     * Used to select things from inside of the table. Values can be left at null to not filter the data by those columns, however user, type, and lift cannot all be null. One has to be non null.
+     * Defaults to no limit on output, and sorts by User ASC, Type ASC, Lift ASC, DATE ASC, Id ASC
+     * @param user The user to be selected
+     * @param type The type of lift to be selected
+     * @param lift The lift to be selected
      * @return Cursor object with all selected values
      */
-    public Cursor getCursor(String user, String type, String lift) {
-        return getCursor(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + cols[4] + " ASC, " + cols[0] + " ASC",null);
+    public Cursor select(String user, String type, String lift) {
+        return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC",null);
     }
 
     /**

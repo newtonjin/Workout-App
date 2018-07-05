@@ -29,7 +29,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, 1);
         TABLE_NAME = name;
         col = cols;
-        Log.d("DatabaseAccessorDebug", DATABASE_NAME.substring(0, DATABASE_NAME.length()-3) +"."+ TABLE_NAME +" accessor created");
+        Log.d(TAG, DATABASE_NAME.substring(0, DATABASE_NAME.length()-3) +"."+ TABLE_NAME +" accessor created");
     }
 
     /**

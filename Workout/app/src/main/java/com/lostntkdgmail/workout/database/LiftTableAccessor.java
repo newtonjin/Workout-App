@@ -90,7 +90,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @param sorting The method for sorting the result
      * @return A Cursor object with all of the selected values
      */
-    public Cursor getCursor(String type, String lift, String sorting) {
+    public Cursor select(String type, String lift, String sorting) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res;
         if(type != null && lift != null) {
@@ -116,8 +116,8 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @param lift The name of the lift
      * @return A Cursor object with all of the selected values
      */
-    public Cursor getCursor(String type, String lift) {
-        return getCursor(type,lift,Columns.TYPE.name()+" ASC");
+    public Cursor select(String type, String lift) {
+        return select(type,lift,Columns.TYPE.name()+" ASC");
     }
 
     /**

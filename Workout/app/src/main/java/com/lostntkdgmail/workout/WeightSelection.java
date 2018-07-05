@@ -201,7 +201,7 @@ public class WeightSelection extends Activity {
      * @return An ArrayList<int[]> containing the previous weights. Each int[] is an entry set up like: [weight, reps]
      */
     public ArrayList<int[]> getPreviousWeights() {
-        Cursor c = weightTable.getCursor(user,type,lift, weightTable.getColumnNames()[0]+" DESC","3");
+        Cursor c = weightTable.select(user,type,lift, weightTable.getColumnNames()[0]+" DESC","3");
         ArrayList<int[]> result = new ArrayList<>(3);
         while(c.moveToNext()) {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
