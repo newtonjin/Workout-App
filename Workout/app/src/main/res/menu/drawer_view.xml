@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav1"
+            android:title="HELP ME" />
+        <item
+            android:id="@+id/nav2"
+            android:title="PLEASE HELP ME" />
+        <item
+            android:id="@+id/nav3"
+            android:title="I AM DYING" />
+        <item
+            android:id="@+id/nav4"
+            android:title="AAAAAHHHH" />
+    </group>
+
+</menu>
