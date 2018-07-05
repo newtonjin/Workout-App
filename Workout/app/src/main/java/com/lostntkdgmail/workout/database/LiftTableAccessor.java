@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.lostntkdgmail.workout.R;
-import com.lostntkdgmail.workout.ResourceContext;
 
 import java.util.ArrayList;
 
@@ -125,12 +124,12 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean fillWithData() {
-        String[] arms = {ResourceContext.getContext().getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
-        String[] back = {ResourceContext.getContext().getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
-        String[] chest = {ResourceContext.getContext().getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
-        String[] forearms = {ResourceContext.getContext().getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
-        String[] legs = {ResourceContext.getContext().getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
-        String[] shoulders = {ResourceContext.getContext().getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
+        String[] arms = {context.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
+        String[] back = {context.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
+        String[] chest = {context.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
+        String[] forearms = {context.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
+        String[] legs = {context.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+        String[] shoulders = {context.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
         String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
         for (String[] arr : lifts) {
             String name = arr[0];
