@@ -2,14 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav1"
+            android:id="@+id/recordWeightsNav"
             android:title="@string/record_weights" />
         <item
-            android:id="@+id/nav2"
+            android:id="@+id/pastEntriesNav"
             android:title="@string/view_past_entries" />
         <item
-            android:id="@+id/nav4"
+            android:id="@+id/switchUserNav"
             android:title="@string/switch_users" />
+        <item
+            android:id="@+id/settingsNav"
+            android:title="@string/settings" />
     </group>
 
 </menu>
