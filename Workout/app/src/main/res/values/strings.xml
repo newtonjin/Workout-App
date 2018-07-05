@@ -13,6 +13,9 @@
     <string name="forearms">Forearms</string>
     <string name="legs">Legs</string>
     <string name="shoulders">Shoulders</string>
+    <string name="record_weights">Record Weights</string>
+    <string name="view_past_entries">View Past Entries</string>
+    <string name="switch_users">Switch Users</string>
 
 
     <string name="lbs">%d lbs</string>

@@ -3,7 +3,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="192dp"
-    android:background="@color/colorPrimary"
     android:padding="16dp"
     android:theme="@style/AppTheme"
     android:gravity="bottom">
@@ -11,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="What a cool side menu"
+        android:text="@string/app_name"
         android:textAppearance="@style/AppTheme" />
 
 </LinearLayout>
