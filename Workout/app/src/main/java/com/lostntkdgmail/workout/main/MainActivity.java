@@ -1,20 +1,23 @@
 package com.lostntkdgmail.workout.main;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.lostntkdgmail.workout.LiftSelection;
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.TypeSelection;
+import com.lostntkdgmail.workout.WeightSelection;
 
 public class MainActivity extends FragmentActivity {
 
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
-    private ViewPager viewPager;
+    private NonSwipeLeftViewPager viewPager;
     private FragmentManager fragmentManager;
 
     @Override
@@ -24,29 +27,39 @@ public class MainActivity extends FragmentActivity {
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
-        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager = (NonSwipeLeftViewPager) findViewById(R.id.container);
 
         // This is where the control of which fragment appears first occurs.
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(pagerAdapter.HOME);
         setUpViewPager(viewPager);
 
-        System.out.println("Test 9");
+        viewPager.setCurrentItem(0);
 
+    }
 
+    public void addFragment(Fragment fm, String title) {
+        pagerAdapter.addFragment(fm, title);
+        pagerAdapter.notifyDataSetChanged();
+        //currently crashing the app???
+        //getSupportFragmentManager().beginTransaction().add(fm, title).addToBackStack(null).commit();
     }
 
     private void setUpViewPager(ViewPager vp) {
-        System.out.println("Test 8");
-        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TypeSelection(), "TypeSelection");
-        adapter.addFragment(new LiftSelection(), "LiftSelection");
-        viewPager.setAdapter(adapter);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        pagerAdapter.addFragment(new TypeSelection(), "TypeSelection");
+        viewPager.setAdapter(pagerAdapter);
     }
 
     public void setViewPager(int fragmentNum) {
-        System.out.println("Test 10");
         viewPager.setCurrentItem(fragmentNum);
     }
 
+    //Not working properly atm
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

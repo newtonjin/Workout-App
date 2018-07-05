@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".main.MainActivity">
 
-    <android.support.v4.view.ViewPager
+    <com.lostntkdgmail.workout.main.NonSwipeLeftViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
 
-    </android.support.v4.view.ViewPager>
+    </com.lostntkdgmail.workout.main.NonSwipeLeftViewPager>
 
 </android.support.constraint.ConstraintLayout>

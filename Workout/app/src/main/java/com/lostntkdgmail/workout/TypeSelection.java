@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lostntkdgmail.workout.main.MainActivity;
+import com.lostntkdgmail.workout.main.PagerAdapter;
 
 
 /**
@@ -30,11 +31,10 @@ public class TypeSelection extends Fragment {
 
     public TypeSelection() {
         //required and empty constructor
-        System.out.println("TEst 3?!");
     }
 
     public static TypeSelection newInstance() {
-        System.out.println("Test 4");
+
         TypeSelection fragment = new TypeSelection();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -43,11 +43,8 @@ public class TypeSelection extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("Test 5");
         View view = inflater.inflate(R.layout.type_selection, container, false);
-        System.out.println("Test 6");
         liftTable = new LiftTableAccessor(this.getContext());
-
 
         if(liftTable.getNumberOfRows() < 1)
             liftTable.fillWithData();
@@ -56,7 +53,6 @@ public class TypeSelection extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(),R.layout.list_item,R.id.listText,types);
         typeList.setAdapter(adapter);
 
-        System.out.println("Test 1");
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
              * Determines what happens when one of the Items is selected
@@ -67,16 +63,16 @@ public class TypeSelection extends Fragment {
              */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                System.out.println("test");
                 String type = (String)typeList.getItemAtPosition(position);
                 Log.d("Debug","Selected: "+type);
 
                 Toast.makeText(getActivity(), "Going to " + type, Toast.LENGTH_SHORT);
+                getActivity().getIntent().putExtra("TYPE", type);
+                ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
                 ((MainActivity)getActivity()).setViewPager(1);
 
             }
         });
-        System.out.println("Test 2");
         return view;
     }
 
@@ -94,7 +90,6 @@ public class TypeSelection extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        System.out.println("Test 7");
     }
 
     @Override

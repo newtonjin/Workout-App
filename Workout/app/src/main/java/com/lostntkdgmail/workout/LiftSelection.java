@@ -66,8 +66,6 @@ public class LiftSelection extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        Log.d("Debug","onDestroy() called for LiftSelection");
-        liftTable.close();
         super.onAttach(context);
     }
     /**
@@ -79,9 +77,15 @@ public class LiftSelection extends Fragment {
      * Sets up the list view which shows all of the different types
      */
     public View setUpListView(View view) {
-        String[] lifts = liftTable.getLifts(getActivity().getIntent().getStringExtra("TYPE"));
+        String[] lifts;
+        try {
+              lifts = liftTable.getLifts(getActivity().getIntent().getStringExtra("TYPE"));
+        } catch (IllegalArgumentException e) {
+            System.out.println("y tho");
+            lifts = liftTable.getLifts("Arms");
+        }
         liftList = view.findViewById(R.id.listvlift);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(),R.layout.list_item,R.id.listText,lifts);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), R.layout.list_item, R.id.listText, lifts);
         liftList.setAdapter(adapter);
 
         liftList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,7 +99,11 @@ public class LiftSelection extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String lift = (String)liftList.getItemAtPosition(position);
-                Log.d("Debug","Selected: "+lift);
+                Log.d("Debug","Selected: " + lift);
+                Intent intent = new Intent(getActivity().getBaseContext(),WeightSelection.class);
+                getActivity().getIntent().putExtra("LIFT",lift);
+                getActivity().getIntent().putExtra("TYPE",getActivity().getIntent().getStringExtra("TYPE"));
+                ((MainActivity)getActivity()).addFragment(new WeightSelection(), "WeightSelection");
                 ((MainActivity)getActivity()).setViewPager(2);
 
             }

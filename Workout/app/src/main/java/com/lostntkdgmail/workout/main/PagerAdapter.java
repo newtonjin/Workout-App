@@ -14,25 +14,35 @@ public class PagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    public final int HOME = 0;
-    public final int LIFT = 1;
-    public final int WEIGHT = 2;
+    public static final int HOME = 0;
+    public static final int LIFT = 1;
+    public static final int WEIGHT = 2;
 
     public PagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
-        mFragmentList.add(new TypeSelection());
     }
 
     public void addFragment(Fragment fm, String title) {
-        mFragmentList.add(fm);
-        mFragmentTitleList.add(title);
+        if(!mFragmentTitleList.contains(title)) {
+            mFragmentList.add(fm);
+            mFragmentTitleList.add(title);
+        } else {
+            System.out.println(title + " already exists");
+        }
+        }
 
+    public void removeFragment(int index) {
+        mFragmentList.remove(index);
+        mFragmentTitleList.remove(index);
     }
 
     public Fragment getItem(int pos) {
         return mFragmentList.get(pos);
     }
 
+    public String getItemTitle(int pos) {
+        return mFragmentTitleList.get(pos);
+    }
 
     @Override
     public int getCount() {
