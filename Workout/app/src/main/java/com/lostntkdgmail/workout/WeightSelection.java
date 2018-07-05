@@ -9,6 +9,7 @@ package com.lostntkdgmail.workout;
 //TODO: Allow users to adjust max value on rep bar
 //TODO: Home screen
 //TODO: An actual app icon/logo
+//TODO: With users, if there are no users in the db, it should prompt for user info before starting for the first time
 
 import android.database.Cursor;
 import android.os.Bundle;

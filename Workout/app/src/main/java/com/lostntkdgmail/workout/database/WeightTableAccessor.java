@@ -49,7 +49,6 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @return True if the insertion was successful
      */
     public boolean insert(String user,String type,String lift, int weight, int reps) {
-        SQLiteDatabase db = this.getWritableDatabase();
         Date date = new Date();
         String printDate = new Date().toString();
         Calendar calendar = Calendar.getInstance();
@@ -63,7 +62,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
         contentValues.put(Columns.LIFT.name(),lift);
         contentValues.put(Columns.WEIGHT.name(),weight);
         contentValues.put(Columns.REPS.name(),reps);
-        long result = db.insert(TABLE_NAME,null ,contentValues);
+        long result = writableDb.insert(TABLE_NAME,null ,contentValues);
         if(result == -1) {
             Log.d(TAG, "Failed to inserted");
             return false;
@@ -85,7 +84,6 @@ public class WeightTableAccessor extends DatabaseAccessor {
             Log.d(TAG, "All values passed to select are null");
             return null;
         }
-        SQLiteDatabase db = this.getReadableDatabase();
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
         if(user != null) {
@@ -106,7 +104,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
             builder.append(" LIMIT ").append(limit);
         String sql = builder.toString();
         Log.d(TAG, "Executing query: "+ sql);
-        return db.rawQuery(sql, new String[0]);
+        return readableDb.rawQuery(sql, new String[0]);
     }
     /**
      * Used to select things from inside of the table. Values can be left at null to not filter the data by those columns, however user, type, and lift cannot all be null. One has to be non null.
@@ -133,7 +131,6 @@ public class WeightTableAccessor extends DatabaseAccessor {
      */
     public boolean updateData(String id,String user,String date, String type,String lift, int weight, int reps) {
         Log.d(TAG,"Replacing id: " + id + " with: " + user +" "+ date +" "+ type +" "+ lift +" "+ weight +" "+ reps + " into " + TABLE_NAME);
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.USER.name(),user);
         contentValues.put(Columns.DATE.name(),date);
@@ -141,7 +138,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
         contentValues.put(Columns.LIFT.name(),lift);
         contentValues.put(Columns.WEIGHT.name(),weight);
         contentValues.put(Columns.REPS.name(),reps);
-        int num = db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
+        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
         if(num > 0)
             return true;
         else {

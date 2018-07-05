@@ -2,13 +2,11 @@ package com.lostntkdgmail.workout.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.lostntkdgmail.workout.R;
-import com.lostntkdgmail.workout.ResourceContext;
 
 import java.util.ArrayList;
 
@@ -47,14 +45,13 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean insert(String type,String lift) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
         Log.d(TAG,"Inserting: \"" + type +", "+ lift +"\" into \"" + TABLE_NAME + "\"");
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.TYPE.name(),type);
         contentValues.put(Columns.LIFT.name(),lift);
 
-        long result = db.insert(TABLE_NAME,null ,contentValues);
+        long result = writableDb.insert(TABLE_NAME,null ,contentValues);
         if(result == -1) {
             Log.d(TAG, "Failed to inserted");
             return false;
@@ -72,11 +69,10 @@ public class LiftTableAccessor extends DatabaseAccessor {
      */
     public boolean updateData(String id,String type,String lift) {
         Log.d(TAG,"Replacing id: " + id + " with: " + type +" "+ lift + " into " + TABLE_NAME);
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.TYPE.name(),type);
         contentValues.put(Columns.LIFT.name(),lift);
-        int num = db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
+        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
         if(num > 0)
             return true;
         else {
@@ -92,22 +88,21 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return A Cursor object with all of the selected values
      */
     public Cursor select(String type, String lift, String sorting) {
-        SQLiteDatabase db = this.getReadableDatabase();
         Cursor res;
         if(type != null && lift != null) {
             String[] selection = {type,lift};
-            res = db.query(TABLE_NAME, col, Columns.TYPE.name() + " = ? and " + Columns.LIFT.name() + " = ?", selection, null, null,sorting);
+            res = readableDb.query(TABLE_NAME, col, Columns.TYPE.name() + " = ? and " + Columns.LIFT.name() + " = ?", selection, null, null,sorting);
         }
         else if(type != null) {
             String[] selection = {type};
-            res = db.query(TABLE_NAME, col, Columns.TYPE.name() + " = ?", selection, null, null,sorting);
+            res = readableDb.query(TABLE_NAME, col, Columns.TYPE.name() + " = ?", selection, null, null,sorting);
         }
         else if(lift != null) {
             String[] selection = {lift};
-            res = db.query(TABLE_NAME, col, Columns.LIFT.name() + " = ?", selection, null, null,sorting);
+            res = readableDb.query(TABLE_NAME, col, Columns.LIFT.name() + " = ?", selection, null, null,sorting);
         }
         else
-            res = db.query(TABLE_NAME,col,null,null,null,null,sorting);
+            res = readableDb.query(TABLE_NAME,col,null,null,null,null,sorting);
         return res;
     }
 
@@ -126,12 +121,12 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean fillWithData() {
-        String[] arms = {ResourceContext.getContext().getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
-        String[] back = {ResourceContext.getContext().getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
-        String[] chest = {ResourceContext.getContext().getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
-        String[] forearms = {ResourceContext.getContext().getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
-        String[] legs = {ResourceContext.getContext().getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
-        String[] shoulders = {ResourceContext.getContext().getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
+        String[] arms = {context.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
+        String[] back = {context.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
+        String[] chest = {context.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
+        String[] forearms = {context.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
+        String[] legs = {context.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+        String[] shoulders = {context.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
         String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
         for (String[] arr : lifts) {
             String name = arr[0];
@@ -152,9 +147,8 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return An array containing all of the types
      */
     public String[] getTypes() {
-        SQLiteDatabase db = this.getReadableDatabase();
         String[] c = {Columns.TYPE.name()};
-        Cursor cursor = db.query(true, TABLE_NAME,c,null,null,null,null,Columns.TYPE.name()+" ASC",null);
+        Cursor cursor = readableDb.query(true, TABLE_NAME,c,null,null,null,null,Columns.TYPE.name()+" ASC",null);
         ArrayList<String> types = new ArrayList<>();
         while(cursor.moveToNext()) {
             types.add(cursor.getString(0));
@@ -169,10 +163,9 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return An array containing all lifts for the given type
      */
     public String[] getLifts(String type) {
-        SQLiteDatabase db = this.getReadableDatabase();
         String[] c = {Columns.LIFT.name()};
         String[] sel = {type};
-        Cursor cursor = db.query(true, TABLE_NAME,c,Columns.TYPE.name()+" =?",sel,null,null,Columns.TYPE.name()+" ASC",null);
+        Cursor cursor = readableDb.query(true, TABLE_NAME,c,Columns.TYPE.name()+" =?",sel,null,null,Columns.TYPE.name()+" ASC",null);
         ArrayList<String> types = new ArrayList<>();
         while(cursor.moveToNext()) {
             types.add(cursor.getString(0));
