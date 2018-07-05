@@ -40,6 +40,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         WeightTableAccessor.createTable(db);
         LiftTableAccessor.createTable(db);
+        UserTableAccessor.createTable(db);
     }
     /**
      * Specifies what should happen when the schema is upgraded
@@ -48,10 +49,12 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
      * @param newVersion The new version number
      */
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.d(TAG,"Upgrading Database: "+ TABLE_NAME +" from version: "+oldVersion+" to version: "+newVersion);
-        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
-        onCreate(db);
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { //TODO: This wipes the database completely, modifying would be better
+        if(oldVersion < newVersion) {
+            Log.d(TAG, "Upgrading Database: " + TABLE_NAME + " from version: " + oldVersion + " to version: " + newVersion);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            onCreate(db);
+        }
     }
 
     /**
