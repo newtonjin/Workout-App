@@ -40,13 +40,12 @@ public class UserTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean insert(String firstName, String lastName) {
-        SQLiteDatabase db = this.getWritableDatabase();
         Log.d(TAG, "Inserting: \""+ firstName + ","+lastName+"\" into "+TABLE_NAME);
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.FIRST_NAME.name(), firstName);
         contentValues.put(Columns.LAST_NAME.name(), lastName);
 
-        long result = db.insert(TABLE_NAME, null, contentValues);
+        long result = writableDb.insert(TABLE_NAME, null, contentValues);
         if(result != -1) {
             Log.d(TAG, "Failed to insert");
             return false;
@@ -64,11 +63,10 @@ public class UserTableAccessor extends DatabaseAccessor {
      */
     public boolean updateData(String id, String firstName, String lastName) {
         Log.d(TAG, "Replacing id: "+id+" with: "+firstName+" "+lastName);
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.FIRST_NAME.name(), firstName);
         contentValues.put(Columns.LAST_NAME.name(), lastName);
-        int num = db.update(TABLE_NAME, contentValues, "ID = ?", new String[] {id});
+        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?", new String[] {id});
         if(num > 0)
             return true;
         else {
@@ -85,7 +83,6 @@ public class UserTableAccessor extends DatabaseAccessor {
      * @return A Cursor object with all of the selected values
      */
     public Cursor select(String firstName, String lastName, String sorting) {
-        SQLiteDatabase db = this.getReadableDatabase();
         StringBuilder sql = new StringBuilder();
         if(firstName != null && lastName != null) {
            sql.append("SELECT * FROM ").append(TABLE_NAME).append(" WHERE ").append(Columns.FIRST_NAME.name()).append(" = ").append(firstName).append(" AND ").append(Columns.LAST_NAME.name()).append(" = ").append(lastName);
@@ -102,7 +99,7 @@ public class UserTableAccessor extends DatabaseAccessor {
         if(sorting != null) {
             sql.append(" ORDER BY ").append(sorting);
         }
-        return db.rawQuery(sql.toString(), new String[0]);
+        return readableDb.rawQuery(sql.toString(), new String[0]);
     }
     /**
      * Used to select things inside of the table. Null values are acceptable for any/all parameters to reduce filtering

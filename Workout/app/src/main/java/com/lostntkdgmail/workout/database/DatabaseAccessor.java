@@ -19,6 +19,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     private final String TABLE_NAME;
     private final String[] col;
     protected Context context;
+    protected SQLiteDatabase readableDb, writableDb;
 
     /**
      * Creates a new DatabaseAccessor
@@ -32,6 +33,8 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
         col = cols;
         Log.d(TAG, DATABASE_NAME.substring(0, DATABASE_NAME.length()-3) +"."+ TABLE_NAME +" accessor created");
         this.context = context;
+        readableDb = getReadableDatabase();
+        writableDb = getWritableDatabase();
     }
 
     /**
@@ -64,7 +67,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
      * @return The number of rows
      */
     public int getNumberOfRows() {
-        return getReadableDatabase().query(TABLE_NAME, col, null, null, null, null, null).getCount();
+        return readableDb.query(TABLE_NAME, col, null, null, null, null, null).getCount();
     }
 
     /**
@@ -72,7 +75,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
      * @return The data in the table in an ArrayList
      */
     public ArrayList<String> getAllData() {
-        Cursor cursor = getReadableDatabase().query(TABLE_NAME, col, null, null, null, null, null);
+        Cursor cursor = readableDb.query(TABLE_NAME, col, null, null, null, null, null);
         ArrayList<String> result = new ArrayList<>();
 
         while(cursor.moveToNext()) {
@@ -95,8 +98,7 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
      */
     public int deleteData (String id) {
         Log.d(TAG,"Deleting data at id: " + id);
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "ID = ?",new String[] {id});
+        return writableDb.delete(TABLE_NAME, "ID = ?",new String[] {id});
     }
 
     /**
@@ -113,6 +115,8 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     @Override
     public void close() {
         super.close();
+        readableDb.close();
+        writableDb.close();
         Log.d(TAG,"Closing: "+ DATABASE_NAME.substring(0, DATABASE_NAME.length()-3) +"."+ TABLE_NAME + " accessor");
     }
 }
