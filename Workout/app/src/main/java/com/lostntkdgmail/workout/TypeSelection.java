@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,13 +66,20 @@ public class TypeSelection extends Fragment {
              */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String type = (String)typeList.getItemAtPosition(position);
-                Log.d("Debug","Selected: "+type);
+                ((MainActivity)getActivity()).TYPE = (String)typeList.getItemAtPosition(position);
+                Log.d("Debug","Selected: " + ((MainActivity)getActivity()).TYPE);
 
-                Toast.makeText(getActivity(), "Going to " + type, Toast.LENGTH_SHORT).show();
-                getActivity().getIntent().putExtra("TYPE", type);
-                ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
-                ((MainActivity)getActivity()).setViewPager(1);
+                Toast.makeText(getActivity(), "Going to " + ((MainActivity)getActivity()).TYPE, Toast.LENGTH_SHORT).show();
+                //((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
+                //((MainActivity)getActivity()).setViewPager(1);
+
+
+                LiftSelection fragment = new LiftSelection();
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.fragment_container, fragment, "LiftSelection");
+                ft.commit();
+
+                System.out.println("---------------- IT SHOULD BE CHANGING NOW -------------------------");
 
             }
         });

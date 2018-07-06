@@ -26,14 +26,22 @@ public class PagerAdapter extends FragmentPagerAdapter {
         if(!mFragmentTitleList.contains(title)) {
             mFragmentList.add(fm);
             mFragmentTitleList.add(title);
+            notifyDataSetChanged();
         } else {
-            System.out.println(title + " already exists");
+            System.out.println(title + " already exists, replacing it");
+            int foundIndex;
+            foundIndex = mFragmentTitleList.indexOf(title);
+            mFragmentList.remove(foundIndex);
+            mFragmentList.add(foundIndex, fm);
+            mFragmentTitleList.remove(foundIndex);
+            mFragmentTitleList.add(foundIndex, title);
         }
         }
 
     public void removeFragment(int index) {
         mFragmentList.remove(index);
         mFragmentTitleList.remove(index);
+        notifyDataSetChanged();
     }
 
     public Fragment getItem(int pos) {
@@ -42,6 +50,14 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     public String getItemTitle(int pos) {
         return mFragmentTitleList.get(pos);
+    }
+
+    public boolean containsFragment(String title) {
+        return mFragmentTitleList.contains(title);
+    }
+
+    public int getFragmentIndex(String title) {
+        return mFragmentTitleList.indexOf(title);
     }
 
     @Override

@@ -17,6 +17,7 @@ public class MainActivity extends FragmentActivity {
 
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
+    public static String TYPE;
     private NonSwipeLeftViewPager viewPager;
     private FragmentManager fragmentManager;
 
@@ -27,24 +28,24 @@ public class MainActivity extends FragmentActivity {
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
-        viewPager = (NonSwipeLeftViewPager) findViewById(R.id.container);
+        viewPager = findViewById(R.id.container);
 
-        // This is where the control of which fragment appears first occurs.
         setUpViewPager(viewPager);
 
-        viewPager.setCurrentItem(0);
+        addFragment(new TypeSelection(), "TypeSelection");
 
     }
 
     public void addFragment(Fragment fm, String title) {
-        pagerAdapter.addFragment(fm, title);
-        pagerAdapter.notifyDataSetChanged();
-        //currently crashing the app???
-        //getSupportFragmentManager().beginTransaction().add(fm, title).addToBackStack(null).commit();
+        if(pagerAdapter.containsFragment(title)) {
+            int i = pagerAdapter.getFragmentIndex(title);
+            getSupportFragmentManager().beginTransaction().replace(i, fm);
+            pagerAdapter.removeFragment(i);
+            pagerAdapter.addFragment(fm, title);
+        }
     }
 
     private void setUpViewPager(ViewPager vp) {
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new TypeSelection(), "TypeSelection");
         viewPager.setAdapter(pagerAdapter);
     }
@@ -53,13 +54,17 @@ public class MainActivity extends FragmentActivity {
         viewPager.setCurrentItem(fragmentNum);
     }
 
-    //Not working properly atm
+    //WAKE ME UP INSIDE (cant wake up)
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
+        System.out.println("----------------------------COMING FROM FRAGMENT-------------------------------------------");
+        System.out.println(((PagerAdapter)viewPager.getAdapter()).getItem(viewPager.getCurrentItem()));
+        System.out.println(((PagerAdapter)viewPager.getAdapter()).getItem(viewPager.getCurrentItem()).getTag());
+
+        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+
+        System.out.println("----------------------------GOING TO FRAGMENT-------------------------------------------");
+        System.out.println(((PagerAdapter)viewPager.getAdapter()).getItem(viewPager.getCurrentItem()));
+        System.out.println(((PagerAdapter)viewPager.getAdapter()).getItem(viewPager.getCurrentItem()).getTag());
     }
 }

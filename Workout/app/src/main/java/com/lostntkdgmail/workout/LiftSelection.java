@@ -51,7 +51,7 @@ public class LiftSelection extends Fragment {
         liftTable = new LiftTableAccessor(this.getContext());
         view = setUpListView(view);
         text = view.findViewById(R.id.selectLiftText);
-        text.setText(getActivity().getIntent().getStringExtra("TYPE"));
+        text.setText(((MainActivity)getActivity()).TYPE);
         liftTable = new LiftTableAccessor(this.getContext());
         return view;
     }
@@ -80,12 +80,7 @@ public class LiftSelection extends Fragment {
      */
     public View setUpListView(View view) {
         String[] lifts;
-        try {
-            lifts = liftTable.getLifts(getActivity().getIntent().getStringExtra("TYPE"));
-        } catch (IllegalArgumentException e) {
-            System.out.println("y tho");
-            lifts = liftTable.getLifts("Arms");
-        }
+            lifts = liftTable.getLifts(((MainActivity)getActivity()).TYPE);
         liftList = view.findViewById(R.id.liftList);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
@@ -102,9 +97,6 @@ public class LiftSelection extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String lift = (String)liftList.getItemAtPosition(position);
                 Log.d("Debug","Selected: " + lift);
-                Intent intent = new Intent(getActivity().getBaseContext(),WeightSelection.class);
-                getActivity().getIntent().putExtra("LIFT",lift);
-                getActivity().getIntent().putExtra("TYPE",getActivity().getIntent().getStringExtra("TYPE"));
                 ((MainActivity)getActivity()).addFragment(new WeightSelection(), "WeightSelection");
                 ((MainActivity)getActivity()).setViewPager(2);
 
