@@ -59,6 +59,12 @@ public class WeightSelection extends Fragment {
         setUpNumberPickers(view);
 
         Button submit = view.findViewById(R.id.submitButton);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                submitWeight(view);
+            }
+        });
         weightTable = new WeightTableAccessor(this.getContext());
         liftTable = new LiftTableAccessor(this.getContext());
 
@@ -225,6 +231,7 @@ public class WeightSelection extends Fragment {
         TextView rep1 = view.findViewById(R.id.pastRepText1);
         TextView rep2 = view.findViewById(R.id.pastRepText2);
         TextView rep3 = view.findViewById(R.id.pastRepText3);
+        Log.d(TAG,"weight1 is null? "+(weight1 == null));
 
         switch (result.size()) {
             case 0: //No previous weights
@@ -248,7 +255,7 @@ public class WeightSelection extends Fragment {
                 rep1.setText(getResources().getString(R.string.null_reps));
                 break;
             case 2: //Only 2 previous weights
-                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
+                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0])); //Here?
                 rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
 
                 weight2.setText(getResources().getString(R.string.lbs,result.get(1)[0]));

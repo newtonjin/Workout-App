@@ -68,7 +68,7 @@ public class TypeSelection extends Fragment {
                 String type = (String)typeList.getItemAtPosition(position);
                 Log.d("Debug","Selected: "+type);
 
-                Toast.makeText(getActivity(), "Going to " + type, Toast.LENGTH_SHORT);
+                Toast.makeText(getActivity(), "Going to " + type, Toast.LENGTH_SHORT).show();
                 getActivity().getIntent().putExtra("TYPE", type);
                 ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
                 ((MainActivity)getActivity()).setViewPager(1);

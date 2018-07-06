@@ -47,9 +47,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
-
         android:background="@color/submitButton"
-        android:onClick="submitWeight"
         android:text="@string/submit_button"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault"
         android:textColor="@color/textPrimary"
