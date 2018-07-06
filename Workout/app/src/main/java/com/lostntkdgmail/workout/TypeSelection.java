@@ -70,14 +70,14 @@ public class TypeSelection extends Fragment {
                 Log.d("Debug","Selected: " + ((MainActivity)getActivity()).TYPE);
 
                 Toast.makeText(getActivity(), "Going to " + ((MainActivity)getActivity()).TYPE, Toast.LENGTH_SHORT).show();
-                //((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
-                //((MainActivity)getActivity()).setViewPager(1);
+                ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
+                ((MainActivity)getActivity()).setViewPager(1);
 
-
-                LiftSelection fragment = new LiftSelection();
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.add(R.id.fragment_container, fragment, "LiftSelection");
-                ft.commit();
+                //mmeehhhhhhhhh
+                //LiftSelection fragment = new LiftSelection();
+                //FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                //ft.add(R.id.fragment_container, fragment, "LiftSelection");
+                //ft.commit();
 
                 System.out.println("---------------- IT SHOULD BE CHANGING NOW -------------------------");
 

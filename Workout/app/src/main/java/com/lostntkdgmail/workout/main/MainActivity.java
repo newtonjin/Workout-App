@@ -39,8 +39,12 @@ public class MainActivity extends FragmentActivity {
     public void addFragment(Fragment fm, String title) {
         if(pagerAdapter.containsFragment(title)) {
             int i = pagerAdapter.getFragmentIndex(title);
-            getSupportFragmentManager().beginTransaction().replace(i, fm);
+
+            //OOF
+            //getSupportFragmentManager().beginTransaction().replace(i, fm);
             pagerAdapter.removeFragment(i);
+            pagerAdapter.addFragment(fm, title);
+        } else {
             pagerAdapter.addFragment(fm, title);
         }
     }
