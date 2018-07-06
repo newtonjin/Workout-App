@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/recordWeightsNav"
+            android:title="@string/record_weights" />
+        <item
+            android:id="@+id/pastEntriesNav"
+            android:title="@string/view_past_entries" />
+        <item
+            android:id="@+id/switchUserNav"
+            android:title="@string/switch_users" />
+        <item
+            android:id="@+id/settingsNav"
+            android:title="@string/settings" />
+    </group>
+
+</menu>

@@ -13,4 +13,24 @@
     <string name="forearms">Forearms</string>
     <string name="legs">Legs</string>
     <string name="shoulders">Shoulders</string>
+    <string name="record_weights">Record Weights</string>
+    <string name="view_past_entries">View Past Entries</string>
+    <string name="past_entries">Past Entries</string>
+    <string name="settings">Settings</string>
+    <string name="switch_users">Switch Users</string>
+    <string name="users">Users</string>
+    <string name="new_user">New User</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+
+
+    <string name="lbs">%d lbs</string>
+    <string name="null_lbs">-- lbs</string>
+
+    <string name="null_reps">-- reps</string>
+    <plurals name="reps">
+        <item quantity="zero">-- reps</item>
+        <item quantity="one">%d rep</item>
+        <item quantity="other">%d reps</item>
+    </plurals>
 </resources>

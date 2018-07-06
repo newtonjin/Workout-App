@@ -1,7 +1,6 @@
 package com.lostntkdgmail.workout;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,11 +17,15 @@ import android.widget.TextView;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.zip.Inflater;
+import com.lostntkdgmail.workout.database.LiftTableAccessor;
+
 
 /**
  * The activity for Selecting a lift
  */
+
 public class LiftSelection extends Fragment {
+    private static final String TAG = "LiftSelection";
     private LiftTableAccessor liftTable;
     private ListView liftList;
     private TextView text;
@@ -47,7 +50,7 @@ public class LiftSelection extends Fragment {
         View view = inflater.inflate(R.layout.lift_selection, container, false);
         liftTable = new LiftTableAccessor(this.getContext());
         view = setUpListView(view);
-        text = view.findViewById(R.id.tvlift);
+        text = view.findViewById(R.id.selectLiftText);
         text.setText(getActivity().getIntent().getStringExtra("TYPE"));
         liftTable = new LiftTableAccessor(this.getContext());
         return view;
@@ -61,7 +64,6 @@ public class LiftSelection extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Debug","Launching Activity LiftSelection");
-
     }
 
     @Override
@@ -79,13 +81,13 @@ public class LiftSelection extends Fragment {
     public View setUpListView(View view) {
         String[] lifts;
         try {
-              lifts = liftTable.getLifts(getActivity().getIntent().getStringExtra("TYPE"));
+            lifts = liftTable.getLifts(getActivity().getIntent().getStringExtra("TYPE"));
         } catch (IllegalArgumentException e) {
             System.out.println("y tho");
             lifts = liftTable.getLifts("Arms");
         }
-        liftList = view.findViewById(R.id.listvlift);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), R.layout.list_item, R.id.listText, lifts);
+        liftList = view.findViewById(R.id.liftList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
 
         liftList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

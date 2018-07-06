@@ -18,15 +18,17 @@ import android.widget.Toast;
 import com.lostntkdgmail.workout.main.MainActivity;
 import com.lostntkdgmail.workout.main.PagerAdapter;
 
+import com.lostntkdgmail.workout.database.LiftTableAccessor;
+
 
 /**
  * The Activity for selecting a Type of lift
  */
+
 public class TypeSelection extends Fragment {
+    private static final String TAG = "TypeSelection";
     private LiftTableAccessor liftTable;
     private ListView typeList;
-    private static final String TAG = "TypeSelection";
-
     private Button test;
 
     public TypeSelection() {
@@ -49,8 +51,8 @@ public class TypeSelection extends Fragment {
         if(liftTable.getNumberOfRows() < 1)
             liftTable.fillWithData();
         String[] types = liftTable.getTypes();
-        typeList = view.findViewById(R.id.listv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(),R.layout.list_item,R.id.listText,types);
+        typeList = view.findViewById(R.id.typeList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(),R.layout.list_item,R.id.listEntry,types);
         typeList.setAdapter(adapter);
 
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
