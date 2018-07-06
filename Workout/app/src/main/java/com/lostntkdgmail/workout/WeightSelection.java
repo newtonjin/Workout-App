@@ -13,9 +13,13 @@ package com.lostntkdgmail.workout;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
@@ -29,7 +33,7 @@ import java.util.ArrayList;
 /**
  * The Activity for selecting a weight
  */
-public class WeightSelection extends Activity {
+public class WeightSelection extends Fragment {
     private static final String TAG = "WeightSelection";
     private String type, lift, user;
     private int digit1 = 0;
@@ -45,29 +49,36 @@ public class WeightSelection extends Activity {
      * @param savedInstanceState The last saved state
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG,"Launching Activity: Weight Selection");
-        setContentView(R.layout.weight_selection);
-        type = getIntent().getStringExtra("TYPE"); //Gets the type of lift from the Intent
-        lift = getIntent().getStringExtra("LIFT"); //Gets the lift name from the Intent
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.weight_selection, container, false);
+        type = getActivity().getIntent().getStringExtra("TYPE"); //Gets the type of lift from the Intent
+        lift = getActivity().getIntent().getStringExtra("LIFT"); //Gets the lift name from the Intent
         user = "Tyler"; //TODO: Actually add users, don't hard code them in
 
-        setUpSeekBar();
-        setUpNumberPickers();
+        setUpSeekBar(view);
+        setUpNumberPickers(view);
 
-        weightTable = new WeightTableAccessor(this);
-        liftTable = new LiftTableAccessor(this);
-        for(int[] s : getPreviousWeights()) {
-            Log.d(TAG,"("+s[0]+" lbs "+s[1]+" reps)");
+        Button submit = view.findViewById(R.id.submitButton);
+        weightTable = new WeightTableAccessor(this.getContext());
+        liftTable = new LiftTableAccessor(this.getContext());
+
+        for(int[] s : getPreviousWeights(view)) {
+            Log.d("Debug",s[0]+" "+s[1]);
         }
+        return view;
     }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("Debug","Launching Activity: Weight Selection");
+    }
+
     /**
      * Cleans up the Activity and closes the Accessors
      */
     @Override
-    protected void onDestroy() {
-        Log.d(TAG,"onDestroy() called for WeightSelection");
+    public void onDestroy() {
+        Log.d("Debug","onDestroy() called for WeightSelection");
         weightTable.close();
         liftTable.close();
         super.onDestroy();
@@ -81,24 +92,24 @@ public class WeightSelection extends Activity {
         if(reps > 0 && weight > 0) {
             boolean insertResult = weightTable.insert(user, type, lift, weight, reps);
             if(insertResult) {
-                Toast.makeText(getApplicationContext(), "Submitted!", Toast.LENGTH_SHORT).show();
-                getPreviousWeights();
+                Toast.makeText(getContext(), "Submitted!", Toast.LENGTH_SHORT).show();
+                getPreviousWeights(view);
             }
             else
-                Toast.makeText(getApplicationContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
         }
         else if(reps <= 0)
-            Toast.makeText(getApplicationContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(getApplicationContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
     }
     /**
      * Initializes the 3 number pickers
      */
-    public void setUpNumberPickers() {
-        NumberPicker np1 = findViewById(R.id.numberPicker1);
-        NumberPicker np2 = findViewById(R.id.numberPicker2);
-        NumberPicker np3 = findViewById(R.id.numberPicker3);
+    public void setUpNumberPickers(View view) {
+        NumberPicker np1 = view.findViewById(R.id.numberPicker1);
+        NumberPicker np2 = view.findViewById(R.id.numberPicker2);
+        NumberPicker np3 = view.findViewById(R.id.numberPicker3);
 
         //Setting up first Number picker
         np1.setMinValue(0);
@@ -160,9 +171,9 @@ public class WeightSelection extends Activity {
     /**
      * Initializes the seek bar
      */
-    public void setUpSeekBar() {
-        sBarText = findViewById(R.id.scrollBarText);
-        SeekBar sBar = findViewById(R.id.seekBar);
+    public void setUpSeekBar(View view) {
+        sBarText = view.findViewById(R.id.scrollBarText);
+        SeekBar sBar = view.findViewById(R.id.seekBar);
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             /**
              * Determines what happens when the progress is changed
@@ -201,19 +212,20 @@ public class WeightSelection extends Activity {
      * Gets the 3 previous weights to display
      * @return An ArrayList<int[]> containing the previous weights. Each int[] is an entry set up like: [weight, reps]
      */
-    public ArrayList<int[]> getPreviousWeights() {
+    public ArrayList<int[]> getPreviousWeights(View view) {
         Cursor c = weightTable.select(user,type,lift, weightTable.getColumnNames()[0]+" DESC","3");
         ArrayList<int[]> result = new ArrayList<>(3);
         while(c.moveToNext()) {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
             result.add(arr);
         }
-        TextView weight1 = findViewById(R.id.pastWeightText1);
-        TextView weight2 = findViewById(R.id.pastWeightText2);
-        TextView weight3 = findViewById(R.id.pastWeightText3);
-        TextView rep1 = findViewById(R.id.pastRepText1);
-        TextView rep2 = findViewById(R.id.pastRepText2);
-        TextView rep3 = findViewById(R.id.pastRepText3);
+        TextView weight1 = view.findViewById(R.id.pastWeightText1);
+        TextView weight2 = view.findViewById(R.id.pastWeightText2);
+        TextView weight3 = view.findViewById(R.id.pastWeightText3);
+        TextView rep1 = view.findViewById(R.id.pastRepText1);
+        TextView rep2 = view.findViewById(R.id.pastRepText2);
+        TextView rep3 = view.findViewById(R.id.pastRepText3);
+
         switch (result.size()) {
             case 0: //No previous weights
                 weight1.setText(getResources().getString(R.string.null_lbs));

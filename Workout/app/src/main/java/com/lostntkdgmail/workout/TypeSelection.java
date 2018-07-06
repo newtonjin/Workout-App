@@ -1,13 +1,22 @@
 package com.lostntkdgmail.workout;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.lostntkdgmail.workout.main.MainActivity;
+import com.lostntkdgmail.workout.main.PagerAdapter;
 
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 
@@ -15,44 +24,35 @@ import com.lostntkdgmail.workout.database.LiftTableAccessor;
 /**
  * The Activity for selecting a Type of lift
  */
-public class TypeSelection extends Activity {
+
+public class TypeSelection extends Fragment {
     private static final String TAG = "TypeSelection";
     private LiftTableAccessor liftTable;
     private ListView typeList;
+    private Button test;
 
-    /**
-     * Creates the Activity and sets up the data
-     * @param savedInstanceState The last saved state
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG,"Launching Activity: TypeSelection");
-        setContentView(R.layout.type_selection);
-        liftTable = new LiftTableAccessor(this);
-        setUpListView();
-
+    public TypeSelection() {
+        //required and empty constructor
     }
 
-    /**
-     * Cleans up the Activity and closes the database accessors
-     */
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG,"onDestroy() called for Type Selection");
-        liftTable.close();
-        super.onDestroy();
+    public static TypeSelection newInstance() {
+
+        TypeSelection fragment = new TypeSelection();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    /**
-     * Sets up the ListView which holds all of the different lifts
-     */
-    public void setUpListView() {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.type_selection, container, false);
+        liftTable = new LiftTableAccessor(this.getContext());
+
         if(liftTable.getNumberOfRows() < 1)
             liftTable.fillWithData();
         String[] types = liftTable.getTypes();
-        typeList = findViewById(R.id.typeList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.listEntry, types);
+        typeList = view.findViewById(R.id.typeList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(),R.layout.list_item,R.id.listEntry,types);
         typeList.setAdapter(adapter);
 
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,14 +66,39 @@ public class TypeSelection extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String type = (String)typeList.getItemAtPosition(position);
-                Log.d(TAG,"Selected: "+type);
-                Intent intent = new Intent(getBaseContext(),LiftSelection.class);
-                intent.putExtra("TYPE",type);
-                startActivity(intent);
+                Log.d("Debug","Selected: "+type);
+
+                Toast.makeText(getActivity(), "Going to " + type, Toast.LENGTH_SHORT);
+                getActivity().getIntent().putExtra("TYPE", type);
+                ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
+                ((MainActivity)getActivity()).setViewPager(1);
 
             }
         });
+        return view;
     }
+
+    /**
+     * Creates the Activity and sets up the data
+     * @param savedInstanceState The last saved state
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("Debug","Launching Activity: TypeSelection");
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
 
 
 
