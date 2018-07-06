@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.lostntkdgmail.workout.LiftSelection"
-    android:id="@+id/fuckAndroid">
+    android:id="@+id/liftSelection"
+    tools:context="com.lostntkdgmail.workout.data_entry.LiftSelection">
 
     <TextView
         android:id="@+id/selectLiftText"

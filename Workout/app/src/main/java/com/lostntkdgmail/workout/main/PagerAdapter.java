@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.lostntkdgmail.workout.TypeSelection;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +21,42 @@ public class PagerAdapter extends FragmentPagerAdapter {
     }
 
     public void addFragment(Fragment fm, String title) {
+        if(title.equals("TypeSelection") || title.equals("SelectUser")) {
             mFragmentList.add(fm);
             mFragmentTitleList.add(title);
+        } else {
+
+
+            int iOfUser = mFragmentTitleList.indexOf("SelectUser");
+            String tag = "SelectUser";
+
+            // Put the select user fragment at the end
+            mFragmentList.add(mFragmentList.get(iOfUser));
+            mFragmentTitleList.add(tag);
+
+            // Remove it's previous position
+            mFragmentList.remove(iOfUser);
+            mFragmentTitleList.remove(iOfUser);
+
+            // Add the new fragment in it's place
+            mFragmentList.add(iOfUser, fm);
+            mFragmentTitleList.add(iOfUser, title);
+
+
             notifyDataSetChanged();
+
+            //from last commit in case this doesn't work
+           //mFragmentList.add(fm);
+           //mFragmentTitleList.add(title);
+           //notifyDataSetChanged();
         }
+    }
 
     public void removeFragment(int index) {
-        mFragmentList.remove(index);
-        mFragmentTitleList.remove(index);
+        mFragmentList.add(mFragmentList.get(mFragmentTitleList.indexOf("SelectUser") - 1));
+        mFragmentList.remove(mFragmentTitleList.lastIndexOf("SelectUser"));
+        //mFragmentList.remove(index);
+        //mFragmentTitleList.remove(index);
         notifyDataSetChanged();
     }
 

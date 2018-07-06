@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".WeightSelection">
+    tools:context=".data_entry.WeightSelection">
 
     <TextView
         android:id="@+id/selectWeightText"

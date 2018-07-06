@@ -1,8 +1,7 @@
-package com.lostntkdgmail.workout;
+package com.lostntkdgmail.workout.data_entry;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,9 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.MainActivity;
 
-import java.util.zip.Inflater;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 
 
@@ -29,6 +28,7 @@ public class LiftSelection extends Fragment {
     private LiftTableAccessor liftTable;
     private ListView liftList;
     private TextView text;
+    private WeightSelection weightSelection;
 
     public LiftSelection() {
         // Required and empty constructor
@@ -97,11 +97,23 @@ public class LiftSelection extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String lift = (String)liftList.getItemAtPosition(position);
                 Log.d("Debug","Selected: " + lift);
+
+                ((MainActivity)getActivity()).LIFT = lift;
+
                 ((MainActivity)getActivity()).addFragment(new WeightSelection(), "WeightSelection");
-                ((MainActivity)getActivity()).setViewPager(2);
+                ((MainActivity)getActivity()).setViewPager(3);
 
             }
         });
         return view;
+    }
+    public void reload() {
+        System.out.println("Reloading");
+        String[] lifts = liftTable.getLifts(((MainActivity)getActivity()).TYPE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), R.layout.list_item, R.id.listEntry, lifts);
+        liftList.setAdapter(adapter);
+        text.setText(((MainActivity)getActivity()).TYPE);
+
+
     }
 }

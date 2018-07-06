@@ -1,13 +1,12 @@
-package com.lostntkdgmail.workout;
+package com.lostntkdgmail.workout.data_entry;
 
-//TODO: Add side menu
 //TODO: Add ability to view/edit/delete past entries
 //TODO: Add ability to edit types of workouts
 //TODO: Add Users
 //TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?
 //TODO: Possibly add color customization to users?
 //TODO: Allow users to adjust max value on rep bar
-//TODO: Home screen
+//TODO: Home screen?
 //TODO: An actual app icon/logo
 //TODO: With users, if there are no users in the db, it should prompt for user info before starting for the first time
 
@@ -18,15 +17,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.database.WeightTableAccessor;
+import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.ArrayList;
 
@@ -51,8 +51,8 @@ public class WeightSelection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weight_selection, container, false);
-        type = getActivity().getIntent().getStringExtra("TYPE"); //Gets the type of lift from the Intent
-        lift = getActivity().getIntent().getStringExtra("LIFT"); //Gets the lift name from the Intent
+        type = ((MainActivity)getActivity()).TYPE;
+        lift = ((MainActivity)getActivity()).LIFT;
         user = "Tyler"; //TODO: Actually add users, don't hard code them in
 
         setUpSeekBar(view);

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_container"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.lostntkdgmail.workout.TypeSelection">
+    tools:context="com.lostntkdgmail.workout.data_entry.TypeSelection">
 
 <TextView
     android:id="@+id/selectTypeText"

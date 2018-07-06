@@ -1,11 +1,8 @@
-package com.lostntkdgmail.workout;
+package com.lostntkdgmail.workout.data_entry;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +13,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.MainActivity;
-import com.lostntkdgmail.workout.main.PagerAdapter;
 
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
+import com.lostntkdgmail.workout.main.PagerAdapter;
 
 
 /**
@@ -31,6 +29,7 @@ public class TypeSelection extends Fragment {
     private LiftTableAccessor liftTable;
     private ListView typeList;
     private Button test;
+    private LiftSelection liftSelection;
 
     public TypeSelection() {
         //required and empty constructor
@@ -66,20 +65,24 @@ public class TypeSelection extends Fragment {
              */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
                 ((MainActivity)getActivity()).TYPE = (String)typeList.getItemAtPosition(position);
                 Log.d("Debug","Selected: " + ((MainActivity)getActivity()).TYPE);
 
+                if(liftSelection == null)
+                    liftSelection = new LiftSelection();
+                else {
+                    liftSelection.reload();
+                }
+
                 Toast.makeText(getActivity(), "Going to " + ((MainActivity)getActivity()).TYPE, Toast.LENGTH_SHORT).show();
-                ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
+                ((MainActivity)getActivity()).addFragment(liftSelection, "LiftSelection");
                 ((MainActivity)getActivity()).setViewPager(PagerAdapter.LIFT);
 
-                //mmeehhhhhhhhh
-                //LiftSelection fragment = new LiftSelection();
-                //FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                //ft.add(R.id.fragment_container, fragment, "LiftSelection");
-                //ft.commit();
 
                 System.out.println("---------------- IT SHOULD BE CHANGING NOW -------------------------");
+
+
 
             }
         });
