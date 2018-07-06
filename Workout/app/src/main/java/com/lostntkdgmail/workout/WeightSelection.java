@@ -99,7 +99,7 @@ public class WeightSelection extends Fragment {
             boolean insertResult = weightTable.insert(user, type, lift, weight, reps);
             if(insertResult) {
                 Toast.makeText(getContext(), "Submitted!", Toast.LENGTH_SHORT).show();
-                getPreviousWeights(view);
+                getPreviousWeights(view.getRootView());
             }
             else
                 Toast.makeText(getContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
@@ -231,7 +231,6 @@ public class WeightSelection extends Fragment {
         TextView rep1 = view.findViewById(R.id.pastRepText1);
         TextView rep2 = view.findViewById(R.id.pastRepText2);
         TextView rep3 = view.findViewById(R.id.pastRepText3);
-        Log.d(TAG,"weight1 is null? "+(weight1 == null));
 
         switch (result.size()) {
             case 0: //No previous weights
