@@ -23,6 +23,9 @@ public class SelectUser extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.select_user, container, false);
         userTable = new UserTableAccessor(getContext());
+        if(userTable.select(null, null).getCount() == 0) {
+            userTable.insert("Default","User");
+        }
         userList = view.findViewById(R.id.userList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),R.layout.list_item, R.id.listEntry, getUsers());
         userList.setAdapter(adapter);

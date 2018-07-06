@@ -1,17 +1,21 @@
 package com.lostntkdgmail.workout.main;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MenuItem;
 
-import com.lostntkdgmail.workout.LiftSelection;
 import com.lostntkdgmail.workout.R;
-import com.lostntkdgmail.workout.TypeSelection;
-import com.lostntkdgmail.workout.WeightSelection;
+import com.lostntkdgmail.workout.data_entry.TypeSelection;
+import com.lostntkdgmail.workout.users.NewUser;
+import com.lostntkdgmail.workout.users.SelectUser;
+
 
 public class MainActivity extends FragmentActivity {
 
@@ -34,6 +38,25 @@ public class MainActivity extends FragmentActivity {
 
         viewPager.setCurrentItem(0);
 
+        //Setting up navigation
+        BottomNavigationView navBar = findViewById(R.id.bottom_navigation);
+        navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch(menuItem.getItemId()) {
+                    case R.id.recordWeightsNav:
+                        viewPager.setCurrentItem(0);
+                        break;
+                    case R.id.switchUserNav:
+                        viewPager.setCurrentItem(1);
+                        break;
+                    case R.id.pastEntriesNav:
+                        break;
+                }
+                return false;
+            }
+        });
+
     }
 
     public void addFragment(Fragment fm, String title) {
@@ -46,6 +69,7 @@ public class MainActivity extends FragmentActivity {
     private void setUpViewPager(ViewPager vp) {
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new TypeSelection(), "TypeSelection");
+        pagerAdapter.addFragment(new SelectUser(), "SelectUser");
         viewPager.setAdapter(pagerAdapter);
     }
 

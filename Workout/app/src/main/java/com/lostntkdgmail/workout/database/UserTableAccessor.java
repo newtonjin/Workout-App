@@ -88,7 +88,7 @@ public class UserTableAccessor extends DatabaseAccessor {
            sql.append("SELECT * FROM ").append(TABLE_NAME).append(" WHERE ").append(Columns.FIRST_NAME.name()).append(" = ").append(firstName).append(" AND ").append(Columns.LAST_NAME.name()).append(" = ").append(lastName);
         }
         else if(firstName == null && lastName == null) {
-            sql.append("SELECT * FROM").append(TABLE_NAME);
+            sql.append("SELECT * FROM ").append(TABLE_NAME);
         }
         else if(firstName == null) {
             sql.append("SELECT * FROM ").append(TABLE_NAME).append(" WHERE ").append(Columns.LAST_NAME).append(" = ").append(lastName);
