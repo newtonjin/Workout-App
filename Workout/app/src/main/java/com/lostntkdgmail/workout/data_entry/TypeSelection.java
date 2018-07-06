@@ -67,7 +67,7 @@ public class TypeSelection extends Fragment {
 
                 getActivity().getIntent().putExtra("TYPE", type);
                 ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
-                ((MainActivity)getActivity()).setViewPager(1);
+                ((MainActivity)getActivity()).setViewPager(2);
             }
         });
         return view;

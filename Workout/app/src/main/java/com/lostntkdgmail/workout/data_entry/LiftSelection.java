@@ -106,7 +106,7 @@ public class LiftSelection extends Fragment {
                 getActivity().getIntent().putExtra("LIFT",lift);
                 getActivity().getIntent().putExtra("TYPE",getActivity().getIntent().getStringExtra("TYPE"));
                 ((MainActivity)getActivity()).addFragment(new WeightSelection(), "WeightSelection");
-                ((MainActivity)getActivity()).setViewPager(2);
+                ((MainActivity)getActivity()).setViewPager(3);
 
             }
         });
