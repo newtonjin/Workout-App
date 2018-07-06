@@ -1,13 +1,12 @@
 package com.lostntkdgmail.workout;
 
-//TODO: Add side menu
 //TODO: Add ability to view/edit/delete past entries
 //TODO: Add ability to edit types of workouts
 //TODO: Add Users
 //TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?
 //TODO: Possibly add color customization to users?
 //TODO: Allow users to adjust max value on rep bar
-//TODO: Home screen
+//TODO: Home screen?
 //TODO: An actual app icon/logo
 //TODO: With users, if there are no users in the db, it should prompt for user info before starting for the first time
 
