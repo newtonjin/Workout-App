@@ -1,4 +1,4 @@
-package com.lostntkdgmail.workout;
+package com.lostntkdgmail.workout.data_entry;
 
 
 import android.content.Context;
@@ -14,9 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.MainActivity;
 
-import java.util.zip.Inflater;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 
 

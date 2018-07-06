@@ -1,4 +1,4 @@
-package com.lostntkdgmail.workout;
+package com.lostntkdgmail.workout.data_entry;
 
 //TODO: Add ability to view/edit/delete past entries
 //TODO: Add ability to edit types of workouts
@@ -17,13 +17,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.database.WeightTableAccessor;
 
