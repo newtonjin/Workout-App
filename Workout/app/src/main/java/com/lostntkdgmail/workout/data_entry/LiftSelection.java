@@ -2,7 +2,6 @@ package com.lostntkdgmail.workout.data_entry;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -29,6 +28,7 @@ public class LiftSelection extends Fragment {
     private LiftTableAccessor liftTable;
     private ListView liftList;
     private TextView text;
+    private WeightSelection weightSelection;
 
     public LiftSelection() {
         // Required and empty constructor
@@ -51,7 +51,7 @@ public class LiftSelection extends Fragment {
         liftTable = new LiftTableAccessor(this.getContext());
         view = setUpListView(view);
         text = view.findViewById(R.id.selectLiftText);
-        text.setText(getActivity().getIntent().getStringExtra("TYPE"));
+        text.setText(MainActivity.type);
         liftTable = new LiftTableAccessor(this.getContext());
         return view;
     }
@@ -79,13 +79,8 @@ public class LiftSelection extends Fragment {
      * Sets up the list view which shows all of the different types
      */
     public View setUpListView(View view) {
-        String[] lifts;
-        try {
-            lifts = liftTable.getLifts(getActivity().getIntent().getStringExtra("TYPE"));
-        } catch (IllegalArgumentException e) {
-            System.out.println("y tho");
-            lifts = liftTable.getLifts("Arms");
-        }
+        String[] lifts = liftTable.getLifts(MainActivity.type);
+
         liftList = view.findViewById(R.id.liftList);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
@@ -102,14 +97,21 @@ public class LiftSelection extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String lift = (String)liftList.getItemAtPosition(position);
                 Log.d("Debug","Selected: " + lift);
-                Intent intent = new Intent(getActivity().getBaseContext(),WeightSelection.class);
-                getActivity().getIntent().putExtra("LIFT",lift);
-                getActivity().getIntent().putExtra("TYPE",getActivity().getIntent().getStringExtra("TYPE"));
+                MainActivity.lift = lift;
                 ((MainActivity)getActivity()).addFragment(new WeightSelection(), "WeightSelection");
                 ((MainActivity)getActivity()).setViewPager(3);
 
             }
         });
         return view;
+    }
+    public void reload() {
+        System.out.println("Reloading");
+        String[] lifts = liftTable.getLifts(MainActivity.type);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), R.layout.list_item, R.id.listEntry, lifts);
+        liftList.setAdapter(adapter);
+        text.setText(MainActivity.type);
+
+
     }
 }

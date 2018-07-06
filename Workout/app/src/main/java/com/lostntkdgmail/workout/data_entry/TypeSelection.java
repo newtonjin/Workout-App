@@ -27,6 +27,7 @@ public class TypeSelection extends Fragment {
     private LiftTableAccessor liftTable;
     private ListView typeList;
     private Button test;
+    private LiftSelection liftSelection;
 
     public TypeSelection() {
         //required and empty constructor
@@ -62,11 +63,15 @@ public class TypeSelection extends Fragment {
              */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String type = (String)typeList.getItemAtPosition(position);
-                Log.d("Debug","Selected: "+type);
+                MainActivity.type = (String)typeList.getItemAtPosition(position);
+                Log.d("Debug","Selected: "+MainActivity.type);
 
-                getActivity().getIntent().putExtra("TYPE", type);
-                ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
+                if(liftSelection == null)
+                    liftSelection = new LiftSelection();
+                else {
+                    liftSelection.reload();
+                }
+                ((MainActivity)getActivity()).addFragment(liftSelection, "LiftSelection");
                 ((MainActivity)getActivity()).setViewPager(2);
             }
         });

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.database.WeightTableAccessor;
+import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.ArrayList;
 
@@ -50,8 +51,8 @@ public class WeightSelection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weight_selection, container, false);
-        type = getActivity().getIntent().getStringExtra("TYPE"); //Gets the type of lift from the Intent
-        lift = getActivity().getIntent().getStringExtra("LIFT"); //Gets the lift name from the Intent
+        type = MainActivity.type;
+        lift = MainActivity.lift;
         user = "Tyler"; //TODO: Actually add users, don't hard code them in
 
         setUpSeekBar(view);

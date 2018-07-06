@@ -23,6 +23,7 @@ public class MainActivity extends FragmentActivity {
     private PagerAdapter pagerAdapter;
     private NonSwipeLeftViewPager viewPager;
     private FragmentManager fragmentManager;
+    public static String type, lift;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +81,9 @@ public class MainActivity extends FragmentActivity {
     //Not working properly atm
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
+        System.out.println(viewPager.getCurrentItem());
+        if (viewPager.getCurrentItem() > 0) {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         } else {
             super.onBackPressed();
         }
