@@ -71,7 +71,7 @@ public class TypeSelection extends Fragment {
 
                 Toast.makeText(getActivity(), "Going to " + ((MainActivity)getActivity()).TYPE, Toast.LENGTH_SHORT).show();
                 ((MainActivity)getActivity()).addFragment(new LiftSelection(), "LiftSelection");
-                ((MainActivity)getActivity()).setViewPager(1);
+                ((MainActivity)getActivity()).setViewPager(PagerAdapter.LIFT);
 
                 //mmeehhhhhhhhh
                 //LiftSelection fragment = new LiftSelection();

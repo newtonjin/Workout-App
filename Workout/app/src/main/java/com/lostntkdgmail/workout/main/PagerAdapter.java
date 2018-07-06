@@ -23,19 +23,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
     }
 
     public void addFragment(Fragment fm, String title) {
-        if(!mFragmentTitleList.contains(title)) {
             mFragmentList.add(fm);
             mFragmentTitleList.add(title);
             notifyDataSetChanged();
-        } else {
-            System.out.println(title + " already exists, replacing it");
-            int foundIndex;
-            foundIndex = mFragmentTitleList.indexOf(title);
-            mFragmentList.remove(foundIndex);
-            mFragmentList.add(foundIndex, fm);
-            mFragmentTitleList.remove(foundIndex);
-            mFragmentTitleList.add(foundIndex, title);
-        }
         }
 
     public void removeFragment(int index) {

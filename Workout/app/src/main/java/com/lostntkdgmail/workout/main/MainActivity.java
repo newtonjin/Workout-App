@@ -5,8 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 
 import com.lostntkdgmail.workout.LiftSelection;
 import com.lostntkdgmail.workout.R;
@@ -18,7 +21,7 @@ public class MainActivity extends FragmentActivity {
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
     public static String TYPE;
-    private NonSwipeLeftViewPager viewPager;
+    private NonSwipeViewPager viewPager;
     private FragmentManager fragmentManager;
 
     @Override
@@ -32,22 +35,13 @@ public class MainActivity extends FragmentActivity {
 
         setUpViewPager(viewPager);
 
-        addFragment(new TypeSelection(), "TypeSelection");
-
     }
 
     public void addFragment(Fragment fm, String title) {
-        if(pagerAdapter.containsFragment(title)) {
-            int i = pagerAdapter.getFragmentIndex(title);
-
-            //OOF
-            //getSupportFragmentManager().beginTransaction().replace(i, fm);
-            pagerAdapter.removeFragment(i);
-            pagerAdapter.addFragment(fm, title);
-        } else {
-            pagerAdapter.addFragment(fm, title);
-        }
+        pagerAdapter.addFragment(fm, title);
+        viewPager.setAdapter(pagerAdapter);
     }
+
 
     private void setUpViewPager(ViewPager vp) {
         pagerAdapter.addFragment(new TypeSelection(), "TypeSelection");
@@ -61,14 +55,19 @@ public class MainActivity extends FragmentActivity {
     //WAKE ME UP INSIDE (cant wake up)
     @Override
     public void onBackPressed() {
-        System.out.println("----------------------------COMING FROM FRAGMENT-------------------------------------------");
-        System.out.println(((PagerAdapter)viewPager.getAdapter()).getItem(viewPager.getCurrentItem()));
-        System.out.println(((PagerAdapter)viewPager.getAdapter()).getItem(viewPager.getCurrentItem()).getTag());
+        String currentFragment = ((PagerAdapter)viewPager.getAdapter()).getItemTitle(viewPager.getCurrentItem());
 
-        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        if(currentFragment.equals("TypeSelection")){
+            super.onBackPressed();
+        } else if(currentFragment.equals("LiftSelection")){
+            setViewPager(pagerAdapter.HOME);
+            pagerAdapter.removeFragment(pagerAdapter.LIFT);
+            viewPager.setAdapter(pagerAdapter);
+        } else if (currentFragment.equals("WeightSelection")) {
+            setViewPager(pagerAdapter.LIFT);
+            pagerAdapter.removeFragment(pagerAdapter.WEIGHT);
+            viewPager.setAdapter(pagerAdapter);
+        }
 
-        System.out.println("----------------------------GOING TO FRAGMENT-------------------------------------------");
-        System.out.println(((PagerAdapter)viewPager.getAdapter()).getItem(viewPager.getCurrentItem()));
-        System.out.println(((PagerAdapter)viewPager.getAdapter()).getItem(viewPager.getCurrentItem()).getTag());
     }
 }
