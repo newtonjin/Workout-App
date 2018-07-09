@@ -62,7 +62,7 @@ public class MainActivity extends FragmentActivity {
                         setViewPager(TypeSelection.TITLE);
                         break;
                     case R.id.switchUserNav:
-                        setViewPager("SelectUser");
+                        setViewPager(SelectUser.TITLE);
                         break;
                     case R.id.pastEntriesNav:
                         break;
@@ -104,11 +104,13 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         int index = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
-        if (viewPager.getCurrentItem() > 0 && viewPager.getCurrentItem() != index) {
-            if(viewPager.getCurrentItem() < index) {
+        int currentIndex = viewPager.getCurrentItem();
+        if (currentIndex> 0 && currentIndex != index) {
+            if(currentIndex < index) {
                 viewPager.setCurrentItem(--currentPos);
             }
-            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+            else
+                viewPager.setCurrentItem(currentIndex - 1);
         }
         else if(index == viewPager.getCurrentItem()) {
             setViewPager(currentPos);
