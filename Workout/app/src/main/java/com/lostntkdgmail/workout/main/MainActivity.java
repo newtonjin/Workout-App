@@ -24,7 +24,8 @@ public class MainActivity extends FragmentActivity {
 
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
-    public static String TYPE, LIFT, USER;
+    public static String TYPE, LIFT;
+    public static long USER;
     public static int currentPos = 0;
     private NonSwipeViewPager viewPager;
     public static LiftTableAccessor liftTable;
@@ -37,10 +38,9 @@ public class MainActivity extends FragmentActivity {
         liftTable = new LiftTableAccessor(this);
         userTable = new UserTableAccessor(this);
         weightTable = new WeightTableAccessor(this);
-
         TYPE = liftTable.getTypes()[0];
         LIFT = liftTable.getLifts(TYPE)[0];
-        USER = userTable.getNames()[0];
+        USER = Long.parseLong(userTable.getAllIds()[0]);
         setContentView(R.layout.activity_main);
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
@@ -105,15 +105,17 @@ public class MainActivity extends FragmentActivity {
     public void onBackPressed() {
         int index = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
         int currentIndex = viewPager.getCurrentItem();
-        if (currentIndex> 0 && currentIndex != index) {
+        if (currentIndex > 0 && currentIndex != index) {
             if(currentIndex < index) {
                 viewPager.setCurrentItem(--currentPos);
             }
             else
                 viewPager.setCurrentItem(currentIndex - 1);
         }
-        else if(index == viewPager.getCurrentItem()) {
+        else if(index == currentIndex) {
             setViewPager(currentPos);
+            if(currentPos == 2)
+                ((WeightSelection)getPagerAdapter().getItem(currentPos)).reload();
         }
         else {
             super.onBackPressed();

@@ -27,6 +27,9 @@ public class LiftTableAccessor extends DatabaseAccessor {
      */
     public LiftTableAccessor(Context context) {
         super(context, TABLE_NAME, col);
+        if(getNumberOfRows() < 1) {
+            fillWithData();
+        }
     }
 
     /**

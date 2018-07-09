@@ -20,27 +20,27 @@ import java.util.Objects;
 public class SelectUser extends Fragment {
     public static final String TITLE = "SelectUser";
     private ListView userList;
+    private String[] ids;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.select_user, container, false);
-        if(MainActivity.userTable.select(null, null).getCount() == 0) {
-            MainActivity.userTable.insert("Default","User");
-        }
         userList = view.findViewById(R.id.userList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.list_item, R.id.listEntry, getUsers());
         userList.setAdapter(adapter);
         userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                //TODO: Select user
+                MainActivity.USER = Long.parseLong(ids[(int)id]);
+                getActivity().onBackPressed();
             }
         });
         FloatingActionButton newUser = view.findViewById(R.id.newUserButton);
         newUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: open new user fragment
+                ((MainActivity)getActivity()).addFragment(new NewUser(), NewUser.TITLE);
+                ((MainActivity)getActivity()).setViewPager(NewUser.TITLE);
             }
         });
         return view;
@@ -56,10 +56,16 @@ public class SelectUser extends Fragment {
     public String[] getUsers() {
         Cursor queryResult = MainActivity.userTable.select(null,null);
         String[] result = new String[queryResult.getCount()];
+        ids = new String[result.length];
         for(int i = 0; i < result.length; i++) {
             queryResult.moveToNext();
             result[i] = queryResult.getString(1) + " " + queryResult.getString(2);
+            ids[i] = queryResult.getString(0);
         }
         return result;
+    }
+    public void reload() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.list_item, R.id.listEntry, getUsers());
+        userList.setAdapter(adapter);
     }
 }

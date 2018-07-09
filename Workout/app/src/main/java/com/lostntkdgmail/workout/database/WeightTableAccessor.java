@@ -33,7 +33,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param db The database to add the table to
      */
     public static void createTable(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.USER.name() + " TEXT," + Columns.DATE.name() +
+        db.execSQL("create table " + TABLE_NAME + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.USER.name() + " LONG," + Columns.DATE.name() +
                 " TEXT," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT," + Columns.WEIGHT.name() + " INTEGER," + Columns.REPS.name() + " INTEGER)");
 
         Log.d(TAG,"Created Weight Table");
@@ -48,7 +48,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param reps The number of reps
      * @return True if the insertion was successful
      */
-    public boolean insert(String user,String type,String lift, int weight, int reps) {
+    public boolean insert(long user,String type,String lift, int weight, int reps) {
         Date date = new Date();
         String printDate = new Date().toString();
         Calendar calendar = Calendar.getInstance();
@@ -78,15 +78,15 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param sorting SQLite sorting algorithm
      * @return Cursor object with all selected values
      */
-    public Cursor select(String user, String type, String lift, String sorting, String limit) { //TODO: change limit to int eventually
+    public Cursor select(long user, String type, String lift, String sorting, String limit) { //TODO: change limit to int eventually
         Log.d(TAG, "select called");
-        if(user == null && type == null && lift == null) {
+        if(user > 0 && type == null && lift == null) {
             Log.d(TAG, "All values passed to select are null");
             return null;
         }
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
-        if(user != null) {
+        if(user > 0) {
             builder.append(" ").append(Columns.USER.name()).append(" = '").append(user).append("'");
             if(type != null || lift != null)
                 builder.append(" AND");
@@ -114,7 +114,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param lift The lift to be selected
      * @return Cursor object with all selected values
      */
-    public Cursor select(String user, String type, String lift) {
+    public Cursor select(long user, String type, String lift) {
         return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC",null);
     }
 
