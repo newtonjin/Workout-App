@@ -25,6 +25,7 @@ public class MainActivity extends FragmentActivity {
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
     public static String TYPE, LIFT, USER;
+    public static int currentPos = 0;
     private NonSwipeViewPager viewPager;
     public static LiftTableAccessor liftTable;
     public static UserTableAccessor userTable;
@@ -57,6 +58,7 @@ public class MainActivity extends FragmentActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()) {
                     case R.id.recordWeightsNav:
+                        currentPos++;
                         setViewPager(TypeSelection.TITLE);
                         break;
                     case R.id.switchUserNav:
@@ -79,7 +81,7 @@ public class MainActivity extends FragmentActivity {
         pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
         pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
         pagerAdapter.addFragment(new WeightSelection(), WeightSelection.TITLE);
-        pagerAdapter.addFragment(new SelectUser(), "SelectUser");
+        pagerAdapter.addFragment(new SelectUser(), SelectUser.TITLE);
         viewPager.setAdapter(pagerAdapter);
     }
 
@@ -101,10 +103,17 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        System.out.println(viewPager.getCurrentItem());
-        if (viewPager.getCurrentItem() > 0) {
+        int index = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
+        if (viewPager.getCurrentItem() > 0 && viewPager.getCurrentItem() != index) {
+            if(viewPager.getCurrentItem() < index) {
+                viewPager.setCurrentItem(--currentPos);
+            }
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        } else {
+        }
+        else if(index == viewPager.getCurrentItem()) {
+            setViewPager(currentPos);
+        }
+        else {
             super.onBackPressed();
         }
     }

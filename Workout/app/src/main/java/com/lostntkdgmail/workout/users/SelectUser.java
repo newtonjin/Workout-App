@@ -18,7 +18,7 @@ import com.lostntkdgmail.workout.main.MainActivity;
 import java.util.Objects;
 
 public class SelectUser extends Fragment {
-    private static final String TAG = "SelectUser";
+    public static final String TITLE = "SelectUser";
     private ListView userList;
 
     @Override

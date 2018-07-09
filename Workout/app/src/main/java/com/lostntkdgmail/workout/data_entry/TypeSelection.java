@@ -50,6 +50,7 @@ public class TypeSelection extends Fragment {
                 int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getFragmentIndex(LiftSelection.TITLE);
                 LiftSelection s = (LiftSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
                 s.reload();
+                MainActivity.currentPos++;
                 ((MainActivity)getActivity()).setViewPager(LiftSelection.TITLE);
             }
         });

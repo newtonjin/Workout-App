@@ -81,6 +81,7 @@ public class LiftSelection extends Fragment {
                 int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getFragmentIndex(WeightSelection.TITLE);
                 WeightSelection s = (WeightSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
                 s.reload();
+                MainActivity.currentPos++;
                 ((MainActivity)getActivity()).setViewPager(WeightSelection.TITLE);
 
             }
