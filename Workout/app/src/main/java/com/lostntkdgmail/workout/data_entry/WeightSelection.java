@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * The Activity for selecting a weight
  */
 public class WeightSelection extends Fragment {
-    private static final String TAG = "WeightSelection";
+    public static final String TITLE = "WeightSelection";
     private int digit1 = 0;
     private int digit2 = 0;
     private int digit3 = 0;
@@ -103,7 +103,6 @@ public class WeightSelection extends Fragment {
      * Initializes the 3 number pickers
      */
     public void setUpNumberPickers(View view) {
-        System.out.println("Setting up np");
         NumberPicker np1 = view.findViewById(R.id.numberPicker1);
         NumberPicker np2 = view.findViewById(R.id.numberPicker2);
         NumberPicker np3 = view.findViewById(R.id.numberPicker3);

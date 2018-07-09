@@ -4,40 +4,25 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.MainActivity;
 
+import java.util.Objects;
+
 
 /**
  * The Activity for selecting a Type of lift
  */
-
 public class TypeSelection extends Fragment {
-    private static final String TAG = "TypeSelection";
+    public static final String TITLE = "TypeSelection";
     private ListView typeList;
-    private Button test;
-    private boolean liftInitialized = false;
-
-    public TypeSelection() {
-        //required and empty constructor
-    }
-
-    public static TypeSelection newInstance() {
-
-        TypeSelection fragment = new TypeSelection();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,7 +32,7 @@ public class TypeSelection extends Fragment {
             MainActivity.liftTable.fillWithData();
         String[] types = MainActivity.liftTable.getTypes();
         typeList = view.findViewById(R.id.typeList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(), R.layout.list_item, R.id.listEntry, types);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, types);
         typeList.setAdapter(adapter);
 
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,18 +47,10 @@ public class TypeSelection extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 MainActivity.TYPE = (String)typeList.getItemAtPosition(position);
-                Log.d("Debug","Selected: " + MainActivity.TYPE);
-
-                if(!liftInitialized) {
-                    ((MainActivity) getActivity()).addFragment(new LiftSelection(), "LiftSelection");
-                    liftInitialized = true;
-                }
-                else {
-                    int index = ((MainActivity) getActivity()).getPagerAdapter().getFragmentIndex("LiftSelection");
-                    LiftSelection s = (LiftSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
-                    s.reload();
-                }
-                ((MainActivity)getActivity()).setViewPager("LiftSelection");
+                int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getFragmentIndex(LiftSelection.TITLE);
+                LiftSelection s = (LiftSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
+                s.reload();
+                ((MainActivity)getActivity()).setViewPager(LiftSelection.TITLE);
             }
         });
         return view;
@@ -86,8 +63,6 @@ public class TypeSelection extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Debug","Launching Activity: TypeSelection");
-
     }
 
     @Override

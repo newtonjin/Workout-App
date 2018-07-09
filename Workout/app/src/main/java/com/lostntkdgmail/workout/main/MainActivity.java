@@ -10,8 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.data_entry.LiftSelection;
 import com.lostntkdgmail.workout.data_entry.TypeSelection;
 
+import com.lostntkdgmail.workout.data_entry.WeightSelection;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.database.UserTableAccessor;
 import com.lostntkdgmail.workout.database.WeightTableAccessor;
@@ -34,6 +36,10 @@ public class MainActivity extends FragmentActivity {
         liftTable = new LiftTableAccessor(this);
         userTable = new UserTableAccessor(this);
         weightTable = new WeightTableAccessor(this);
+
+        TYPE = liftTable.getTypes()[0];
+        LIFT = liftTable.getLifts(TYPE)[0];
+        USER = userTable.getNames()[0];
         setContentView(R.layout.activity_main);
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
@@ -51,7 +57,7 @@ public class MainActivity extends FragmentActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()) {
                     case R.id.recordWeightsNav:
-                        setViewPager("TypeSelection");
+                        setViewPager(TypeSelection.TITLE);
                         break;
                     case R.id.switchUserNav:
                         setViewPager("SelectUser");
@@ -69,9 +75,10 @@ public class MainActivity extends FragmentActivity {
         viewPager.setAdapter(pagerAdapter);
     }
 
-
     private void setUpViewPager(ViewPager vp) {
-        pagerAdapter.addFragment(new TypeSelection(), "TypeSelection");
+        pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
+        pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
+        pagerAdapter.addFragment(new WeightSelection(), WeightSelection.TITLE);
         pagerAdapter.addFragment(new SelectUser(), "SelectUser");
         viewPager.setAdapter(pagerAdapter);
     }

@@ -17,31 +17,18 @@ import android.widget.TextView;
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.MainActivity;
 
+import java.util.Objects;
+
 
 /**
  * The activity for Selecting a lift
  */
 
 public class LiftSelection extends Fragment {
-    private static final String TAG = "LiftSelection";
+    public static final String TITLE = "LiftSelection";
     private ListView liftList;
     private TextView text;
     private boolean weightInitialized = false;
-
-    public LiftSelection() {
-        // Required and empty constructor
-    }
-
-    public static LiftSelection newInstance(int index) {
-        LiftSelection fragment = new LiftSelection();
-
-        // Supply index input as argument
-        Bundle args = new Bundle();
-        args.putInt("index", index);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -74,7 +61,7 @@ public class LiftSelection extends Fragment {
         String[] lifts;
             lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
         liftList = view.findViewById(R.id.liftList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(), R.layout.list_item, R.id.listEntry, lifts);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
 
         liftList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -91,16 +78,10 @@ public class LiftSelection extends Fragment {
                 Log.d("Debug","Selected: " + lift);
 
                 MainActivity.LIFT = lift;
-                if(!weightInitialized) {
-                    ((MainActivity) getActivity()).addFragment(new WeightSelection(), "WeightSelection");
-                    weightInitialized = true;
-                }
-                else {
-                    int index = ((MainActivity) getActivity()).getPagerAdapter().getFragmentIndex("WeightSelection");
-                    WeightSelection s = (WeightSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
-                    s.reload();
-                }
-                ((MainActivity)getActivity()).setViewPager("WeightSelection");
+                int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getFragmentIndex(WeightSelection.TITLE);
+                WeightSelection s = (WeightSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
+                s.reload();
+                ((MainActivity)getActivity()).setViewPager(WeightSelection.TITLE);
 
             }
         });
@@ -109,10 +90,8 @@ public class LiftSelection extends Fragment {
     public void reload() {
         System.out.println("Reloading");
         String[] lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(), R.layout.list_item, R.id.listEntry, lifts);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
         text.setText(MainActivity.TYPE);
-
-
     }
 }

@@ -15,6 +15,8 @@ import android.widget.ListView;
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.MainActivity;
 
+import java.util.Objects;
+
 public class SelectUser extends Fragment {
     private static final String TAG = "SelectUser";
     private ListView userList;
@@ -26,7 +28,7 @@ public class SelectUser extends Fragment {
             MainActivity.userTable.insert("Default","User");
         }
         userList = view.findViewById(R.id.userList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),R.layout.list_item, R.id.listEntry, getUsers());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.list_item, R.id.listEntry, getUsers());
         userList.setAdapter(adapter);
         userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
