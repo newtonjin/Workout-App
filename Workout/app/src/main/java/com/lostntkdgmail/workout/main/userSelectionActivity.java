@@ -1,5 +1,6 @@
 package com.lostntkdgmail.workout.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,7 +13,7 @@ import com.lostntkdgmail.workout.data_entry.TypeSelection;
 import com.lostntkdgmail.workout.users.NewUser;
 import com.lostntkdgmail.workout.users.SelectUser;
 
-public class userSelectionActivity extends FragmentActivity {
+public class UserSelectionActivity extends AppBaseActivity {
 
     private static final String TAG = "UserSelection";
     private PagerAdapter pagerAdapter;
@@ -32,23 +33,7 @@ public class userSelectionActivity extends FragmentActivity {
         viewPager.setCurrentItem(0);
 
         //Setting up navigation
-        BottomNavigationView navBar = findViewById(R.id.bottom_navigation);
-        navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.recordWeightsNav:
-                        viewPager.setCurrentItem(0);
-                        break;
-                    case R.id.switchUserNav:
-                        viewPager.setCurrentItem(1);
-                        break;
-                    case R.id.pastEntriesNav:
-                        break;
-                }
-                return false;
-            }
-        });
+
     }
 
     private void setUpViewPager(ViewPager vp) {
@@ -70,5 +55,21 @@ public class userSelectionActivity extends FragmentActivity {
             super.onBackPressed();
         }
 
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.recordWeightsNav:
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.switchUserNav:
+                viewPager.setCurrentItem(0);
+                break;
+            case R.id.pastEntriesNav:
+                break;
+        }
+        return false;
     }
 }
