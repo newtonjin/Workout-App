@@ -1,11 +1,9 @@
 package com.lostntkdgmail.workout.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
 
 import android.support.v4.view.ViewPager;
@@ -22,13 +20,12 @@ import com.lostntkdgmail.workout.database.WeightTableAccessor;
 import com.lostntkdgmail.workout.users.SelectUser;
 
 
-public class MainActivity extends AppBaseActivity {
+public class MainActivity extends FragmentActivity {
 
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
-    private NonSwipeViewPager viewPager;
-    public static String type, lift;
     public static String TYPE, LIFT, USER;
+    private NonSwipeViewPager viewPager;
     public static LiftTableAccessor liftTable;
     public static UserTableAccessor userTable;
     public static WeightTableAccessor weightTable;
@@ -47,23 +44,42 @@ public class MainActivity extends AppBaseActivity {
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
-        viewPager = (NonSwipeViewPager) findViewById(R.id.container);
+        viewPager = findViewById(R.id.container);
 
         setUpViewPager(viewPager);
 
         viewPager.setCurrentItem(0);
 
+        //Setting up navigation
+        BottomNavigationView navBar = findViewById(R.id.bottom_navigation);
+        navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch(menuItem.getItemId()) {
+                    case R.id.recordWeightsNav:
+                        setViewPager(TypeSelection.TITLE);
+                        break;
+                    case R.id.switchUserNav:
+                        setViewPager("SelectUser");
+                        break;
+                    case R.id.pastEntriesNav:
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     public void addFragment(Fragment fm, String title) {
         pagerAdapter.addFragment(fm, title);
-        pagerAdapter.notifyDataSetChanged();
+        viewPager.setAdapter(pagerAdapter);
     }
 
     private void setUpViewPager(ViewPager vp) {
         pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
         pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
         pagerAdapter.addFragment(new WeightSelection(), WeightSelection.TITLE);
+        pagerAdapter.addFragment(new SelectUser(), "SelectUser");
         viewPager.setAdapter(pagerAdapter);
     }
 
@@ -85,28 +101,12 @@ public class MainActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
+        System.out.println(viewPager.getCurrentItem());
         if (viewPager.getCurrentItem() > 0) {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.recordWeightsNav:
-                viewPager.setCurrentItem(0);
-                break;
-            case R.id.switchUserNav:
-                Intent intent = new Intent(getBaseContext(), UserSelectionActivity.class);
-                intent.putExtra("TYPE", type);
-                startActivity(intent);
-                break;
-            case R.id.pastEntriesNav:
-                break;
-        }
-        return false;
     }
     @Override
     public void onDestroy() {
