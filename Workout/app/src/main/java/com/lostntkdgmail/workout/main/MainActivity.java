@@ -18,6 +18,7 @@ import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.database.UserTableAccessor;
 import com.lostntkdgmail.workout.database.WeightTableAccessor;
 import com.lostntkdgmail.workout.users.SelectUser;
+import com.lostntkdgmail.workout.view.CalendarFragment;
 
 
 public class MainActivity extends FragmentActivity {
@@ -47,9 +48,9 @@ public class MainActivity extends FragmentActivity {
 
         viewPager = findViewById(R.id.container);
 
-        setUpViewPager(viewPager);
+        setUpViewPager();
 
-        viewPager.setCurrentItem(0);
+        setViewPager(TypeSelection.TITLE);
 
         //Setting up navigation
         BottomNavigationView navBar = findViewById(R.id.bottom_navigation);
@@ -65,6 +66,7 @@ public class MainActivity extends FragmentActivity {
                         setViewPager(SelectUser.TITLE);
                         break;
                     case R.id.pastEntriesNav:
+                        setViewPager(CalendarFragment.TITLE);
                         break;
                 }
                 return false;
@@ -72,12 +74,8 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-    public void addFragment(Fragment fm, String title) {
-        pagerAdapter.addFragment(fm, title);
-        viewPager.setAdapter(pagerAdapter);
-    }
-
-    private void setUpViewPager(ViewPager vp) {
+    private void setUpViewPager() {
+        pagerAdapter.addFragment(new CalendarFragment(), CalendarFragment.TITLE);
         pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
         pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
         pagerAdapter.addFragment(new WeightSelection(), WeightSelection.TITLE);
