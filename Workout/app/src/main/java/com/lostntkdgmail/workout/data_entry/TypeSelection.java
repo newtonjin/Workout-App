@@ -2,6 +2,7 @@ package com.lostntkdgmail.workout.data_entry;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,13 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.MainActivity;
-
-import com.lostntkdgmail.workout.database.LiftTableAccessor;
-import com.lostntkdgmail.workout.main.PagerAdapter;
 
 
 /**
@@ -26,10 +23,9 @@ import com.lostntkdgmail.workout.main.PagerAdapter;
 
 public class TypeSelection extends Fragment {
     private static final String TAG = "TypeSelection";
-    private LiftTableAccessor liftTable;
     private ListView typeList;
     private Button test;
-    private LiftSelection liftSelection;
+    private boolean liftInitialized = false;
 
     public TypeSelection() {
         //required and empty constructor
@@ -44,15 +40,14 @@ public class TypeSelection extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.type_selection, container, false);
-        liftTable = new LiftTableAccessor(this.getContext());
 
-        if(liftTable.getNumberOfRows() < 1)
-            liftTable.fillWithData();
-        String[] types = liftTable.getTypes();
+        if(MainActivity.liftTable.getNumberOfRows() < 1)
+            MainActivity.liftTable.fillWithData();
+        String[] types = MainActivity.liftTable.getTypes();
         typeList = view.findViewById(R.id.typeList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(),R.layout.list_item,R.id.listEntry,types);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(), R.layout.list_item, R.id.listEntry, types);
         typeList.setAdapter(adapter);
 
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,24 +61,19 @@ public class TypeSelection extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                ((MainActivity)getActivity()).TYPE = (String)typeList.getItemAtPosition(position);
-                Log.d("Debug","Selected: " + ((MainActivity)getActivity()).TYPE);
+                MainActivity.TYPE = (String)typeList.getItemAtPosition(position);
+                Log.d("Debug","Selected: " + MainActivity.TYPE);
 
-                if(liftSelection == null)
-                    liftSelection = new LiftSelection();
-                else {
-                    liftSelection.reload();
+                if(!liftInitialized) {
+                    ((MainActivity) getActivity()).addFragment(new LiftSelection(), "LiftSelection");
+                    liftInitialized = true;
                 }
-
-                Toast.makeText(getActivity(), "Going to " + ((MainActivity)getActivity()).TYPE, Toast.LENGTH_SHORT).show();
-                ((MainActivity)getActivity()).addFragment(liftSelection, "LiftSelection");
-                ((MainActivity)getActivity()).setViewPager(PagerAdapter.LIFT);
-
-
-                System.out.println("---------------- IT SHOULD BE CHANGING NOW -------------------------");
-
-
-
+                else {
+                    int index = ((MainActivity) getActivity()).getPagerAdapter().getFragmentIndex("LiftSelection");
+                    LiftSelection s = (LiftSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
+                    s.reload();
+                }
+                ((MainActivity)getActivity()).setViewPager("LiftSelection");
             }
         });
         return view;
@@ -109,8 +99,5 @@ public class TypeSelection extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
-
-
 
 }

@@ -1,7 +1,7 @@
 package com.lostntkdgmail.workout.users;
 
-import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ public class NewUser extends Fragment {
     private UserTableAccessor userTable;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_user, container, false);
         userTable = new UserTableAccessor(getContext());
 

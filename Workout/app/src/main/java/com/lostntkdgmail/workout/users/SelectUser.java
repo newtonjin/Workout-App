@@ -2,6 +2,7 @@ package com.lostntkdgmail.workout.users;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,19 +13,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lostntkdgmail.workout.R;
-import com.lostntkdgmail.workout.database.UserTableAccessor;
+import com.lostntkdgmail.workout.main.MainActivity;
 
 public class SelectUser extends Fragment {
     private static final String TAG = "SelectUser";
-    private UserTableAccessor userTable;
     private ListView userList;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.select_user, container, false);
-        userTable = new UserTableAccessor(getContext());
-        if(userTable.select(null, null).getCount() == 0) {
-            userTable.insert("Default","User");
+        if(MainActivity.userTable.select(null, null).getCount() == 0) {
+            MainActivity.userTable.insert("Default","User");
         }
         userList = view.findViewById(R.id.userList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),R.layout.list_item, R.id.listEntry, getUsers());
@@ -50,11 +49,10 @@ public class SelectUser extends Fragment {
     }
     @Override
     public void onDestroy() {
-        userTable.close();
         super.onDestroy();
     }
     public String[] getUsers() {
-        Cursor queryResult = userTable.select(null,null);
+        Cursor queryResult = MainActivity.userTable.select(null,null);
         String[] result = new String[queryResult.getCount()];
         for(int i = 0; i < result.length; i++) {
             queryResult.moveToNext();

@@ -12,6 +12,9 @@ import android.view.MenuItem;
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.data_entry.TypeSelection;
 
+import com.lostntkdgmail.workout.database.LiftTableAccessor;
+import com.lostntkdgmail.workout.database.UserTableAccessor;
+import com.lostntkdgmail.workout.database.WeightTableAccessor;
 import com.lostntkdgmail.workout.users.SelectUser;
 
 
@@ -19,12 +22,18 @@ public class MainActivity extends FragmentActivity {
 
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
-    public static String TYPE, LIFT;
+    public static String TYPE, LIFT, USER;
     private NonSwipeViewPager viewPager;
+    public static LiftTableAccessor liftTable;
+    public static UserTableAccessor userTable;
+    public static WeightTableAccessor weightTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        liftTable = new LiftTableAccessor(this);
+        userTable = new UserTableAccessor(this);
+        weightTable = new WeightTableAccessor(this);
         setContentView(R.layout.activity_main);
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
@@ -42,10 +51,10 @@ public class MainActivity extends FragmentActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()) {
                     case R.id.recordWeightsNav:
-                        viewPager.setCurrentItem(0);
+                        setViewPager("TypeSelection");
                         break;
                     case R.id.switchUserNav:
-                        viewPager.setCurrentItem(1);
+                        setViewPager("SelectUser");
                         break;
                     case R.id.pastEntriesNav:
                         break;
@@ -53,7 +62,6 @@ public class MainActivity extends FragmentActivity {
                 return false;
             }
         });
-
     }
 
     public void addFragment(Fragment fm, String title) {
@@ -71,32 +79,33 @@ public class MainActivity extends FragmentActivity {
     public void setViewPager(int fragmentNum) {
         viewPager.setCurrentItem(fragmentNum);
     }
+    public void setViewPager(String title) {
+        int index = pagerAdapter.getFragmentIndex(title);
+        setViewPager(index);
+    }
+
+    public PagerAdapter getPagerAdapter() {
+        return pagerAdapter;
+    }
+
+    public NonSwipeViewPager getViewPager() {
+        return viewPager;
+    }
 
     @Override
     public void onBackPressed() {
-//<<<<<<< HEAD
-       //String currentFragment = ((PagerAdapter)viewPager.getAdapter()).getItemTitle(viewPager.getCurrentItem());
-
-       //if(currentFragment.equals("TypeSelection")){
-//=======
-            System.out.println(viewPager.getCurrentItem());
-            if (viewPager.getCurrentItem() > 0) {
-                viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-            } else {
-                super.onBackPressed();
-            }
-
-//>>>>>>> Tyler-dev
-        //    super.onBackPressed();
-        //} else if(currentFragment.equals("LiftSelection")){
-        //    setViewPager(pagerAdapter.HOME);
-        //    pagerAdapter.removeFragment(pagerAdapter.LIFT);
-        //    viewPager.setAdapter(pagerAdapter);
-        //} else if (currentFragment.equals("WeightSelection")) {
-        //    setViewPager(pagerAdapter.LIFT);
-        //    pagerAdapter.removeFragment(pagerAdapter.WEIGHT);
-        //    viewPager.setAdapter(pagerAdapter);
-        //}
-
+        System.out.println(viewPager.getCurrentItem());
+        if (viewPager.getCurrentItem() > 0) {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        } else {
+            super.onBackPressed();
+        }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        liftTable.close();
+        weightTable.close();
+        userTable.close();
     }
 }

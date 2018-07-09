@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.lostntkdgmail.workout.main.MainActivity;
 import com.lostntkdgmail.workout.R;
 
 import java.util.ArrayList;

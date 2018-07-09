@@ -12,6 +12,7 @@ package com.lostntkdgmail.workout.data_entry;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,8 +25,6 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
-import com.lostntkdgmail.workout.database.LiftTableAccessor;
-import com.lostntkdgmail.workout.database.WeightTableAccessor;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.ArrayList;
@@ -35,25 +34,20 @@ import java.util.ArrayList;
  */
 public class WeightSelection extends Fragment {
     private static final String TAG = "WeightSelection";
-    private String type, lift, user;
     private int digit1 = 0;
     private int digit2 = 0;
     private int digit3 = 0;
     private int reps = 0;
     private TextView sBarText;
-    private WeightTableAccessor weightTable;
-    private LiftTableAccessor liftTable;
 
     /**
      * Creates the Activity and sets up the data
      * @param savedInstanceState The last saved state
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weight_selection, container, false);
-        type = ((MainActivity)getActivity()).TYPE;
-        lift = ((MainActivity)getActivity()).LIFT;
-        user = "Tyler"; //TODO: Actually add users, don't hard code them in
+        MainActivity.USER = "Tyler"; //TODO
 
         setUpSeekBar(view);
         setUpNumberPickers(view);
@@ -65,8 +59,6 @@ public class WeightSelection extends Fragment {
                 submitWeight(view);
             }
         });
-        weightTable = new WeightTableAccessor(this.getContext());
-        liftTable = new LiftTableAccessor(this.getContext());
 
         for(int[] s : getPreviousWeights(view)) {
             Log.d("Debug",s[0]+" "+s[1]);
@@ -85,8 +77,6 @@ public class WeightSelection extends Fragment {
     @Override
     public void onDestroy() {
         Log.d("Debug","onDestroy() called for WeightSelection");
-        weightTable.close();
-        liftTable.close();
         super.onDestroy();
     }
     /**
@@ -96,7 +86,7 @@ public class WeightSelection extends Fragment {
     public void submitWeight(View view) {
         int weight = digit1*100+digit2*10+digit3;
         if(reps > 0 && weight > 0) {
-            boolean insertResult = weightTable.insert(user, type, lift, weight, reps);
+            boolean insertResult = MainActivity.weightTable.insert(MainActivity.USER, MainActivity.TYPE, MainActivity.LIFT, weight, reps);
             if(insertResult) {
                 Toast.makeText(getContext(), "Submitted!", Toast.LENGTH_SHORT).show();
                 getPreviousWeights(view.getRootView());
@@ -113,6 +103,7 @@ public class WeightSelection extends Fragment {
      * Initializes the 3 number pickers
      */
     public void setUpNumberPickers(View view) {
+        System.out.println("Setting up np");
         NumberPicker np1 = view.findViewById(R.id.numberPicker1);
         NumberPicker np2 = view.findViewById(R.id.numberPicker2);
         NumberPicker np3 = view.findViewById(R.id.numberPicker3);
@@ -219,7 +210,7 @@ public class WeightSelection extends Fragment {
      * @return An ArrayList<int[]> containing the previous weights. Each int[] is an entry set up like: [weight, reps]
      */
     public ArrayList<int[]> getPreviousWeights(View view) {
-        Cursor c = weightTable.select(user,type,lift, weightTable.getColumnNames()[0]+" DESC","3");
+        Cursor c = MainActivity.weightTable.select(MainActivity.USER,MainActivity.TYPE,MainActivity.LIFT, MainActivity.weightTable.getColumnNames()[0]+" DESC","3");
         ArrayList<int[]> result = new ArrayList<>(3);
         while(c.moveToNext()) {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
@@ -254,7 +245,7 @@ public class WeightSelection extends Fragment {
                 rep1.setText(getResources().getString(R.string.null_reps));
                 break;
             case 2: //Only 2 previous weights
-                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0])); //Here?
+                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
                 rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
 
                 weight2.setText(getResources().getString(R.string.lbs,result.get(1)[0]));
@@ -275,5 +266,8 @@ public class WeightSelection extends Fragment {
                 break;
         }
         return result;
+    }
+    public void reload() {
+        getPreviousWeights(getView());
     }
 }
