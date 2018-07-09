@@ -44,7 +44,7 @@ public abstract class AppBaseActivity extends AppCompatActivity implements MenuI
         mCoordLayout = (CoordinatorLayout) findViewById(R.id.coord_layout);
 
         System.out.println("SUPPORT ACTION BAR " + getSupportActionBar());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         BottomNavigationView navBar = findViewById(R.id.bottom_navigation);
         System.out.println("--------- NAVBAR " + navBar + " -----------------");

@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * An Accessor used to access the User table in the workout database
  */
@@ -109,5 +111,19 @@ public class UserTableAccessor extends DatabaseAccessor {
      */
     public Cursor select(String firstName, String lastName) {
         return select(firstName,lastName,null);
+    }
+    /**
+     * Gets all of the types inside of the table
+     * @return An array containing all of the types
+     */
+    public String[] getNames() {
+        String[] c = {Columns.FIRST_NAME.name(), Columns.LAST_NAME.name()};
+        Cursor cursor = select(null, null);
+        ArrayList<String> types = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            types.add(cursor.getString(1) + " " + cursor.getString(2));
+        }
+        cursor.close();
+        return types.toArray(new String[types.size()]);
     }
 }

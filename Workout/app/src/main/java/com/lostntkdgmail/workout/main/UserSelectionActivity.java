@@ -32,8 +32,6 @@ public class UserSelectionActivity extends AppBaseActivity {
 
         viewPager.setCurrentItem(0);
 
-        //Setting up navigation
-
     }
 
     private void setUpViewPager(ViewPager vp) {
