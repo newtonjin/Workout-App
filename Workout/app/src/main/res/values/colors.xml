@@ -3,4 +3,9 @@
     <color name="colorPrimary">#000000</color>
     <color name="textPrimary">#FFFFFF</color>
     <color name="submitButton">#0000FF</color>
+
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#373737</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
 </resources>

@@ -95,9 +95,6 @@ public class MainActivity extends FragmentActivity {
         return pagerAdapter;
     }
 
-    public NonSwipeViewPager getViewPager() {
-        return viewPager;
-    }
 
     @Override
     public void onBackPressed() {

@@ -7,8 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.view.EventObjects;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * An Accessor used to access the Lift table in the workout database
@@ -104,6 +111,39 @@ public class LiftTableAccessor extends DatabaseAccessor {
         else
             res = readableDb.query(TABLE_NAME,col,null,null,null,null,sorting);
         return res;
+    }
+
+    public List<EventObjects> getAllLifts(){
+        Date dateToday = new Date();
+        List<EventObjects> events = new ArrayList<>();
+        String[] c = {Columns.LIFT.name()};
+        Cursor cursor = readableDb.query(true, TABLE_NAME,c,Columns.TYPE.name()+" =?",null,null,null,Columns.TYPE.name()+" ASC",null);
+        if(cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String message = cursor.getString(cursor.getColumnIndexOrThrow("message"));
+                String startDate = cursor.getString(cursor.getColumnIndexOrThrow("start_date"));
+                //convert start date to date object
+                Date reminderDate = convertStringToDate(startDate);
+                if(reminderDate.after(dateToday) || reminderDate.equals(dateToday)){
+                    events.add(new EventObjects(id, message, reminderDate));
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return events;
+    }
+
+    private Date convertStringToDate(String dateInString){
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date date = null;
+        try {
+            date = format.parse(dateInString);
+        } catch (ParseException e) {
+            System.out.println("ERROR IN LIFT TABLE ACCESSOR CONVERT STRING TO DATE");
+            e.printStackTrace();
+        }
+        return date;
     }
 
     /**
