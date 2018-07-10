@@ -26,7 +26,7 @@ public class SelectUser extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.select_user, container, false);
         userList = view.findViewById(R.id.userList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.list_item, R.id.listEntry, getUsers());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.user_list_item, R.id.userListEntry, getUsers());
         userList.setAdapter(adapter);
         userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -65,7 +65,8 @@ public class SelectUser extends Fragment {
         return result;
     }
     public void reload() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.list_item, R.id.listEntry, getUsers());
+        System.out.println(getContext() == null);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.user_list_item, R.id.userListEntry, getUsers());
         userList.setAdapter(adapter);
     }
 }
