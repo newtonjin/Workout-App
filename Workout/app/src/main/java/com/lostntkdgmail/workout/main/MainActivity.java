@@ -89,6 +89,7 @@ public class MainActivity extends FragmentActivity {
     public void setViewPager(int fragmentNum) {
         viewPager.setCurrentItem(fragmentNum);
     }
+
     public void setViewPager(String title) {
         int index = pagerAdapter.getFragmentIndex(title);
         setViewPager(index);
@@ -135,6 +136,11 @@ public class MainActivity extends FragmentActivity {
         addFragment(new EditUser(), EditUser.TITLE);
         setViewPager(EditUser.TITLE);
     }
+
+    public void addFragment(Fragment fm, String title) {
+        pagerAdapter.addFragment(fm, title);
+    }
+
     public void onDeleteUserClick(View button) {
         View parentRow = (View)button.getParent();
         ListView listView = (ListView)parentRow.getParent();
