@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class LiftTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "lift";
     private static final String TAG = "LiftTableAccessor";
-    private enum Columns {
+    public enum Columns {
         ID, TYPE, LIFT
     }
     private static final String[] col = {Columns.ID.name(),Columns.TYPE.name(),Columns.LIFT.name()};

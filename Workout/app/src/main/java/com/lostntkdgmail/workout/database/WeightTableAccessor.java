@@ -13,7 +13,7 @@ import java.util.Date;
  * An Accessor used to access the Weight Table in the Workout database
  */
 public class WeightTableAccessor extends DatabaseAccessor {
-    private enum Columns {
+    public enum Columns {
         ID, USER, DATE, TYPE, LIFT, WEIGHT, REPS
     }
     private static final String TABLE_NAME = "weight";

@@ -20,7 +20,7 @@ import java.util.Objects;
 public class SelectUser extends Fragment {
     public static final String TITLE = "SelectUser";
     private ListView userList;
-    private String[] ids;
+    public static String[] ids;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +65,6 @@ public class SelectUser extends Fragment {
         return result;
     }
     public void reload() {
-        System.out.println(getContext() == null);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.user_list_item, R.id.userListEntry, getUsers());
         userList.setAdapter(adapter);
     }

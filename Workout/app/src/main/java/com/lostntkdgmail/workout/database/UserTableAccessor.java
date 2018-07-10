@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class UserTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "user", TAG = "UserTableAccessor";
-    private enum Columns {
+    public enum Columns {
         ID, FIRST_NAME, LAST_NAME //TODO: Add date last accessed? Default to that one?
     }
     private static final String[] col = {Columns.ID.name(), Columns.FIRST_NAME.name(), Columns.LAST_NAME.name()};
@@ -61,12 +61,12 @@ public class UserTableAccessor extends DatabaseAccessor {
      * @param lastName The new last name of the User
      * @return True if it was successful
      */
-    public boolean updateData(String id, String firstName, String lastName) {
+    public boolean updateData(long id, String firstName, String lastName) {
         Log.d(TAG, "Replacing id: "+id+" with: "+firstName+" "+lastName);
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.FIRST_NAME.name(), firstName);
         contentValues.put(Columns.LAST_NAME.name(), lastName);
-        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?", new String[] {id});
+        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?", new String[] {id+""});
         if(num > 0)
             return true;
         else {
@@ -113,9 +113,9 @@ public class UserTableAccessor extends DatabaseAccessor {
     public Cursor select(String firstName, String lastName) {
         return select(firstName,lastName,null,-1);
     }
-    public String select(long userId) {
+    public Cursor select(long userId) {
         Cursor cursor = readableDb.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+Columns.ID+" = "+userId,new String[0]);
-        return cursor.getString(Columns.FIRST_NAME.ordinal()) + cursor.getString(Columns.LAST_NAME.ordinal());
+        return cursor;
     }
     /**
      * Gets all of the types inside of the table
