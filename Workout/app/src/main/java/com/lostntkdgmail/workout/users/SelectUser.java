@@ -53,7 +53,7 @@ public class SelectUser extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
-    public String[] getUsers() {
+    public static String[] getUsers() {
         Cursor queryResult = MainActivity.userTable.select(null,null);
         String[] result = new String[queryResult.getCount()];
         ids = new String[result.length];

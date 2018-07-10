@@ -45,7 +45,7 @@ public class NewUser extends Fragment {
             int index = ((MainActivity)getActivity()).getPagerAdapter().getFragmentIndex(SelectUser.TITLE);
             ((SelectUser)((MainActivity)getActivity()).getPagerAdapter().getItem(index)).reload();
             ((MainActivity)getActivity()).setViewPager(SelectUser.TITLE);
-            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+            //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit(); //TODO: Actually remove the fragment
         }
         //TODO: Add confirmation message
     }
