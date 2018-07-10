@@ -27,9 +27,6 @@ public class TypeSelection extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.type_selection, container, false);
-
-        if(MainActivity.liftTable.getNumberOfRows() < 1)
-            MainActivity.liftTable.fillWithData();
         String[] types = MainActivity.liftTable.getTypes();
         typeList = view.findViewById(R.id.typeList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, types);

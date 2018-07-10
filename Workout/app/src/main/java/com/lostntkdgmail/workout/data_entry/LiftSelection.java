@@ -89,7 +89,6 @@ public class LiftSelection extends Fragment {
         return view;
     }
     public void reload() {
-        System.out.println("Reloading");
         String[] lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);

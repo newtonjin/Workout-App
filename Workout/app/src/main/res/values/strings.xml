@@ -20,6 +20,7 @@
     <string name="switch_users">Switch Users</string>
     <string name="users">Users</string>
     <string name="new_user">New User</string>
+    <string name="edit_user">Edit User</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
 

@@ -13,8 +13,8 @@ import java.util.ArrayList;
  */
 public class UserTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "user", TAG = "UserTableAccessor";
-    private enum Columns {
-        ID, FIRST_NAME, LAST_NAME
+    public enum Columns {
+        ID, FIRST_NAME, LAST_NAME //TODO: Add date last accessed? Default to that one?
     }
     private static final String[] col = {Columns.ID.name(), Columns.FIRST_NAME.name(), Columns.LAST_NAME.name()};
 
@@ -24,6 +24,9 @@ public class UserTableAccessor extends DatabaseAccessor {
      */
     public UserTableAccessor(Context context) {
         super(context, TABLE_NAME, col);
+        if(select(null, null).getCount() == 0) {
+            insert("Default","User");
+        }
     }
 
     /**
@@ -39,21 +42,16 @@ public class UserTableAccessor extends DatabaseAccessor {
      * Inserts a user into the database
      * @param firstName The User's first name
      * @param lastName The User's last name
-     * @return True if it was successful
+     * @return The id of the user
      */
-    public boolean insert(String firstName, String lastName) {
+    public long insert(String firstName, String lastName) {
         Log.d(TAG, "Inserting: \""+ firstName + ","+lastName+"\" into "+TABLE_NAME);
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.FIRST_NAME.name(), firstName);
         contentValues.put(Columns.LAST_NAME.name(), lastName);
 
         long result = writableDb.insert(TABLE_NAME, null, contentValues);
-        if(result != -1) {
-            Log.d(TAG, "Failed to insert");
-            return false;
-        }
-        Log.d(TAG, "Successfully inserted");
-        return true;
+        return result;
     }
 
     /**
@@ -63,12 +61,12 @@ public class UserTableAccessor extends DatabaseAccessor {
      * @param lastName The new last name of the User
      * @return True if it was successful
      */
-    public boolean updateData(String id, String firstName, String lastName) {
+    public boolean updateData(long id, String firstName, String lastName) {
         Log.d(TAG, "Replacing id: "+id+" with: "+firstName+" "+lastName);
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.FIRST_NAME.name(), firstName);
         contentValues.put(Columns.LAST_NAME.name(), lastName);
-        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?", new String[] {id});
+        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?", new String[] {id+""});
         if(num > 0)
             return true;
         else {
@@ -84,7 +82,7 @@ public class UserTableAccessor extends DatabaseAccessor {
      * @param sorting The method for sorting the result
      * @return A Cursor object with all of the selected values
      */
-    public Cursor select(String firstName, String lastName, String sorting) {
+    public Cursor select(String firstName, String lastName, String sorting, int limit) {
         StringBuilder sql = new StringBuilder();
         if(firstName != null && lastName != null) {
            sql.append("SELECT * FROM ").append(TABLE_NAME).append(" WHERE ").append(Columns.FIRST_NAME.name()).append(" = ").append(firstName).append(" AND ").append(Columns.LAST_NAME.name()).append(" = ").append(lastName);
@@ -101,6 +99,9 @@ public class UserTableAccessor extends DatabaseAccessor {
         if(sorting != null) {
             sql.append(" ORDER BY ").append(sorting);
         }
+        if(limit > 0) {
+            sql.append(" LIMIT ").append(limit);
+        }
         return readableDb.rawQuery(sql.toString(), new String[0]);
     }
     /**
@@ -110,18 +111,22 @@ public class UserTableAccessor extends DatabaseAccessor {
      * @return A Cursor object with all of the selected values
      */
     public Cursor select(String firstName, String lastName) {
-        return select(firstName,lastName,null);
+        return select(firstName,lastName,null,-1);
+    }
+    public Cursor select(long userId) {
+        Cursor cursor = readableDb.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+Columns.ID+" = "+userId,new String[0]);
+        return cursor;
     }
     /**
      * Gets all of the types inside of the table
      * @return An array containing all of the types
      */
-    public String[] getNames() {
+    public String[] getAllIds() {
         String[] c = {Columns.FIRST_NAME.name(), Columns.LAST_NAME.name()};
         Cursor cursor = select(null, null);
         ArrayList<String> types = new ArrayList<>();
         while(cursor.moveToNext()) {
-            types.add(cursor.getString(1) + " " + cursor.getString(2));
+            types.add(cursor.getString(0));
         }
         cursor.close();
         return types.toArray(new String[types.size()]);

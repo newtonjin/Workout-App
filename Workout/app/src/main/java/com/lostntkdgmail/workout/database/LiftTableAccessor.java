@@ -23,7 +23,7 @@ import java.util.Locale;
 public class LiftTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "lift";
     private static final String TAG = "LiftTableAccessor";
-    private enum Columns {
+    public enum Columns {
         ID, TYPE, LIFT
     }
     private static final String[] col = {Columns.ID.name(),Columns.TYPE.name(),Columns.LIFT.name()};
@@ -34,6 +34,9 @@ public class LiftTableAccessor extends DatabaseAccessor {
      */
     public LiftTableAccessor(Context context) {
         super(context, TABLE_NAME, col);
+        if(getNumberOfRows() < 1) {
+            fillWithData();
+        }
     }
 
     /**

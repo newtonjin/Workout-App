@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentActivity;
 
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.data_entry.LiftSelection;
@@ -17,6 +19,7 @@ import com.lostntkdgmail.workout.data_entry.WeightSelection;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.database.UserTableAccessor;
 import com.lostntkdgmail.workout.database.WeightTableAccessor;
+import com.lostntkdgmail.workout.users.EditUser;
 import com.lostntkdgmail.workout.users.SelectUser;
 import com.lostntkdgmail.workout.view.CalendarFragment;
 
@@ -25,7 +28,8 @@ public class MainActivity extends FragmentActivity {
 
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
-    public static String TYPE, LIFT, USER;
+    public static String TYPE, LIFT;
+    public static long USER;
     public static int currentPos = 0;
     private NonSwipeViewPager viewPager;
     public static LiftTableAccessor liftTable;
@@ -38,10 +42,9 @@ public class MainActivity extends FragmentActivity {
         liftTable = new LiftTableAccessor(this);
         userTable = new UserTableAccessor(this);
         weightTable = new WeightTableAccessor(this);
-
         TYPE = liftTable.getTypes()[0];
         LIFT = liftTable.getLifts(TYPE)[0];
-        USER = userTable.getNames()[0];
+        USER = Long.parseLong(userTable.getAllIds()[0]);
         setContentView(R.layout.activity_main);
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
@@ -98,17 +101,20 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        int index = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
+        int selectUserIndex = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
+        int startIndex = pagerAdapter.getFragmentIndex(TypeSelection.TITLE);
         int currentIndex = viewPager.getCurrentItem();
-        if (currentIndex> 0 && currentIndex != index) {
-            if(currentIndex < index) {
-                viewPager.setCurrentItem(--currentPos);
+        if (currentIndex > 0 && currentIndex != selectUserIndex) {
+            if(currentIndex < selectUserIndex) {
+                viewPager.setCurrentItem(startIndex + --currentPos);
             }
             else
                 viewPager.setCurrentItem(currentIndex - 1);
         }
-        else if(index == viewPager.getCurrentItem()) {
-            setViewPager(currentPos);
+        else if(selectUserIndex == currentIndex) {
+            setViewPager(startIndex + currentPos);
+            if(currentPos == 2)
+                ((WeightSelection)getPagerAdapter().getItem(startIndex + currentPos)).reload();
         }
         else {
             super.onBackPressed();
@@ -120,5 +126,20 @@ public class MainActivity extends FragmentActivity {
         liftTable.close();
         weightTable.close();
         userTable.close();
+    }
+    public void onEditUserClick(View button) {
+        View parentRow = (View)button.getParent();
+        ListView listView = (ListView)parentRow.getParent();
+        int position = listView.getPositionForView(parentRow);
+        EditUser.userId = Long.parseLong(SelectUser.ids[position]);
+        addFragment(new EditUser(), EditUser.TITLE);
+        setViewPager(EditUser.TITLE);
+    }
+    public void onDeleteUserClick(View button) {
+        View parentRow = (View)button.getParent();
+        ListView listView = (ListView)parentRow.getParent();
+        int position = listView.getPositionForView(parentRow);
+        userTable.deleteData(SelectUser.ids[position]);
+        ((SelectUser)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(SelectUser.TITLE))).reload();
     }
 }

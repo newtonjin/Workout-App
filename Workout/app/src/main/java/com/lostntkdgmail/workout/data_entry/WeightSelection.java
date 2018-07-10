@@ -9,6 +9,7 @@ package com.lostntkdgmail.workout.data_entry;
 //TODO: Home screen?
 //TODO: An actual app icon/logo
 //TODO: With users, if there are no users in the db, it should prompt for user info before starting for the first time
+//TODO: Add info about lift/type/user on the weight selection page
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -47,7 +48,6 @@ public class WeightSelection extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weight_selection, container, false);
-        MainActivity.USER = "Tyler"; //TODO
 
         setUpSeekBar(view);
         setUpNumberPickers(view);
