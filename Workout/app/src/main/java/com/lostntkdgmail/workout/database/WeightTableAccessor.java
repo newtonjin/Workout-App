@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -146,4 +147,17 @@ public class WeightTableAccessor extends DatabaseAccessor {
             return false;
         }
     }
+
+    public String[] getLiftsByDate(String date) {
+        String[] c = {LiftTableAccessor.Columns.TYPE.name()};
+        String[] theDate = {date};
+        Cursor cursor = readableDb.query(true, TABLE_NAME, c, WeightTableAccessor.Columns.DATE.name() + "=?",theDate, null, null, null, null);
+        ArrayList<String> types = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            types.add(cursor.getString(0));
+        }
+        cursor.close();
+        return types.toArray(new String[types.size()]);
+    }
+
 }

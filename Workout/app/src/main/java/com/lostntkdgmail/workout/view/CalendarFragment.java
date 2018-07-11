@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
+import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +37,6 @@ public class CalendarFragment extends Fragment {
     private GridAdapter mAdapter;
     private LiftTableAccessor mQuery;
     private static final int MAX_CALENDAR_COLUMN = 42;
-    private int month, year;
     private SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
 
     public CalendarFragment() {
@@ -83,7 +83,11 @@ public class CalendarFragment extends Fragment {
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "Clicked " + position, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Clicked " + parent.getItemAtPosition(position), Toast.LENGTH_LONG).show();
+
+                //calls to update the view history and set as the current fragment
+                ((MainActivity)getActivity()).updateViewHistory(formatter.format((Date) parent.getItemAtPosition(position)));
+                ((MainActivity)getActivity()).setViewPager(ViewHistoryFragment.TITLE);
             }
         });
     }

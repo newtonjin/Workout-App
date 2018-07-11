@@ -6,7 +6,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
-import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -22,6 +21,8 @@ import com.lostntkdgmail.workout.database.WeightTableAccessor;
 import com.lostntkdgmail.workout.users.EditUser;
 import com.lostntkdgmail.workout.users.SelectUser;
 import com.lostntkdgmail.workout.view.CalendarFragment;
+import com.lostntkdgmail.workout.view.ViewHistoryFragment;
+
 
 
 public class MainActivity extends FragmentActivity {
@@ -79,6 +80,7 @@ public class MainActivity extends FragmentActivity {
 
     private void setUpViewPager() {
         pagerAdapter.addFragment(new CalendarFragment(), CalendarFragment.TITLE);
+        pagerAdapter.addFragment(new ViewHistoryFragment(), ViewHistoryFragment.TITLE);
         pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
         pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
         pagerAdapter.addFragment(new WeightSelection(), WeightSelection.TITLE);
@@ -147,5 +149,10 @@ public class MainActivity extends FragmentActivity {
         int position = listView.getPositionForView(parentRow);
         userTable.deleteData(SelectUser.ids[position]);
         ((SelectUser)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(SelectUser.TITLE))).reload();
+    }
+
+    //Called from the Calendar Fragment when the user clicks on a date to view
+    public void updateViewHistory(String date){
+        ((ViewHistoryFragment)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
     }
 }
