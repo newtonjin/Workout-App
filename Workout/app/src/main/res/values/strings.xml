@@ -21,8 +21,13 @@
     <string name="users">Users</string>
     <string name="new_user">New User</string>
     <string name="edit_user">Edit User</string>
+    <string name="delete_user">Delete User</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
+    <string name="new_lift">New Lift</string>
+    <string name="lift_name">Lift Name</string>
+    <string name="type_name">Type Name</string>
+    <string name="new_type">New Lift Category</string>
 
     <string name="lbs">%d lbs</string>
     <string name="null_lbs">-- lbs</string>

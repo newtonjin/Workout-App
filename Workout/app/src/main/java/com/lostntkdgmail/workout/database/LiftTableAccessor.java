@@ -124,12 +124,12 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean fillWithData() {
-        String[] arms = {context.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
-        String[] back = {context.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
-        String[] chest = {context.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
-        String[] forearms = {context.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
-        String[] legs = {context.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
-        String[] shoulders = {context.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
+        String[] arms = {resources.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
+        String[] back = {resources.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
+        String[] chest = {resources.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
+        String[] forearms = {resources.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
+        String[] legs = {resources.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+        String[] shoulders = {resources.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
         String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
         for (String[] arr : lifts) {
             String name = arr[0];
@@ -150,7 +150,6 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return An array containing all of the types
      */
     public String[] getTypes() {
-        System.out.println("Getting types");
         String[] c = {Columns.TYPE.name()};
         Cursor cursor = readableDb.query(true, TABLE_NAME,c,null,null,null,null,Columns.TYPE.name()+" ASC",null);
         ArrayList<String> types = new ArrayList<>();
