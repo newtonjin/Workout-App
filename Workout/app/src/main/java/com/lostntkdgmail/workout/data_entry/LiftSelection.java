@@ -1,10 +1,8 @@
 package com.lostntkdgmail.workout.data_entry;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.Objects;
@@ -24,11 +23,10 @@ import java.util.Objects;
  * The activity for Selecting a lift
  */
 
-public class LiftSelection extends Fragment {
+public class LiftSelection extends BaseFragment {
     public static final String TITLE = "LiftSelection";
     private ListView liftList;
     private TextView text;
-    private boolean weightInitialized = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -40,26 +38,10 @@ public class LiftSelection extends Fragment {
     }
 
     /**
-     * Creates the activity and sets up the data
-     * @param savedInstanceState The last savedInstanceState
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("Debug","Launching Activity LiftSelection");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    /**
      * Sets up the list view which shows all of the different types
      */
     public View setUpListView(View view) {
-        String[] lifts;
-            lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
+        String[] lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
         liftList = view.findViewById(R.id.liftList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
@@ -80,7 +62,6 @@ public class LiftSelection extends Fragment {
                 MainActivity.LIFT = lift;
                 int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getFragmentIndex(WeightSelection.TITLE);
                 WeightSelection s = (WeightSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
-                s.reload();
                 MainActivity.currentPos++;
                 ((MainActivity)getActivity()).setViewPager(WeightSelection.TITLE);
 

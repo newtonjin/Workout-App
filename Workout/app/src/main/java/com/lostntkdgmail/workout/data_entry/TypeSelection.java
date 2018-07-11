@@ -1,9 +1,7 @@
 package com.lostntkdgmail.workout.data_entry;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.Objects;
@@ -20,7 +19,7 @@ import java.util.Objects;
 /**
  * The Activity for selecting a Type of lift
  */
-public class TypeSelection extends Fragment {
+public class TypeSelection extends BaseFragment {
     public static final String TITLE = "TypeSelection";
     private ListView typeList;
 
@@ -46,7 +45,6 @@ public class TypeSelection extends Fragment {
                 MainActivity.TYPE = (String)typeList.getItemAtPosition(position);
                 int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getFragmentIndex(LiftSelection.TITLE);
                 LiftSelection s = (LiftSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
-                s.reload();
                 MainActivity.currentPos++;
                 ((MainActivity)getActivity()).setViewPager(LiftSelection.TITLE);
             }
@@ -54,23 +52,11 @@ public class TypeSelection extends Fragment {
         return view;
     }
 
-    /**
-     * Creates the Activity and sets up the data
-     * @param savedInstanceState The last saved state
-     */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
+    public void reload() {
+        String[] types = MainActivity.liftTable.getTypes();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, types);
+        typeList.setAdapter(adapter);
     }
 
 }

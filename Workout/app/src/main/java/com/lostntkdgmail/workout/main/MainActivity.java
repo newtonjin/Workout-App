@@ -1,6 +1,5 @@
 package com.lostntkdgmail.workout.main;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +50,7 @@ public class MainActivity extends FragmentActivity {
         USER = Long.parseLong(userTable.getAllIds()[0]);
         setContentView(R.layout.activity_main);
 
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),R.id.container);
 
         viewPager = findViewById(R.id.container);
 
@@ -120,8 +119,6 @@ public class MainActivity extends FragmentActivity {
         }
         else if(selectUserIndex == currentIndex) {
             setViewPager(startIndex + currentPos);
-            if(currentPos == 2)
-                ((WeightSelection)getPagerAdapter().getItem(startIndex + currentPos)).reload();
         }
         else if(currentIndex > selectUserIndex) {
             viewPager.setCurrentItem(selectUserIndex);
@@ -142,7 +139,10 @@ public class MainActivity extends FragmentActivity {
         ListView listView = (ListView)parentRow.getParent();
         int position = listView.getPositionForView(parentRow);
         EditUser.userId = Long.parseLong(SelectUser.ids[position]);
-        addFragment(new EditUser(), EditUser.TITLE);
+        if(!SelectUser.editInitialized) {
+            addFragment(new EditUser(), EditUser.TITLE);
+            SelectUser.editInitialized = true;
+        }
         setViewPager(EditUser.TITLE);
     }
     public void onDeleteUserClick(View button) {
@@ -166,7 +166,6 @@ public class MainActivity extends FragmentActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         userTable.deleteData(SelectUser.ids[position]);
-                        ((SelectUser)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(SelectUser.TITLE))).reload();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

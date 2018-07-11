@@ -14,7 +14,6 @@ package com.lostntkdgmail.workout.data_entry;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,8 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.database.UserTableAccessor;
+import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 /**
  * The Activity for selecting a weight
  */
-public class WeightSelection extends Fragment {
+public class WeightSelection extends BaseFragment {
     public static final String TITLE = "WeightSelection";
     private int digit1 = 0;
     private int digit2 = 0;
@@ -65,20 +66,7 @@ public class WeightSelection extends Fragment {
         }
         return view;
     }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("Debug","Launching Activity: Weight Selection");
-    }
 
-    /**
-     * Cleans up the Activity and closes the Accessors
-     */
-    @Override
-    public void onDestroy() {
-        Log.d("Debug","onDestroy() called for WeightSelection");
-        super.onDestroy();
-    }
     /**
      * Submits the weight into the database
      * @param view The Submit button
@@ -87,7 +75,10 @@ public class WeightSelection extends Fragment {
         int weight = digit1*100+digit2*10+digit3;
         if(reps > 0 && weight > 0) {
             boolean insertResult = MainActivity.weightTable.insert(MainActivity.USER, MainActivity.TYPE, MainActivity.LIFT, weight, reps);
-            if(insertResult) {
+            Cursor cursor = MainActivity.userTable.select(MainActivity.USER);
+            cursor.moveToFirst();
+            boolean userUpdateResult = MainActivity.userTable.updateData(MainActivity.USER,cursor.getString(UserTableAccessor.Columns.FIRST_NAME.ordinal()),cursor.getString(UserTableAccessor.Columns.LAST_NAME.ordinal()));
+            if(insertResult && userUpdateResult) {
                 Toast.makeText(getContext(), "Submitted!", Toast.LENGTH_SHORT).show();
                 getPreviousWeights(view.getRootView());
             }

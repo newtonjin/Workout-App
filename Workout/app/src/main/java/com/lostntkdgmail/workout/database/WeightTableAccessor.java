@@ -80,7 +80,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      */
     public Cursor select(long user, String type, String lift, String sorting, String limit) { //TODO: change limit to int eventually
         Log.d(TAG, "select called");
-        if(user > 0 && type == null && lift == null) {
+        if(user < 0 && type == null && lift == null) {
             Log.d(TAG, "All values passed to select are null");
             return null;
         }
