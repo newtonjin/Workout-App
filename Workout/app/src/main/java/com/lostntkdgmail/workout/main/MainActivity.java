@@ -8,7 +8,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
-import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -23,6 +22,9 @@ import com.lostntkdgmail.workout.database.UserTableAccessor;
 import com.lostntkdgmail.workout.database.WeightTableAccessor;
 import com.lostntkdgmail.workout.users.EditUser;
 import com.lostntkdgmail.workout.users.SelectUser;
+import com.lostntkdgmail.workout.view.CalendarFragment;
+import com.lostntkdgmail.workout.view.ViewHistoryFragment;
+
 
 import java.lang.reflect.Type;
 
@@ -56,9 +58,9 @@ public class MainActivity extends FragmentActivity {
 
         viewPager = findViewById(R.id.container);
 
-        setUpViewPager(viewPager);
+        setUpViewPager();
 
-        viewPager.setCurrentItem(0);
+        setViewPager(TypeSelection.TITLE);
 
         //Setting up navigation
         BottomNavigationView navBar = findViewById(R.id.bottom_navigation);
@@ -74,6 +76,7 @@ public class MainActivity extends FragmentActivity {
                         setViewPager(SelectUser.TITLE);
                         break;
                     case R.id.pastEntriesNav:
+                        setViewPager(CalendarFragment.TITLE);
                         break;
                 }
                 return false;
@@ -81,12 +84,9 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-    public void addFragment(Fragment fm, String title) {
-        pagerAdapter.addFragment(fm, title);
-        viewPager.setAdapter(pagerAdapter);
-    }
-
-    private void setUpViewPager(ViewPager vp) {
+    private void setUpViewPager() {
+        pagerAdapter.addFragment(new CalendarFragment(), CalendarFragment.TITLE);
+        pagerAdapter.addFragment(new ViewHistoryFragment(), ViewHistoryFragment.TITLE);
         pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
         //TODO: we could init the other fragments in other threads to speed up?
         pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
@@ -98,6 +98,7 @@ public class MainActivity extends FragmentActivity {
     public void setViewPager(int fragmentNum) {
         viewPager.setCurrentItem(fragmentNum);
     }
+
     public void setViewPager(String title) {
         int index = pagerAdapter.getFragmentIndex(title);
         setViewPager(index);
@@ -107,9 +108,6 @@ public class MainActivity extends FragmentActivity {
         return pagerAdapter;
     }
 
-    public NonSwipeViewPager getViewPager() {
-        return viewPager;
-    }
 
     @Override
     public void onBackPressed() {
@@ -147,6 +145,11 @@ public class MainActivity extends FragmentActivity {
         }
         setViewPager(EditUser.TITLE);
     }
+
+    public void addFragment(Fragment fm, String title) {
+        pagerAdapter.addFragment(fm, title);
+    }
+
     public void onDeleteUserClick(View button) {
         View parentRow = (View)button.getParent();
         ListView listView = (ListView)parentRow.getParent();
@@ -180,5 +183,10 @@ public class MainActivity extends FragmentActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    //Called from the Calendar Fragment when the user clicks on a date to view
+    public void updateViewHistory(String date){
+        ((ViewHistoryFragment)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
     }
 }

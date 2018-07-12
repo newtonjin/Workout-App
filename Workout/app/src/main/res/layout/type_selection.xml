@@ -23,8 +23,8 @@
     android:id="@+id/typeList"
     android:layout_below="@+id/selectTypeText"
     android:textSize="25sp"
-    android:textAlignment="center"
-    android:background="@color/colorPrimary"
+    android:textAlignment="center"/>
+    <!-- android:background="@color/colorPrimary" -->
     />
 
 </RelativeLayout>
