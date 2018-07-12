@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()) {
                     case R.id.recordWeightsNav:
-                        currentPos++;
+                        currentPos = 0;
                         setViewPager(TypeSelection.TITLE);
                         break;
                     case R.id.switchUserNav:
@@ -131,19 +131,36 @@ public class MainActivity extends FragmentActivity {
      * Determines what happens when the back button is pressed
      */
     @Override
-    public void onBackPressed() { //TODO: Once again needs to be looked at
+    public void onBackPressed() {
         int selectUserIndex = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
         int startIndex = pagerAdapter.getFragmentIndex(TypeSelection.TITLE);
         int currentIndex = viewPager.getCurrentItem();
-        if (currentIndex > 0 && currentIndex < selectUserIndex) {
+
+        //Main group
+        if (currentIndex > startIndex && currentIndex < selectUserIndex) {
             viewPager.setCurrentItem(startIndex + --currentPos);
         }
+        //Select user
         else if(selectUserIndex == currentIndex) {
             setViewPager(startIndex + currentPos);
         }
+        //User group
         else if(currentIndex > selectUserIndex) {
             viewPager.setCurrentItem(selectUserIndex);
         }
+        //Past Entries group
+        else if(currentIndex < startIndex) {
+            int calendarIndex = pagerAdapter.getFragmentIndex(CalendarFragment.TITLE);
+            //Calendar page
+            if(currentIndex == calendarIndex) {
+                setViewPager(startIndex + currentPos);
+            }
+            //Other pages
+            else {
+                viewPager.setCurrentItem(calendarIndex);
+            }
+        }
+        //Default
         else {
             super.onBackPressed();
         }

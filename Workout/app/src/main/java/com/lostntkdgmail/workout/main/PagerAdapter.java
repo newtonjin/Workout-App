@@ -110,4 +110,18 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public int getFragmentIndex(String title) {
         return fragmentTagList.indexOf(title);
     }
+
+    /**
+     * Gets the title of the page
+     * @param position The position of the page
+     * @return The title of the page
+     */
+    @Override
+    public CharSequence getPageTitle(int position) {
+        System.out.println(position);
+        if(position > -1 && position < getCount()) {
+            return fragmentTagList.get(position);
+        }
+        return null;
+    }
 }
