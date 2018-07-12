@@ -42,6 +42,7 @@ public class MainActivity extends FragmentActivity {
     public static LiftTableAccessor liftTable;
     public static UserTableAccessor userTable;
     public static WeightTableAccessor weightTable;
+    private BottomNavigationView navBar;
 
     /**
      * Determines what happens when the Activity is created. Sets up the menus, initializes the database accessors and various variables.
@@ -67,14 +68,17 @@ public class MainActivity extends FragmentActivity {
         setViewPager(TypeSelection.TITLE);
 
         //Setting up navigation
-        BottomNavigationView navBar = findViewById(R.id.bottom_navigation);
+        navBar = findViewById(R.id.bottom_navigation);
+        navBar.getMenu().getItem(1).setChecked(true);
         navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                menuItem.setChecked(true);
                 switch(menuItem.getItemId()) {
                     case R.id.recordWeightsNav:
                         currentPos = 0;
                         setViewPager(TypeSelection.TITLE);
+
                         break;
                     case R.id.switchUserNav:
                         setViewPager(SelectUser.TITLE);
@@ -142,6 +146,7 @@ public class MainActivity extends FragmentActivity {
         }
         //Select user
         else if(selectUserIndex == currentIndex) {
+            navBar.getMenu().getItem(1).setChecked(true);
             setViewPager(startIndex + currentPos);
         }
         //User group
@@ -153,6 +158,7 @@ public class MainActivity extends FragmentActivity {
             int calendarIndex = pagerAdapter.getFragmentIndex(CalendarFragment.TITLE);
             //Calendar page
             if(currentIndex == calendarIndex) {
+                navBar.getMenu().getItem(1).setChecked(true);
                 setViewPager(startIndex + currentPos);
             }
             //Other pages
