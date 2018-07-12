@@ -77,6 +77,9 @@ public class GridAdapter extends ArrayAdapter {
 
     @Override
     public int getPosition(Object item) {
-        return monthlyDates.indexOf(item);
+        if(item instanceof Date)
+            return monthlyDates.indexOf(item);
+        else
+            return -1;
     }
 }

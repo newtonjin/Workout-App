@@ -26,8 +26,6 @@ import com.lostntkdgmail.workout.view.CalendarFragment;
 import com.lostntkdgmail.workout.view.ViewHistoryFragment;
 
 
-import java.lang.reflect.Type;
-
 import static android.app.AlertDialog.*;
 
 
@@ -87,11 +85,14 @@ public class MainActivity extends FragmentActivity {
     private void setUpViewPager() {
         pagerAdapter.addFragment(new CalendarFragment(), CalendarFragment.TITLE);
         pagerAdapter.addFragment(new ViewHistoryFragment(), ViewHistoryFragment.TITLE);
+
         pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
+
         //TODO: we could init the other fragments in other threads to speed up?
         pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
         pagerAdapter.addFragment(new WeightSelection(), WeightSelection.TITLE);
         pagerAdapter.addFragment(new SelectUser(), SelectUser.TITLE);
+
         viewPager.setAdapter(pagerAdapter);
     }
 
