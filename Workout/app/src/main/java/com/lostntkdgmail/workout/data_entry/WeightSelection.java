@@ -29,7 +29,7 @@ import com.lostntkdgmail.workout.main.MainActivity;
 import java.util.ArrayList;
 
 /**
- * The Activity for selecting a weight
+ * The Fragment for selecting a weight
  */
 public class WeightSelection extends BaseFragment {
     public static final String TITLE = "WeightSelection";
@@ -39,10 +39,15 @@ public class WeightSelection extends BaseFragment {
     private int reps = 0;
     private TextView sBarText;
     private NumberPicker np1, np2, np3;
+    private static String lastType, lastLift;
+    private static long lastUser;
 
     /**
-     * Creates the Activity and sets up the data
-     * @param savedInstanceState The last saved state
+     * Creates the fragment
+     * @param inflater The inflater to inflate the layout
+     * @param container The container to put the Fragment inside of
+     * @param savedInstanceState The saved state
+     * @return The view to display
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,9 +63,14 @@ public class WeightSelection extends BaseFragment {
                 submitWeight(view);
             }
         });
+        if(lastType == null || lastLift == null || lastUser != MainActivity.USER || !lastType.equals(MainActivity.TYPE) || !lastLift.equals(MainActivity.LIFT)) {
+            lastUser = MainActivity.USER;
+            lastType = MainActivity.TYPE;
+            lastLift = MainActivity.LIFT;
 
-        for(int[] s : getPreviousWeights(view)) {
-            Log.d("Debug",s[0]+" "+s[1]);
+            for (int[] s : getPreviousWeights(view)) {
+                Log.d("Debug", s[0] + " " + s[1]);
+            }
         }
         return view;
     }
@@ -90,6 +100,7 @@ public class WeightSelection extends BaseFragment {
     }
     /**
      * Initializes the 3 number pickers
+     * @param view The view that was inflated in onCreateView
      */
     public void setUpNumberPickers(View view) {
         np1 = view.findViewById(R.id.numberPicker1);
@@ -155,6 +166,7 @@ public class WeightSelection extends BaseFragment {
     }
     /**
      * Initializes the seek bar
+     * @param view The view that was inflated in onCreateView
      */
     public void setUpSeekBar(View view) {
         sBarText = view.findViewById(R.id.scrollBarText);
@@ -195,6 +207,7 @@ public class WeightSelection extends BaseFragment {
 
     /**
      * Gets the 3 previous weights to display
+     * @param view The view that was inflated in onCreateView
      * @return An ArrayList<int[]> containing the previous weights. Each int[] is an entry set up like: [weight, reps]
      */
     public ArrayList<int[]> getPreviousWeights(View view) {
@@ -255,10 +268,20 @@ public class WeightSelection extends BaseFragment {
         }
         return result;
     }
+
+    /**
+     * Reloads the Fragment. Specifically updates the previous weights if User/Type/Lift is changed
+     */
     public void reload() {
-        getPreviousWeights(getView());
-        digit1 = np1.getValue();
-        digit2 = np2.getValue();
-        digit3 = np3.getValue();
+        if(lastType == null || lastLift == null || lastUser != MainActivity.USER || !lastType.equals(MainActivity.TYPE) || !lastLift.equals(MainActivity.LIFT)) {
+            lastUser = MainActivity.USER;
+            lastType = MainActivity.TYPE;
+            lastLift = MainActivity.LIFT;
+
+            getPreviousWeights(getView());
+            digit1 = np1.getValue();
+            digit2 = np2.getValue();
+            digit3 = np3.getValue();
+        }
     }
 }

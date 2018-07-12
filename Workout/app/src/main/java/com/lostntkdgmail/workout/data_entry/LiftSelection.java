@@ -20,28 +20,41 @@ import java.util.Objects;
 
 
 /**
- * The activity for Selecting a lift
+ * The Fragment for Selecting a lift
  */
-
 public class LiftSelection extends BaseFragment {
     public static final String TITLE = "LiftSelection";
     private ListView liftList;
     private TextView text;
+    private static String[] lifts;
+    private static String lastType;
 
+    /**
+     * Creates the fragment
+     * @param inflater The inflater to inflate the layout
+     * @param container The container to put the Fragment inside of
+     * @param savedInstanceState The saved state
+     * @return The view to display
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.lift_selection, container, false);
         view = setUpListView(view);
         text = view.findViewById(R.id.selectLiftText);
         text.setText(MainActivity.TYPE);
+        if(lastType == null)
+            lastType = MainActivity.TYPE;
         return view;
     }
-
     /**
      * Sets up the list view which shows all of the different types
+     * @param view The View that was inflated in onCreateView
      */
     public View setUpListView(View view) {
-        String[] lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
+        if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
+            lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
+            lastType = MainActivity.TYPE;
+        }
         liftList = view.findViewById(R.id.liftList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
@@ -69,10 +82,16 @@ public class LiftSelection extends BaseFragment {
         });
         return view;
     }
+    /**
+     * Reloads the Fragment. Specifically updates the list of lifts to reflect the current type
+     */
     public void reload() {
-        String[] lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
-        liftList.setAdapter(adapter);
-        text.setText(MainActivity.TYPE);
+        if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
+            lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
+            lastType = MainActivity.TYPE;
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
+            liftList.setAdapter(adapter);
+            text.setText(MainActivity.TYPE);
+        }
     }
 }

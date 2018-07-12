@@ -123,7 +123,6 @@ public class UserTableAccessor extends DatabaseAccessor {
      * @return An array containing all of the types
      */
     public String[] getAllIds() {
-        String[] c = {Columns.FIRST_NAME.name(), Columns.LAST_NAME.name()};
         Cursor cursor = select(null, null);
         ArrayList<String> types = new ArrayList<>();
         while(cursor.moveToNext()) {

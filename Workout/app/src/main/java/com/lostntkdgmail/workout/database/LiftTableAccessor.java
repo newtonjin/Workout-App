@@ -24,6 +24,9 @@ public class LiftTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "lift";
     private static final String TAG = "LiftTableAccessor";
 
+    /**
+     * The columns of the table
+     */
     public enum Columns {
         ID, TYPE, LIFT
     }
@@ -208,7 +211,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return An array containing all lifts for the given type
      */
     public String[] getLifts(String type) {
-        System.out.println("Getting lifts for: "+type);
+        Log.d(TAG, "Getting lifts for: "+type);
         String[] c = {Columns.LIFT.name()};
         String[] sel = {type};
         Cursor cursor = readableDb.query(true, TABLE_NAME,c,Columns.TYPE.name()+" =?",sel,null,null,Columns.TYPE.name()+" ASC",null);
