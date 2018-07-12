@@ -148,16 +148,23 @@ public class WeightTableAccessor extends DatabaseAccessor {
         }
     }
 
-    public String[] getLiftsByDate(String date) {
-        String[] c = {LiftTableAccessor.Columns.TYPE.name()};
-        String[] theDate = {date};
-        Cursor cursor = readableDb.query(true, TABLE_NAME, c, WeightTableAccessor.Columns.DATE.name() + "=?",theDate, null, null, null, null);
-        ArrayList<String> types = new ArrayList<>();
-        while(cursor.moveToNext()) {
-            types.add(cursor.getString(0));
+    public void getLiftsByDate(String date) {
+        Log.d(TAG, "select called");
+        StringBuilder builder = new StringBuilder();
+        builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
+        if(date != "") {
+            builder.append(" ").append(Columns.DATE.name()).append(" = '").append(date).append("'");
         }
-        cursor.close();
-        return types.toArray(new String[types.size()]);
+
+        String sql = builder.toString();
+        Log.d(TAG, "Executing date query: "+ sql);
+        Cursor cursor = readableDb.rawQuery(sql, new String[0]);
+        int i = 0;
+        while(cursor.moveToNext()){
+            System.out.println(cursor.getString(i));
+            ++i;
+        }
+        System.out.println(i + " ENTRIES WITH THAT QUERY");
     }
 
 }

@@ -1,8 +1,8 @@
 <resources>
 
-    <style name="fuckThemes" parent="Theme.AppCompat" >
-        <item name="android:colorBackground">@color/background_material_dark</item>
-        <item name="android:colorForeground">@color/foreground_material_dark</item>
+    <style name="darkTheme" parent="Theme.AppCompat" >
+        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="android:colorForeground">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/text_color_primary</item>
     </style>
 

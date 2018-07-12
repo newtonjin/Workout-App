@@ -38,7 +38,7 @@ public class CalendarFragment extends BaseFragment {
     private GridAdapter mAdapter;
     private LiftTableAccessor mQuery;
     private static final int MAX_CALENDAR_COLUMN = 42;
-    private SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
 
     public CalendarFragment() {
         //ok
@@ -87,6 +87,7 @@ public class CalendarFragment extends BaseFragment {
                 Toast.makeText(getContext(), "Clicked " + parent.getItemAtPosition(position), Toast.LENGTH_LONG).show();
 
                 //calls to update the view history and set as the current fragment
+                System.out.println(formatter.format((Date) parent.getItemAtPosition(position)));
                 ((MainActivity)getActivity()).updateViewHistory(formatter.format((Date) parent.getItemAtPosition(position)));
                 ((MainActivity)getActivity()).setViewPager(ViewHistoryFragment.TITLE);
             }

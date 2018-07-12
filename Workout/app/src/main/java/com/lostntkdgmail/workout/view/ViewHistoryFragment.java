@@ -45,11 +45,12 @@ public class ViewHistoryFragment extends BaseFragment {
 
     //weight table query
     public void initList(String datePicked) {
-        String[] lifts = MainActivity.weightTable.getLiftsByDate(datePicked);
-        for(String s : lifts) {
-            System.out.println(s);
-        }
-        ListElementsArrayList = new ArrayList<>(Arrays.asList(lifts));
+        //String[] lifts =
+                MainActivity.weightTable.getLiftsByDate(datePicked);
+        //for(String s : lifts) {
+        //    System.out.println(s);
+       // }
+       // ListElementsArrayList = new ArrayList<>(Arrays.asList(lifts));
     }
 
 
