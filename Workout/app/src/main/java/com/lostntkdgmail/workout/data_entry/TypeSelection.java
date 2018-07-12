@@ -17,7 +17,7 @@ import java.util.Objects;
 
 
 /**
- * The Activity for selecting a Type of lift
+ * The Fragment for selecting a Type of lift
  */
 public class TypeSelection extends BaseFragment {
     public static final String TITLE = "TypeSelection";
@@ -25,6 +25,13 @@ public class TypeSelection extends BaseFragment {
     public static boolean hasChanged = true; //Set this to true if a new type is added
     private static String[] types;
 
+    /**
+     * Creates the fragment
+     * @param inflater The inflater to inflate the layout
+     * @param container The container to put the Fragment inside of
+     * @param savedInstanceState The saved state
+     * @return The view to display
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.type_selection, container, false);
@@ -57,6 +64,9 @@ public class TypeSelection extends BaseFragment {
         return view;
     }
 
+    /**
+     * Reloads the Fragment. Specifically updates the list of types if it has been indicated that there is a change
+     */
     @Override
     public void reload() {
         if(hasChanged) {

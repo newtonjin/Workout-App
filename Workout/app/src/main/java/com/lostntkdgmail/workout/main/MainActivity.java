@@ -28,19 +28,25 @@ import com.lostntkdgmail.workout.view.ViewHistoryFragment;
 
 import static android.app.AlertDialog.*;
 
-
+/**
+ * The Main Activity of the App
+ */
 public class MainActivity extends FragmentActivity {
-
     private static final String TAG = "MainActivity";
     private PagerAdapter pagerAdapter;
+    private NonSwipeViewPager viewPager;
+
     public static String TYPE, LIFT;
     public static long USER;
     public static int currentPos = 0;
-    private NonSwipeViewPager viewPager;
     public static LiftTableAccessor liftTable;
     public static UserTableAccessor userTable;
     public static WeightTableAccessor weightTable;
 
+    /**
+     * Determines what happens when the Activity is created. Sets up the menus, initializes the database accessors and various variables.
+     * @param savedInstanceState The saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,20 +102,34 @@ public class MainActivity extends FragmentActivity {
         viewPager.setAdapter(pagerAdapter);
     }
 
+    /**
+     * Sets the view pager to the given page
+     * @param fragmentNum The index of the page
+     */
     public void setViewPager(int fragmentNum) {
         viewPager.setCurrentItem(fragmentNum);
     }
 
+    /**
+     * Sets the view pager to the given page
+     * @param title The title of the page
+     */
     public void setViewPager(String title) {
         int index = pagerAdapter.getFragmentIndex(title);
         setViewPager(index);
     }
 
+    /**
+     * Returns the instance of the pager adapter
+     * @return The instance of the pager adapter
+     */
     public PagerAdapter getPagerAdapter() {
         return pagerAdapter;
     }
 
-
+    /**
+     * Determines what happens when the back button is pressed
+     */
     @Override
     public void onBackPressed() { //TODO: Once again needs to be looked at
         int selectUserIndex = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
@@ -128,6 +148,10 @@ public class MainActivity extends FragmentActivity {
             super.onBackPressed();
         }
     }
+
+    /**
+     * Determines what happens when the Activity is destroyed. Closes the database accessors
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -135,6 +159,11 @@ public class MainActivity extends FragmentActivity {
         weightTable.close();
         userTable.close();
     }
+
+    /**
+     * In the Select User page, this is what is called when the edit button is pressed. Opens the edit user page
+     * @param button The edit button
+     */
     public void onEditUserClick(View button) {
         View parentRow = (View)button.getParent();
         ListView listView = (ListView)parentRow.getParent();
@@ -147,10 +176,10 @@ public class MainActivity extends FragmentActivity {
         setViewPager(EditUser.TITLE);
     }
 
-    public void addFragment(Fragment fm, String title) {
-        pagerAdapter.addFragment(fm, title);
-    }
-
+    /**
+     * In the Select User page, this is what is called when the delete button is pressed. Deletes the selected user
+     * @param button The delete button
+     */
     public void onDeleteUserClick(View button) {
         View parentRow = (View)button.getParent();
         ListView listView = (ListView)parentRow.getParent();
@@ -186,7 +215,19 @@ public class MainActivity extends FragmentActivity {
                 .show();
     }
 
-    //Called from the Calendar Fragment when the user clicks on a date to view
+    /**
+     * Adds a fragment to the pagerAdapter
+     * @param fragment The Fragment to add
+     * @param title The title of the Fragment
+     */
+    public void addFragment(Fragment fragment, String title) {
+        pagerAdapter.addFragment(fragment, title);
+    }
+
+    /**
+     * Called from the Calendar Fragment when the user clicks on a date to view
+     * @param date The selected date
+     */
     public void updateViewHistory(String date){
         ((ViewHistoryFragment)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
     }

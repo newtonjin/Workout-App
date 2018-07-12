@@ -17,12 +17,22 @@ import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.Objects;
 
+/**
+ * The Select User Fragment
+ */
 public class SelectUser extends BaseFragment {
     public static final String TITLE = "SelectUser";
     private ListView userList;
     public static boolean newInitialized = false, editInitialized = false;
     public static String[] ids;
 
+    /**
+     * Creates the fragment
+     * @param inflater The inflater to inflate the layout
+     * @param container The container to put the Fragment inside of
+     * @param savedInstanceState The saved state
+     * @return The view to display
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.select_user, container, false);
@@ -49,6 +59,11 @@ public class SelectUser extends BaseFragment {
         });
         return view;
     }
+
+    /**
+     * Gets all of the users from the database to display
+     * @return An array of all of the Users' names
+     */
     public static String[] getUsers() {
         Cursor queryResult = MainActivity.userTable.select(null,null);
         String[] result = new String[queryResult.getCount()];
@@ -60,6 +75,10 @@ public class SelectUser extends BaseFragment {
         }
         return result;
     }
+
+    /**
+     * Reloads the Fragment, specifically refreshes the list of users
+     */
     @Override
     public void reload() {
         if(getContext() != null) {

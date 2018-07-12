@@ -24,6 +24,9 @@ public class LiftTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "lift";
     private static final String TAG = "LiftTableAccessor";
 
+    /**
+     * The columns of the table
+     */
     public enum Columns {
         ID, TYPE, LIFT
     }

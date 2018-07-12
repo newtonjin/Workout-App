@@ -148,6 +148,11 @@ public class WeightTableAccessor extends DatabaseAccessor {
         }
     }
 
+    /**
+     * Gets all Lifts that were entered on the given date
+     * @param date The date of the lifts
+     * @return An array of the lifts
+     */
     public String[] getLiftsByDate(String date) {
         String[] c = {LiftTableAccessor.Columns.TYPE.name()};
         String[] theDate = {date};

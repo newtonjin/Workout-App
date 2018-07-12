@@ -20,9 +20,8 @@ import java.util.Objects;
 
 
 /**
- * The activity for Selecting a lift
+ * The Fragment for Selecting a lift
  */
-
 public class LiftSelection extends BaseFragment {
     public static final String TITLE = "LiftSelection";
     private ListView liftList;
@@ -30,6 +29,13 @@ public class LiftSelection extends BaseFragment {
     private static String[] lifts;
     private static String lastType;
 
+    /**
+     * Creates the fragment
+     * @param inflater The inflater to inflate the layout
+     * @param container The container to put the Fragment inside of
+     * @param savedInstanceState The saved state
+     * @return The view to display
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.lift_selection, container, false);
@@ -40,9 +46,9 @@ public class LiftSelection extends BaseFragment {
             lastType = MainActivity.TYPE;
         return view;
     }
-
     /**
      * Sets up the list view which shows all of the different types
+     * @param view The View that was inflated in onCreateView
      */
     public View setUpListView(View view) {
         if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
@@ -76,6 +82,9 @@ public class LiftSelection extends BaseFragment {
         });
         return view;
     }
+    /**
+     * Reloads the Fragment. Specifically updates the list of lifts to reflect the current type
+     */
     public void reload() {
         if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
             lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
