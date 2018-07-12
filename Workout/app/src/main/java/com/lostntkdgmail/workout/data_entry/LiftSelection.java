@@ -27,6 +27,8 @@ public class LiftSelection extends BaseFragment {
     public static final String TITLE = "LiftSelection";
     private ListView liftList;
     private TextView text;
+    private static String[] lifts;
+    private static String lastType;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -34,6 +36,8 @@ public class LiftSelection extends BaseFragment {
         view = setUpListView(view);
         text = view.findViewById(R.id.selectLiftText);
         text.setText(MainActivity.TYPE);
+        if(lastType == null)
+            lastType = MainActivity.TYPE;
         return view;
     }
 
@@ -41,7 +45,10 @@ public class LiftSelection extends BaseFragment {
      * Sets up the list view which shows all of the different types
      */
     public View setUpListView(View view) {
-        String[] lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
+        if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
+            lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
+            lastType = MainActivity.TYPE;
+        }
         liftList = view.findViewById(R.id.liftList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
@@ -70,9 +77,12 @@ public class LiftSelection extends BaseFragment {
         return view;
     }
     public void reload() {
-        String[] lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
-        liftList.setAdapter(adapter);
-        text.setText(MainActivity.TYPE);
+        if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
+            lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
+            lastType = MainActivity.TYPE;
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
+            liftList.setAdapter(adapter);
+            text.setText(MainActivity.TYPE);
+        }
     }
 }

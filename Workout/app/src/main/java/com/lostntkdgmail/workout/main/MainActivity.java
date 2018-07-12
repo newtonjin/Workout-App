@@ -110,7 +110,7 @@ public class MainActivity extends FragmentActivity {
 
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //TODO: Once again needs to be looked at
         int selectUserIndex = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
         int startIndex = pagerAdapter.getFragmentIndex(TypeSelection.TITLE);
         int currentIndex = viewPager.getCurrentItem();

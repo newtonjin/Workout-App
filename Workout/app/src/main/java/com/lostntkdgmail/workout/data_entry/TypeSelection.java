@@ -22,11 +22,16 @@ import java.util.Objects;
 public class TypeSelection extends BaseFragment {
     public static final String TITLE = "TypeSelection";
     private ListView typeList;
+    public static boolean hasChanged = true; //Set this to true if a new type is added
+    private static String[] types;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.type_selection, container, false);
-        String[] types = MainActivity.liftTable.getTypes();
+        if(hasChanged) {
+            types = MainActivity.liftTable.getTypes();
+            hasChanged = false;
+        }
         typeList = view.findViewById(R.id.typeList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, types);
         typeList.setAdapter(adapter);
@@ -54,9 +59,12 @@ public class TypeSelection extends BaseFragment {
 
     @Override
     public void reload() {
-        String[] types = MainActivity.liftTable.getTypes();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, types);
-        typeList.setAdapter(adapter);
+        if(hasChanged) {
+            types = MainActivity.liftTable.getTypes();
+            hasChanged = false;
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, types);
+            typeList.setAdapter(adapter);
+        }
     }
 
 }

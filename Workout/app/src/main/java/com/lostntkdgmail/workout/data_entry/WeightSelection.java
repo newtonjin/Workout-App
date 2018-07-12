@@ -39,6 +39,8 @@ public class WeightSelection extends BaseFragment {
     private int reps = 0;
     private TextView sBarText;
     private NumberPicker np1, np2, np3;
+    private static String lastType, lastLift;
+    private static long lastUser;
 
     /**
      * Creates the Activity and sets up the data
@@ -58,9 +60,14 @@ public class WeightSelection extends BaseFragment {
                 submitWeight(view);
             }
         });
+        if(lastType == null || lastLift == null || lastUser != MainActivity.USER || !lastType.equals(MainActivity.TYPE) || !lastLift.equals(MainActivity.LIFT)) {
+            lastUser = MainActivity.USER;
+            lastType = MainActivity.TYPE;
+            lastLift = MainActivity.LIFT;
 
-        for(int[] s : getPreviousWeights(view)) {
-            Log.d("Debug",s[0]+" "+s[1]);
+            for (int[] s : getPreviousWeights(view)) {
+                Log.d("Debug", s[0] + " " + s[1]);
+            }
         }
         return view;
     }
@@ -256,9 +263,15 @@ public class WeightSelection extends BaseFragment {
         return result;
     }
     public void reload() {
-        getPreviousWeights(getView());
-        digit1 = np1.getValue();
-        digit2 = np2.getValue();
-        digit3 = np3.getValue();
+        if(lastType == null || lastLift == null || lastUser != MainActivity.USER || !lastType.equals(MainActivity.TYPE) || !lastLift.equals(MainActivity.LIFT)) {
+            lastUser = MainActivity.USER;
+            lastType = MainActivity.TYPE;
+            lastLift = MainActivity.LIFT;
+
+            getPreviousWeights(getView());
+            digit1 = np1.getValue();
+            digit2 = np2.getValue();
+            digit3 = np3.getValue();
+        }
     }
 }
