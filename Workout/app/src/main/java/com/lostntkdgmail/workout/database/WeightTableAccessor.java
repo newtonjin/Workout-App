@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * An Accessor used to access the Weight Table in the Workout database
@@ -20,6 +23,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "weight";
     private static final String TAG = "WeightTableAccess";
     private static final String[] cols = {Columns.ID.name(), Columns.USER.name(),Columns.DATE.name(),Columns.TYPE.name(),Columns.LIFT.name(),Columns.WEIGHT.name(),Columns.REPS.name()};
+    private static final DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
     /**
      * Creates an accessor for accessing the Weight Table
@@ -35,7 +39,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      */
     public static void createTable(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE_NAME + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.USER.name() + " LONG," + Columns.DATE.name() +
-                " TEXT," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT," + Columns.WEIGHT.name() + " INTEGER," + Columns.REPS.name() + " INTEGER)");
+                " DATE," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT," + Columns.WEIGHT.name() + " INTEGER," + Columns.REPS.name() + " INTEGER)");
 
         Log.d(TAG,"Created Weight Table");
     }
@@ -50,11 +54,9 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @return True if the insertion was successful
      */
     public boolean insert(long user,String type,String lift, int weight, int reps) {
-        Date date = new Date();
-        String printDate = new Date().toString();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        printDate = printDate.substring(24)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+printDate.substring(8,10) ;
+        Date now = new Date();
+        String printDate = dateFormatter.format(now);
+
         Log.d(TAG,"Inserting: \"" + user +", "+ printDate +", "+ type +", "+ lift +", "+ weight +", "+ reps + "\" into \"" + TABLE_NAME + "\"");
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.USER.name(),user);
