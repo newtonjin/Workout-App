@@ -1,5 +1,7 @@
 package com.lostntkdgmail.workout.main;
 
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -23,6 +25,10 @@ import com.lostntkdgmail.workout.users.SelectUser;
 import com.lostntkdgmail.workout.view.CalendarFragment;
 import com.lostntkdgmail.workout.view.ViewHistoryFragment;
 
+
+import java.lang.reflect.Type;
+
+import static android.app.AlertDialog.*;
 
 
 public class MainActivity extends FragmentActivity {
@@ -82,6 +88,7 @@ public class MainActivity extends FragmentActivity {
         pagerAdapter.addFragment(new CalendarFragment(), CalendarFragment.TITLE);
         pagerAdapter.addFragment(new ViewHistoryFragment(), ViewHistoryFragment.TITLE);
         pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
+        //TODO: we could init the other fragments in other threads to speed up?
         pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
         pagerAdapter.addFragment(new WeightSelection(), WeightSelection.TITLE);
         pagerAdapter.addFragment(new SelectUser(), SelectUser.TITLE);
@@ -107,17 +114,14 @@ public class MainActivity extends FragmentActivity {
         int selectUserIndex = pagerAdapter.getFragmentIndex(SelectUser.TITLE);
         int startIndex = pagerAdapter.getFragmentIndex(TypeSelection.TITLE);
         int currentIndex = viewPager.getCurrentItem();
-        if (currentIndex > 0 && currentIndex != selectUserIndex) {
-            if(currentIndex < selectUserIndex) {
-                viewPager.setCurrentItem(startIndex + --currentPos);
-            }
-            else
-                viewPager.setCurrentItem(currentIndex - 1);
+        if (currentIndex > 0 && currentIndex < selectUserIndex) {
+            viewPager.setCurrentItem(startIndex + --currentPos);
         }
         else if(selectUserIndex == currentIndex) {
             setViewPager(startIndex + currentPos);
-            if(currentPos == 2)
-                ((WeightSelection)getPagerAdapter().getItem(startIndex + currentPos)).reload();
+        }
+        else if(currentIndex > selectUserIndex) {
+            viewPager.setCurrentItem(selectUserIndex);
         }
         else {
             super.onBackPressed();
@@ -135,7 +139,10 @@ public class MainActivity extends FragmentActivity {
         ListView listView = (ListView)parentRow.getParent();
         int position = listView.getPositionForView(parentRow);
         EditUser.userId = Long.parseLong(SelectUser.ids[position]);
-        addFragment(new EditUser(), EditUser.TITLE);
+        if(!SelectUser.editInitialized) {
+            addFragment(new EditUser(), EditUser.TITLE);
+            SelectUser.editInitialized = true;
+        }
         setViewPager(EditUser.TITLE);
     }
 
@@ -146,9 +153,36 @@ public class MainActivity extends FragmentActivity {
     public void onDeleteUserClick(View button) {
         View parentRow = (View)button.getParent();
         ListView listView = (ListView)parentRow.getParent();
-        int position = listView.getPositionForView(parentRow);
-        userTable.deleteData(SelectUser.ids[position]);
-        ((SelectUser)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(SelectUser.TITLE))).reload();
+        final int position = listView.getPositionForView(parentRow);
+        final String name = SelectUser.getUsers()[position];
+
+        Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new Builder(this);
+        }
+        if(SelectUser.ids.length == 1) {
+            //TODO: Show error message: There must be at least 1 user
+            return;
+        }
+        builder.setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete \""+name+"\" and all workouts associated with that user?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        userTable.deleteData(SelectUser.ids[position]);
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SelectUser.TITLE);
+                        System.out.println(fragment == null);
+                        ((SelectUser)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(SelectUser.TITLE))).reload();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     //Called from the Calendar Fragment when the user clicks on a date to view

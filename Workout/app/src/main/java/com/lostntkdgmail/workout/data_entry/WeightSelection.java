@@ -2,19 +2,15 @@ package com.lostntkdgmail.workout.data_entry;
 
 //TODO: Add ability to view/edit/delete past entries
 //TODO: Add ability to edit types of workouts
-//TODO: Add Users
 //TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?
 //TODO: Possibly add color customization to users?
 //TODO: Allow users to adjust max value on rep bar
-//TODO: Home screen?
 //TODO: An actual app icon/logo
-//TODO: With users, if there are no users in the db, it should prompt for user info before starting for the first time
 //TODO: Add info about lift/type/user on the weight selection page
 
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +22,8 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.database.UserTableAccessor;
+import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.ArrayList;
@@ -33,13 +31,14 @@ import java.util.ArrayList;
 /**
  * The Activity for selecting a weight
  */
-public class WeightSelection extends Fragment {
+public class WeightSelection extends BaseFragment {
     public static final String TITLE = "WeightSelection";
     private int digit1 = 0;
     private int digit2 = 0;
     private int digit3 = 0;
     private int reps = 0;
     private TextView sBarText;
+    private NumberPicker np1, np2, np3;
 
     /**
      * Creates the Activity and sets up the data
@@ -65,20 +64,7 @@ public class WeightSelection extends Fragment {
         }
         return view;
     }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("Debug","Launching Activity: Weight Selection");
-    }
 
-    /**
-     * Cleans up the Activity and closes the Accessors
-     */
-    @Override
-    public void onDestroy() {
-        Log.d("Debug","onDestroy() called for WeightSelection");
-        super.onDestroy();
-    }
     /**
      * Submits the weight into the database
      * @param view The Submit button
@@ -87,7 +73,10 @@ public class WeightSelection extends Fragment {
         int weight = digit1*100+digit2*10+digit3;
         if(reps > 0 && weight > 0) {
             boolean insertResult = MainActivity.weightTable.insert(MainActivity.USER, MainActivity.TYPE, MainActivity.LIFT, weight, reps);
-            if(insertResult) {
+            Cursor cursor = MainActivity.userTable.select(MainActivity.USER);
+            cursor.moveToFirst();
+            boolean userUpdateResult = MainActivity.userTable.updateData(MainActivity.USER,cursor.getString(UserTableAccessor.Columns.FIRST_NAME.ordinal()),cursor.getString(UserTableAccessor.Columns.LAST_NAME.ordinal()));
+            if(insertResult && userUpdateResult) {
                 Toast.makeText(getContext(), "Submitted!", Toast.LENGTH_SHORT).show();
                 getPreviousWeights(view.getRootView());
             }
@@ -103,9 +92,9 @@ public class WeightSelection extends Fragment {
      * Initializes the 3 number pickers
      */
     public void setUpNumberPickers(View view) {
-        NumberPicker np1 = view.findViewById(R.id.numberPicker1);
-        NumberPicker np2 = view.findViewById(R.id.numberPicker2);
-        NumberPicker np3 = view.findViewById(R.id.numberPicker3);
+        np1 = view.findViewById(R.id.numberPicker1);
+        np2 = view.findViewById(R.id.numberPicker2);
+        np3 = view.findViewById(R.id.numberPicker3);
 
         //Setting up first Number picker
         np1.setMinValue(0);
@@ -268,5 +257,8 @@ public class WeightSelection extends Fragment {
     }
     public void reload() {
         getPreviousWeights(getView());
+        digit1 = np1.getValue();
+        digit2 = np2.getValue();
+        digit3 = np3.getValue();
     }
 }

@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +12,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.Objects;
 
-public class SelectUser extends Fragment {
+public class SelectUser extends BaseFragment {
     public static final String TITLE = "SelectUser";
     private ListView userList;
+    public static boolean newInitialized = false, editInitialized = false;
     public static String[] ids;
 
     @Override
@@ -39,21 +40,16 @@ public class SelectUser extends Fragment {
         newUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).addFragment(new NewUser(), NewUser.TITLE);
-                ((MainActivity)getActivity()).setViewPager(NewUser.TITLE);
+                if(!newInitialized) {
+                    ((MainActivity) getActivity()).addFragment(new NewUser(), NewUser.TITLE);
+                    newInitialized = true;
+                }
+                ((MainActivity) getActivity()).setViewPager(NewUser.TITLE);
             }
         });
         return view;
     }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-    public String[] getUsers() {
+    public static String[] getUsers() {
         Cursor queryResult = MainActivity.userTable.select(null,null);
         String[] result = new String[queryResult.getCount()];
         ids = new String[result.length];
@@ -64,8 +60,11 @@ public class SelectUser extends Fragment {
         }
         return result;
     }
+    @Override
     public void reload() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),R.layout.user_list_item, R.id.userListEntry, getUsers());
-        userList.setAdapter(adapter);
+        if(getContext() != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()), R.layout.user_list_item, R.id.userListEntry, getUsers());
+            userList.setAdapter(adapter);
+        }
     }
 }

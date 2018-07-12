@@ -16,7 +16,7 @@ public class NonSwipeViewPager extends ViewPager {
         setMyScroller();
     }
 
-    public NonSwipeViewPager(Context context, AttributeSet attrs) {
+   public NonSwipeViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         setMyScroller();
     }
