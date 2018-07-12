@@ -33,7 +33,6 @@ public class NewUser extends BaseFragment {
         if(firstName.getEditText().getText().toString().length() > 0) {
             MainActivity.USER = MainActivity.userTable.insert(firstName.getEditText().getText().toString(), lastName.getEditText().getText().toString());
             ((MainActivity)getActivity()).setViewPager(SelectUser.TITLE);
-            getActivity().onBackPressed();
         }
         //TODO: Add confirmation message
     }

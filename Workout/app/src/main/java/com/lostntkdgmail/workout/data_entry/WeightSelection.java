@@ -2,13 +2,10 @@ package com.lostntkdgmail.workout.data_entry;
 
 //TODO: Add ability to view/edit/delete past entries
 //TODO: Add ability to edit types of workouts
-//TODO: Add Users
 //TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?
 //TODO: Possibly add color customization to users?
 //TODO: Allow users to adjust max value on rep bar
-//TODO: Home screen?
 //TODO: An actual app icon/logo
-//TODO: With users, if there are no users in the db, it should prompt for user info before starting for the first time
 //TODO: Add info about lift/type/user on the weight selection page
 
 import android.database.Cursor;
@@ -41,6 +38,7 @@ public class WeightSelection extends BaseFragment {
     private int digit3 = 0;
     private int reps = 0;
     private TextView sBarText;
+    private NumberPicker np1, np2, np3;
 
     /**
      * Creates the Activity and sets up the data
@@ -94,9 +92,9 @@ public class WeightSelection extends BaseFragment {
      * Initializes the 3 number pickers
      */
     public void setUpNumberPickers(View view) {
-        NumberPicker np1 = view.findViewById(R.id.numberPicker1);
-        NumberPicker np2 = view.findViewById(R.id.numberPicker2);
-        NumberPicker np3 = view.findViewById(R.id.numberPicker3);
+        np1 = view.findViewById(R.id.numberPicker1);
+        np2 = view.findViewById(R.id.numberPicker2);
+        np3 = view.findViewById(R.id.numberPicker3);
 
         //Setting up first Number picker
         np1.setMinValue(0);
@@ -259,5 +257,8 @@ public class WeightSelection extends BaseFragment {
     }
     public void reload() {
         getPreviousWeights(getView());
+        digit1 = np1.getValue();
+        digit2 = np2.getValue();
+        digit3 = np3.getValue();
     }
 }

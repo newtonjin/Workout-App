@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import com.lostntkdgmail.workout.data_entry.LiftSelection;
 import com.lostntkdgmail.workout.data_entry.TypeSelection;
@@ -17,21 +18,23 @@ import java.util.List;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
-    private final List<String> mFragmentTitleList = new ArrayList<>();
+    private final List<String> fragmentTagList = new ArrayList<>(); //List used to keep up with the current fragments
+    public static final List<Fragment> fragmentList = new ArrayList<>();
     private FragmentManager manager;
 
-    public PagerAdapter(FragmentManager fragmentManager, int containerId) {
+    public PagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
         this.manager = fragmentManager;
     }
 
-    public void addFragment(Fragment fm, String title) {
-           manager.beginTransaction().disallowAddToBackStack().add(fm,title).attach(fm).commit();
-           mFragmentTitleList.add(title);
+    public void addFragment(Fragment fragment, String title) {
+           manager.beginTransaction().add(fragment,title).attach(fragment).commit();
+           fragmentTagList.add(title);
+           fragmentList.add(fragment);
            notifyDataSetChanged();
     }
     public Fragment getItem(int pos) {
-        String currentFrame = mFragmentTitleList.get(pos);
+        String currentFrame = fragmentTagList.get(pos);
         switch (currentFrame) {
             case(LiftSelection.TITLE):
                 return new LiftSelection();
@@ -46,27 +49,21 @@ public class PagerAdapter extends FragmentPagerAdapter {
             case(SelectUser.TITLE):
                 return new SelectUser();
             default:
-                return null;
+                throw new RuntimeException("Item does not exist");
         }
     }
-    public Fragment getItem(String title) {
-        return manager.getFragments().get(mFragmentTitleList.indexOf(title));
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment createdFragment = (Fragment)super.instantiateItem(container,position);
+        fragmentList.set(position, createdFragment);
+        return createdFragment;
     }
-
-    public String getItemTitle(int pos) {
-        return mFragmentTitleList.get(pos);
-    }
-
-    public boolean containsFragment(String title) {
-        return mFragmentTitleList.contains(title);
+    @Override
+    public int getCount() {
+        return fragmentTagList.size();
     }
 
     public int getFragmentIndex(String title) {
-        return mFragmentTitleList.indexOf(title);
-    }
-
-    @Override
-    public int getCount() {
-        return mFragmentTitleList.size();
+        return fragmentTagList.indexOf(title);
     }
 }

@@ -24,6 +24,8 @@ import com.lostntkdgmail.workout.database.WeightTableAccessor;
 import com.lostntkdgmail.workout.users.EditUser;
 import com.lostntkdgmail.workout.users.SelectUser;
 
+import java.lang.reflect.Type;
+
 import static android.app.AlertDialog.*;
 
 
@@ -50,7 +52,7 @@ public class MainActivity extends FragmentActivity {
         USER = Long.parseLong(userTable.getAllIds()[0]);
         setContentView(R.layout.activity_main);
 
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),R.id.container);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
         viewPager = findViewById(R.id.container);
 
@@ -166,6 +168,9 @@ public class MainActivity extends FragmentActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         userTable.deleteData(SelectUser.ids[position]);
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SelectUser.TITLE);
+                        System.out.println(fragment == null);
+                        ((SelectUser)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(SelectUser.TITLE))).reload();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
