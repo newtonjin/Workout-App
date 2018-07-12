@@ -12,6 +12,8 @@ import com.lostntkdgmail.workout.data_entry.WeightSelection;
 import com.lostntkdgmail.workout.users.EditUser;
 import com.lostntkdgmail.workout.users.NewUser;
 import com.lostntkdgmail.workout.users.SelectUser;
+import com.lostntkdgmail.workout.view.CalendarFragment;
+import com.lostntkdgmail.workout.view.ViewHistoryFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +50,12 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return new NewUser();
             case(SelectUser.TITLE):
                 return new SelectUser();
+            case(ViewHistoryFragment.TITLE):
+                return new ViewHistoryFragment();
+            case(CalendarFragment.TITLE):
+                return new CalendarFragment();
             default:
-                throw new RuntimeException("Item does not exist");
+                throw new RuntimeException("Item does not exist: "+currentFrame);
         }
     }
     @Override

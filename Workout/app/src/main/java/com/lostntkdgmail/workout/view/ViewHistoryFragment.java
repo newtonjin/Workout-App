@@ -9,13 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ViewHistoryFragment extends Fragment {
+public class ViewHistoryFragment extends BaseFragment {
 
     public static final String TITLE = "ViewHistory";
     private List<String> ListElementsArrayList;

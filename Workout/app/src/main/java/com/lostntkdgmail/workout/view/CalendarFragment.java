@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
+import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CalendarFragment extends Fragment {
+public class CalendarFragment extends BaseFragment {
 
     public static final String TITLE = "ViewEntries";
 
