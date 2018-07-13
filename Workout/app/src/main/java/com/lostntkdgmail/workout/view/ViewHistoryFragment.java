@@ -50,6 +50,10 @@ public class ViewHistoryFragment extends BaseFragment {
         }
         ListElementsArrayList = new ArrayList<>(Arrays.asList(lifts));
     }
+    @Override
+    public String getTitle() {
+        return TITLE;
+    }
 
 
 }

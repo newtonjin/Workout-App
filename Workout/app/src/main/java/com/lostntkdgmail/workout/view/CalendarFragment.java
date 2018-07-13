@@ -124,6 +124,9 @@ public class CalendarFragment extends BaseFragment {
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         return super.onCreateAnimation(transit, enter, nextAnim);
     }
-
+    @Override
+    public String getTitle() {
+        return TITLE;
+    }
 
 }

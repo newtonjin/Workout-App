@@ -284,4 +284,8 @@ public class WeightSelection extends BaseFragment {
             digit3 = np3.getValue();
         }
     }
+    @Override
+    public String getTitle() {
+        return TITLE;
+    }
 }

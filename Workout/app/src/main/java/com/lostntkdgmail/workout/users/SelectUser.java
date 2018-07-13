@@ -86,4 +86,8 @@ public class SelectUser extends BaseFragment {
             userList.setAdapter(adapter);
         }
     }
+    @Override
+    public String getTitle() {
+        return TITLE;
+    }
 }

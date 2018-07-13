@@ -17,7 +17,6 @@ import com.lostntkdgmail.workout.main.MainActivity;
  */
 public class NewUser extends BaseFragment {
     public static final String TITLE = "newUser";
-
     /**
      * Creates the fragment
      * @param inflater The inflater to inflate the layout
@@ -50,5 +49,9 @@ public class NewUser extends BaseFragment {
             ((MainActivity)getActivity()).setViewPager(SelectUser.TITLE);
         }
         //TODO: Add confirmation message
+    }
+    @Override
+    public String getTitle() {
+        return TITLE;
     }
 }

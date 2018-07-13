@@ -55,8 +55,6 @@ public class TypeSelection extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 MainActivity.TYPE = (String)typeList.getItemAtPosition(position);
-                int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getFragmentIndex(LiftSelection.TITLE);
-                LiftSelection s = (LiftSelection)(((MainActivity) getActivity()).getPagerAdapter().getItem(index));
                 MainActivity.currentPos++;
                 ((MainActivity)getActivity()).setViewPager(LiftSelection.TITLE);
             }
@@ -75,6 +73,10 @@ public class TypeSelection extends BaseFragment {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, types);
             typeList.setAdapter(adapter);
         }
+    }
+    @Override
+    public String getTitle() {
+        return TITLE;
     }
 
 }

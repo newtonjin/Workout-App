@@ -61,4 +61,8 @@ public class EditUser extends BaseFragment {
         }
         //TODO: Add confirmation message
     }
+    @Override
+    public String getTitle() {
+        return TITLE;
+    }
 }
