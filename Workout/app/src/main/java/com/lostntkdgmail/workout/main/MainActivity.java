@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.data_entry.LiftSelection;
@@ -216,7 +217,7 @@ public class MainActivity extends FragmentActivity {
             builder = new Builder(this);
         }
         if(SelectUser.ids.length == 1) {
-            //TODO: Show error message: There must be at least 1 user
+            Toast.makeText(this,"Cannot delete the only user",Toast.LENGTH_SHORT).show();
             return;
         }
         builder.setTitle("Delete entry")

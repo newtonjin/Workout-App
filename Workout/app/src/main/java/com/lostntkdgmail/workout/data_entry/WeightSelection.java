@@ -7,6 +7,7 @@ package com.lostntkdgmail.workout.data_entry;
 //TODO: Allow users to adjust max value on rep bar
 //TODO: An actual app icon/logo
 //TODO: Add info about lift/type/user on the weight selection page
+//TODO: Add what types of lifts were performed in the calendar
 
 import android.database.Cursor;
 import android.os.Bundle;
