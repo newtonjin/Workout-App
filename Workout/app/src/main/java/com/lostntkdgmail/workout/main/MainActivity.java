@@ -26,6 +26,8 @@ import com.lostntkdgmail.workout.view.CalendarFragment;
 import com.lostntkdgmail.workout.view.ViewHistoryFragment;
 
 
+import java.util.Date;
+
 import static android.app.AlertDialog.*;
 
 /**
@@ -251,7 +253,7 @@ public class MainActivity extends FragmentActivity {
      * Called from the Calendar Fragment when the user clicks on a date to view
      * @param date The selected date
      */
-    public void updateViewHistory(String date){
+    public void updateViewHistory(Date date){
         ((ViewHistoryFragment)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
     }
 }

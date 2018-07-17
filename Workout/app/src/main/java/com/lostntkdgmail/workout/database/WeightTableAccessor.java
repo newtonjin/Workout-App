@@ -150,8 +150,9 @@ public class WeightTableAccessor extends DatabaseAccessor {
         }
     }
 
-    public void getLiftsByDate(String date) {
+    public void getLiftsByDate(Date datePicked) {
         Log.d(TAG, "select called");
+        String date = dateFormatter.format(datePicked);
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
         if(date != "") {
