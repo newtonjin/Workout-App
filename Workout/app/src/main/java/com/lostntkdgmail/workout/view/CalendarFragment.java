@@ -18,6 +18,7 @@ import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +29,7 @@ import java.util.Locale;
 public class CalendarFragment extends BaseFragment {
 
     public static final String TITLE = "ViewEntries";
+    private static final DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
     private ImageView previousButton, nextButton;
     private TextView currentDate;
@@ -87,6 +89,7 @@ public class CalendarFragment extends BaseFragment {
                 //calls to update the view history and set as the current fragment
                 ((MainActivity)getActivity()).updateViewHistory((Date) parent.getItemAtPosition(position));
                 ((MainActivity)getActivity()).setViewPager(ViewHistoryFragment.TITLE);
+
             }
         });
     }
@@ -103,7 +106,7 @@ public class CalendarFragment extends BaseFragment {
             mCal.add(Calendar.DAY_OF_MONTH, 1);
         }
         Log.d(TITLE, "Number of date " + dayValueInCells.size());
-        String sDate = formatter.format(cal.getTime());
+        String sDate = dateFormatter.format(cal.getTime());
         currentDate.setText(sDate);
         mAdapter = new GridAdapter(getContext(), dayValueInCells, cal, mEvents);
         calendarGridView.setAdapter(mAdapter);

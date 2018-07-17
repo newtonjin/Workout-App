@@ -254,6 +254,7 @@ public class MainActivity extends FragmentActivity {
      * @param date The selected date
      */
     public void updateViewHistory(Date date){
-        ((ViewHistoryFragment)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
+        ((ViewHistoryFragment)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
+        //((ViewHistoryFragment)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
     }
 }

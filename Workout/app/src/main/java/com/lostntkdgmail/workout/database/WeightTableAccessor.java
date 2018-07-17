@@ -11,7 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * An Accessor used to access the Weight Table in the Workout database
@@ -150,24 +153,37 @@ public class WeightTableAccessor extends DatabaseAccessor {
         }
     }
 
-    public void getLiftsByDate(Date datePicked) {
+    public Map<String, String> getLiftsByDate(Date datePicked, String type) {
         Log.d(TAG, "select called");
         String date = dateFormatter.format(datePicked);
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
-        if(date != "") {
+        if(type != null) {
+            builder.append(" ").append(Columns.TYPE.name()).append(" = '").append(type).append("'");
+            if(date != null)
+                builder.append(" AND");
+        }
+        if(date != null) {
             builder.append(" ").append(Columns.DATE.name()).append(" = '").append(date).append("'");
         }
 
         String sql = builder.toString();
         Log.d(TAG, "ヽ༼ຈل͜ຈ༽ﾉ raise your dongers ヽ༼ຈل͜ຈ༽ﾉ: "+ sql);
+
+
         Cursor cursor = readableDb.rawQuery(sql, new String[0]);
-        int i = 0;
-        while(cursor.moveToNext()){
-            System.out.println(cursor.getString(i));
-            ++i;
+
+        //TODO: replace the value string in the map to an ArrayList<String> for multiple rep and weight entries
+        //type -> lift -> (weight + reps)
+        Map<String, String> returnMap = new HashMap<>();
+
+        while(cursor.moveToNext()) {
+            returnMap.put(cursor.getString(Columns.LIFT.ordinal()), cursor.getString(Columns.REPS.ordinal()) + " repetitions by " + cursor.getString(Columns.WEIGHT.ordinal()) + " LBS");
         }
-        System.out.println(i + " ENTRIES WITH THAT QUERY");
+
+        cursor.close();
+        return returnMap;
+
     }
 
 }
