@@ -23,6 +23,13 @@ import java.util.Locale;
 public class LiftTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "lift";
     private static final String TAG = "LiftTableAccessor";
+    public String[] arms = new String[]{resources.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
+    public String[] back = new String[]{resources.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
+    public String[] chest = new String[]{resources.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
+    public String[] forearms = new String[]{resources.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
+    public String[] legs = new String[]{resources.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+    public String[] shoulders = new String[]{resources.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
+    String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
 
     /**
      * The columns of the table
@@ -169,12 +176,12 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean fillWithData() {
-        String[] arms = {resources.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
-        String[] back = {resources.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
-        String[] chest = {resources.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
-        String[] forearms = {resources.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
-        String[] legs = {resources.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
-        String[] shoulders = {resources.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
+         arms = new String[]{resources.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
+         back = new String[]{resources.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
+         chest = new String[]{resources.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
+         forearms = new String[]{resources.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
+         legs = new String[]{resources.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+         shoulders = new String[]{resources.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
         String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
         for (String[] arr : lifts) {
             String name = arr[0];
@@ -221,6 +228,10 @@ public class LiftTableAccessor extends DatabaseAccessor {
         }
         cursor.close();
         return types.toArray(new String[types.size()]);
+    }
+
+    public String[][] getLifts() {
+        return lifts;
     }
 
 }

@@ -8,11 +8,8 @@ import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -157,7 +154,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
         Log.d(TAG, "select called");
         String date = dateFormatter.format(datePicked);
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
+        builder.append("SELECT * FROM " + TABLE_NAME + " WHERE");
         if(type != null) {
             builder.append(" ").append(Columns.TYPE.name()).append(" = '").append(type).append("'");
             if(date != null)
@@ -168,8 +165,6 @@ public class WeightTableAccessor extends DatabaseAccessor {
         }
 
         String sql = builder.toString();
-        Log.d(TAG, "ヽ༼ຈل͜ຈ༽ﾉ raise your dongers ヽ༼ຈل͜ຈ༽ﾉ: "+ sql);
-
 
         Cursor cursor = readableDb.rawQuery(sql, new String[0]);
 

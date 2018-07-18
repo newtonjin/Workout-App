@@ -97,9 +97,7 @@ public class MainActivity extends FragmentActivity {
     private void setUpViewPager() {
         pagerAdapter.addFragment(new CalendarFragment(), CalendarFragment.TITLE);
         pagerAdapter.addFragment(new ViewHistoryFragment(), ViewHistoryFragment.TITLE);
-
         pagerAdapter.addFragment(new TypeSelection(), TypeSelection.TITLE);
-
         //TODO: we could init the other fragments in other threads to speed up?
         pagerAdapter.addFragment(new LiftSelection(), LiftSelection.TITLE);
         pagerAdapter.addFragment(new WeightSelection(), WeightSelection.TITLE);

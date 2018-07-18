@@ -94,4 +94,8 @@ public class LiftSelection extends BaseFragment {
             text.setText(MainActivity.TYPE);
         }
     }
+
+    public String[] getLifts() {
+        return lifts;
+    }
 }
