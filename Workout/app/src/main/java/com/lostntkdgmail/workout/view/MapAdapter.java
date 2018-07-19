@@ -30,14 +30,14 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MapAdapter extends BaseAdapter {
-    private Map<String, Map<String, String>> mData;
+    private Map<String, Map<String, ArrayList<String>>> mData;
     private Context context;
     private String types[];
     private String[][] lifts;
     private Date date;
     private boolean viewMade = false;
 
-    public MapAdapter(Map<String, Map<String, String>> mData, Context context, String[] types, String[][] lifts, Date date){
+    public MapAdapter(Map<String, Map<String, ArrayList<String>>> mData, Context context, String[] types, String[][] lifts, Date date){
         this.context = context;
         this.mData = mData;
         this.types = types;
@@ -56,93 +56,44 @@ public class MapAdapter extends BaseAdapter {
             result = convertView;
         }
 
-
-
-        //Map<String, String> item = (Map<String, String>) getItem(position);
-
         //TODO: if not checked by this boolean the view will be added many times, fix dis
-        //TODO: Needs to display multiple sets multiple times
             if(!viewMade) {
                 TextView dateDisplay = result.findViewById(R.id.dateDisplay);
                 dateDisplay.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(date));
 
-                LinearLayout myRoot = (LinearLayout) result.findViewById(R.id.my_root);
+                LinearLayout myRoot =  result.findViewById(R.id.my_root);
                 LinearLayout inner = new LinearLayout(context);
                 inner.setOrientation(LinearLayout.VERTICAL);
 
+                // iterating the types
                 for(String outerKey : mData.keySet()) {
-                    Map<String, String> innerMap_ = mData.get(outerKey);
-                    if(innerMap_.size() > 0) {
-                        TextView currOuter_ = new TextView(context);
-                        currOuter_.setText(outerKey);
-                        myRoot.addView(currOuter_);
+                    Map<String, ArrayList<String>> innerMap = mData.get(outerKey);
+                    if(innerMap.size() > 0) {
+                        TextView currOuter = new TextView(context);
+                        currOuter.setText(outerKey);
+                        myRoot.addView(currOuter);
 
-                        for(String innerKey_ : (mData.get(outerKey)).keySet()){
-                            TextView currMiddle_ = new TextView(context);
-                            currMiddle_.setPadding(25,0,0,0);
-                            currMiddle_.setText(innerKey_);
-                            myRoot.addView(currMiddle_);
+                        // iterating the map<lift, List<Weights & reps>>
+                        for(String innerKey : (mData.get(outerKey)).keySet()){
+                            TextView currMiddle = new TextView(context);
+                            currMiddle.setPadding(25,0,0,0);
+                            currMiddle.setText(innerKey);
+                            myRoot.addView(currMiddle);
 
-                            // get ALL SETS of this type and lift
-                            Cursor c = MainActivity.weightTable.select(MainActivity.USER,outerKey,innerKey_, MainActivity.weightTable.getColumnNames()[0]+" DESC", "-1");
-                            ArrayList<String> result_ = new ArrayList<>();
-                            while(c.moveToNext()) {
-                                String arr = c.getString(6) + " repetitions of " + c.getString(5) + " LBS";
-                                result_.add(arr);
-                            }
-
-
-                            for(String listItem : result_) {
-                                TextView currInner_ = new TextView(context);
-                                currInner_.setPadding(50, 0, 0, 0);
-                                currInner_.setText(listItem);
-                                myRoot.addView(currInner_);
+                            // iterating the weights and reps
+                            for(String listItem : mData.get(outerKey).get(innerKey)) {
+                                TextView currInner = new TextView(context);
+                                currInner.setPadding(50, 0, 0, 0);
+                                currInner.setText(listItem);
+                                myRoot.addView(currInner);
                             }
                         }
                     }
                 }
-
-
-
-
-
-
-                //for (Map<String, String> innerMap : mData.values()) {
-                //    if (innerMap.size() > 0) {
-                //        for (String val : innerMap.values()) {
-                //            // get the key of the value from the outer table, then inner table
-                //            String outerKey = (String) getKeyFromValue(mData, innerMap);
-                //            String middleKey = (String) getKeyFromValue(innerMap, val);
-
-                //            TextView currOuter = new TextView(context);
-                //            TextView currMiddle = new TextView(context);
-                //            TextView currInner = new TextView(context);
-
-                //            currMiddle.setPadding(25, 0,0,0);
-                //            currInner.setPadding(50, 0, 0, 0);
-
-                //            currOuter.setText(outerKey);
-                //            currMiddle.setText(middleKey);
-                //            currInner.setText(val);
-
-                //            myRoot.addView(currOuter);
-                //            myRoot.addView(currMiddle);
-                //            myRoot.addView(currInner);
-                //        }
-                //    }
-                //}
             }
+
         viewMade = true;
         return result;
-    }
-
-    public static Object getKeyFromValue(Map hm, Object value) {
-        for (Object o : hm.keySet()) {
-            if (hm.get(o).equals(value)) {
-                return o;
-            }
-        }
-        return null;
     }
 
     @Override

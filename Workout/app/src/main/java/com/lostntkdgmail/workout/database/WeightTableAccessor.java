@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.lostntkdgmail.workout.main.MainActivity;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -151,7 +153,8 @@ public class WeightTableAccessor extends DatabaseAccessor {
         }
     }
 
-    public Map<String, String> getLiftsByDate(Date datePicked, String type) {
+    //TODO: update the query to include USER
+    public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type) {
         Log.d(TAG, "select called");
         String date = dateFormatter.format(datePicked);
         StringBuilder builder = new StringBuilder();
@@ -169,17 +172,28 @@ public class WeightTableAccessor extends DatabaseAccessor {
 
         Cursor cursor = readableDb.rawQuery(sql, new String[0]);
 
-        //TODO: replace the value string in the map to an ArrayList<String> for multiple rep and weight entries
-        //type -> lift -> (weight + reps)
-        Map<String, String> returnMap = new HashMap<>();
+        //type -> lift -> list of (weight + reps)
+        Map<String, ArrayList<String>> returnMap = new HashMap<>();
+
 
         while(cursor.moveToNext()) {
-            returnMap.put(cursor.getString(Columns.LIFT.ordinal()), cursor.getString(Columns.REPS.ordinal()) + " repetitions by " + cursor.getString(Columns.WEIGHT.ordinal()) + " LBS");
+            returnMap.put(cursor.getString(Columns.LIFT.ordinal()), getAllSets(type, cursor.getString(Columns.LIFT.ordinal())));
         }
 
         cursor.close();
         return returnMap;
 
+    }
+
+    public ArrayList<String> getAllSets(String type, String lift) {
+        // get ALL SETS of this type and lift
+        Cursor c = MainActivity.weightTable.select(MainActivity.USER, type, lift, null, "-1");
+        ArrayList<String> result = new ArrayList<>();
+        while(c.moveToNext()) {
+            String arr = c.getString(6) + " repetitions of " + c.getString(5) + " LBS";
+            result.add(arr);
+        }
+        return result;
     }
 
 }

@@ -40,9 +40,6 @@ public class ViewHistoryFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_history, container, false);
         listory = view.findViewById(R.id.listory);
-        //adapter = new MapAdapter(null, getContext(), types);
-
-        //listory.setAdapter(adapter);
 
         this.view = view;
         return view;
@@ -51,12 +48,13 @@ public class ViewHistoryFragment extends BaseFragment {
     //weight table query
     public void initList(Date datePicked) {
 
-        Map<String, Map<String, String>> qResults = new HashMap<>();
+        Map<String, Map<String, ArrayList<String>>> qResults = new HashMap<>();
         types = ((MainActivity)getActivity()).liftTable.getTypes();
         lifts = ((MainActivity)getActivity()).liftTable.getLifts();
 
         for(String type : types) {
-            qResults.put(type, ((MainActivity)getActivity()).weightTable.getLiftsByDate(datePicked, type));
+            Map<String, ArrayList<String>> innerMap = ((MainActivity)getActivity()).weightTable.getLiftsByDate(datePicked, type);
+            qResults.put(type, innerMap);
         }
 
         adapter = new MapAdapter(qResults, getContext(), types, ((MainActivity)getActivity()).liftTable.getLifts(), datePicked);
