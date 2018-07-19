@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.database.UserTableAccessor;
@@ -57,8 +58,11 @@ public class EditUser extends BaseFragment {
         if(firstName.getEditText().getText().toString().length() > 0) {
             MainActivity.userTable.updateData(userId, firstName.getEditText().getText().toString(), lastName.getEditText().getText().toString());
             ((MainActivity)getActivity()).setViewPager(SelectUser.TITLE);
-            getActivity().onBackPressed();
         }
-        //TODO: Add confirmation message
+        Toast.makeText(getContext(),"Successfully modified: "+firstName.getEditText().getText().toString(),Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public String getTitle() {
+        return TITLE;
     }
 }

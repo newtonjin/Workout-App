@@ -68,6 +68,10 @@ public class ViewHistoryFragment extends BaseFragment {
         super.onAttach(context);
         mContext = context;
     }
+    @Override
+    public String getTitle() {
+        return TITLE;
+    }
 
     @Override
     public void onDetach() {

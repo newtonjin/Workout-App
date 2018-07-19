@@ -15,7 +15,7 @@ import java.util.Calendar;
 public class UserTableAccessor extends DatabaseAccessor {
     private static final String TABLE_NAME = "user", TAG = "UserTableAccessor";
     public enum Columns {
-        ID, FIRST_NAME, LAST_NAME, DATE_LAST_ACTIVE//TODO: Add date last accessed? Default to that one?
+        ID, FIRST_NAME, LAST_NAME, DATE_LAST_ACTIVE
     }
     private static final String[] col = {Columns.ID.name(), Columns.FIRST_NAME.name(), Columns.LAST_NAME.name(), Columns.DATE_LAST_ACTIVE.name()};
 

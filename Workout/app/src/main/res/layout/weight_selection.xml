@@ -116,6 +116,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/numberPicker1"
+        android:layout_marginTop="8dp"
         android:max="20"
         android:id="@+id/seekBar" />
 

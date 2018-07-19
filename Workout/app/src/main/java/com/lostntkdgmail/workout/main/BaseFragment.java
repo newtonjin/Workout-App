@@ -60,5 +60,6 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroy();
         Log.d(getClass().getSimpleName(), "onDestroy called");
     }
+    public abstract String getTitle();
 
 }
