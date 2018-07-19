@@ -154,11 +154,16 @@ public class WeightTableAccessor extends DatabaseAccessor {
     }
 
     //TODO: update the query to include USER
-    public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type) {
+    public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type, long user) {
         Log.d(TAG, "select called");
         String date = dateFormatter.format(datePicked);
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT * FROM " + TABLE_NAME + " WHERE");
+        if(user > 0) {
+            builder.append(" ").append(Columns.USER.name()).append(" = '").append(user).append("'");
+            if(type != null)
+                builder.append(" AND");
+        }
         if(type != null) {
             builder.append(" ").append(Columns.TYPE.name()).append(" = '").append(type).append("'");
             if(date != null)

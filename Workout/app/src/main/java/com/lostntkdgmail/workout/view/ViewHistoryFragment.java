@@ -53,7 +53,7 @@ public class ViewHistoryFragment extends BaseFragment {
         lifts = ((MainActivity)getActivity()).liftTable.getLifts();
 
         for(String type : types) {
-            Map<String, ArrayList<String>> innerMap = ((MainActivity)getActivity()).weightTable.getLiftsByDate(datePicked, type);
+            Map<String, ArrayList<String>> innerMap = ((MainActivity)getActivity()).weightTable.getLiftsByDate(datePicked, type, ((MainActivity)getActivity()).USER);
             qResults.put(type, innerMap);
         }
 
