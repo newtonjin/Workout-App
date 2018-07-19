@@ -1,6 +1,7 @@
 package com.lostntkdgmail.workout.database;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -18,8 +19,8 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseAccessor";
     private final String TABLE_NAME;
     private final String[] col;
-    protected Context context;
     protected SQLiteDatabase readableDb, writableDb;
+    protected Resources resources;
 
     /**
      * Creates a new DatabaseAccessor
@@ -32,9 +33,9 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
         TABLE_NAME = name;
         col = cols;
         Log.d(TAG, DATABASE_NAME.substring(0, DATABASE_NAME.length()-3) +"."+ TABLE_NAME +" accessor created");
-        this.context = context;
         readableDb = getReadableDatabase();
         writableDb = getWritableDatabase();
+        resources = context.getResources();
     }
 
     /**

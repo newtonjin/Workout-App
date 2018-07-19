@@ -6,19 +6,27 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import java.util.Calendar;
+import com.lostntkdgmail.workout.main.MainActivity;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * An Accessor used to access the Weight Table in the Workout database
  */
 public class WeightTableAccessor extends DatabaseAccessor {
-    private enum Columns {
+    public enum Columns {
         ID, USER, DATE, TYPE, LIFT, WEIGHT, REPS
     }
     private static final String TABLE_NAME = "weight";
     private static final String TAG = "WeightTableAccess";
     private static final String[] cols = {Columns.ID.name(), Columns.USER.name(),Columns.DATE.name(),Columns.TYPE.name(),Columns.LIFT.name(),Columns.WEIGHT.name(),Columns.REPS.name()};
+    private static final DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
     /**
      * Creates an accessor for accessing the Weight Table
@@ -33,8 +41,8 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param db The database to add the table to
      */
     public static void createTable(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.USER.name() + " TEXT," + Columns.DATE.name() +
-                " TEXT," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT," + Columns.WEIGHT.name() + " INTEGER," + Columns.REPS.name() + " INTEGER)");
+        db.execSQL("create table " + TABLE_NAME + " (" + Columns.ID.name() + " INTEGER PRIMARY KEY AUTOINCREMENT," + Columns.USER.name() + " LONG," + Columns.DATE.name() +
+                " DATE," + Columns.TYPE.name() + " TEXT," + Columns.LIFT.name() + " TEXT," + Columns.WEIGHT.name() + " INTEGER," + Columns.REPS.name() + " INTEGER)");
 
         Log.d(TAG,"Created Weight Table");
     }
@@ -48,12 +56,10 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param reps The number of reps
      * @return True if the insertion was successful
      */
-    public boolean insert(String user,String type,String lift, int weight, int reps) {
-        Date date = new Date();
-        String printDate = new Date().toString();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        printDate = printDate.substring(24)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+printDate.substring(8,10) ;
+    public boolean insert(long user,String type,String lift, int weight, int reps) {
+        Date now = new Date();
+        String printDate = dateFormatter.format(now);
+
         Log.d(TAG,"Inserting: \"" + user +", "+ printDate +", "+ type +", "+ lift +", "+ weight +", "+ reps + "\" into \"" + TABLE_NAME + "\"");
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.USER.name(),user);
@@ -78,15 +84,15 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param sorting SQLite sorting algorithm
      * @return Cursor object with all selected values
      */
-    public Cursor select(String user, String type, String lift, String sorting, String limit) { //TODO: change limit to int eventually
+    public Cursor select(long user, String type, String lift, String sorting, String limit) { //TODO: change limit to int eventually
         Log.d(TAG, "select called");
-        if(user == null && type == null && lift == null) {
+        if(user < 0 && type == null && lift == null) {
             Log.d(TAG, "All values passed to select are null");
             return null;
         }
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
-        if(user != null) {
+        if(user > 0) {
             builder.append(" ").append(Columns.USER.name()).append(" = '").append(user).append("'");
             if(type != null || lift != null)
                 builder.append(" AND");
@@ -114,7 +120,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param lift The lift to be selected
      * @return Cursor object with all selected values
      */
-    public Cursor select(String user, String type, String lift) {
+    public Cursor select(long user, String type, String lift) {
         return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC",null);
     }
 
@@ -146,4 +152,53 @@ public class WeightTableAccessor extends DatabaseAccessor {
             return false;
         }
     }
+
+    //TODO: update the query to include USER
+    public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type, long user) {
+        Log.d(TAG, "select called");
+        String date = dateFormatter.format(datePicked);
+        StringBuilder builder = new StringBuilder();
+        builder.append("SELECT * FROM " + TABLE_NAME + " WHERE");
+        if(user > 0) {
+            builder.append(" ").append(Columns.USER.name()).append(" = '").append(user).append("'");
+            if(type != null)
+                builder.append(" AND");
+        }
+        if(type != null) {
+            builder.append(" ").append(Columns.TYPE.name()).append(" = '").append(type).append("'");
+            if(date != null)
+                builder.append(" AND");
+        }
+        if(date != null) {
+            builder.append(" ").append(Columns.DATE.name()).append(" = '").append(date).append("'");
+        }
+
+        String sql = builder.toString();
+
+        Cursor cursor = readableDb.rawQuery(sql, new String[0]);
+
+        //type -> lift -> list of (weight + reps)
+        Map<String, ArrayList<String>> returnMap = new HashMap<>();
+
+
+        while(cursor.moveToNext()) {
+            returnMap.put(cursor.getString(Columns.LIFT.ordinal()), getAllSets(type, cursor.getString(Columns.LIFT.ordinal())));
+        }
+
+        cursor.close();
+        return returnMap;
+
+    }
+
+    public ArrayList<String> getAllSets(String type, String lift) {
+        // get ALL SETS of this type and lift
+        Cursor c = MainActivity.weightTable.select(MainActivity.USER, type, lift, null, "-1");
+        ArrayList<String> result = new ArrayList<>();
+        while(c.moveToNext()) {
+            String arr = c.getString(6) + " repetitions of " + c.getString(5) + " LBS";
+            result.add(arr);
+        }
+        return result;
+    }
+
 }

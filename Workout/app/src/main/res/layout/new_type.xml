@@ -3,17 +3,17 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/newUserText"
+        android:id="@+id/newTypeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:text="@string/new_user"
+        android:text="@string/new_type"
         android:layout_marginTop="53dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/firstNameInput"
+        android:id="@+id/typeNameInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -23,29 +23,13 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="284dp"
             android:layout_height="wrap_content"
-            android:hint="@string/first_name"
+            android:hint="@string/type_name"
             android:textColor="@color/textPrimary"
             android:textSize="20sp" />
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/lastNameInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/firstNameInput"
-        android:layout_above="@id/userSubmitButton"
-        android:layout_centerHorizontal="true">
-
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="291dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/last_name"
-            android:textColorHint="@color/textPrimary"
-            android:textSize="20sp" />
-    </android.support.design.widget.TextInputLayout>
-
     <Button
-        android:id="@+id/userSubmitButton"
+        android:id="@+id/liftSubmitButton"
         android:layout_width="291dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

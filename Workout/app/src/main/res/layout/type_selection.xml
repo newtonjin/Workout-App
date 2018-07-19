@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_container"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.lostntkdgmail.workout.data_entry.TypeSelection">
 
 <TextView
     android:id="@+id/selectTypeText"
@@ -19,8 +23,7 @@ android:layout_width="match_parent" android:layout_height="match_parent">
     android:id="@+id/typeList"
     android:layout_below="@+id/selectTypeText"
     android:textSize="25sp"
-    android:textAlignment="center"
-    android:background="@color/colorPrimary"
-    />
+    android:textAlignment="center"/>
+    <!-- android:background="@color/colorPrimary" -->
 
 </RelativeLayout>

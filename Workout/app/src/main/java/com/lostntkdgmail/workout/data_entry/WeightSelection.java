@@ -1,77 +1,81 @@
-package com.lostntkdgmail.workout;
+package com.lostntkdgmail.workout.data_entry;
 
-//TODO: Add side menu
 //TODO: Add ability to view/edit/delete past entries
 //TODO: Add ability to edit types of workouts
-//TODO: Add Users
 //TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?
 //TODO: Possibly add color customization to users?
 //TODO: Allow users to adjust max value on rep bar
-//TODO: Home screen
 //TODO: An actual app icon/logo
-//TODO: With users, if there are no users in the db, it should prompt for user info before starting for the first time
+//TODO: Add info about lift/type/user on the weight selection page
+//TODO: Add what types of lifts were performed in the calendar
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-import com.lostntkdgmail.workout.database.LiftTableAccessor;
-import com.lostntkdgmail.workout.database.WeightTableAccessor;
+import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.database.UserTableAccessor;
+import com.lostntkdgmail.workout.main.BaseFragment;
+import com.lostntkdgmail.workout.main.MainActivity;
 
 import java.util.ArrayList;
 
 /**
- * The Activity for selecting a weight
+ * The Fragment for selecting a weight
  */
-public class WeightSelection extends Activity {
-    private static final String TAG = "WeightSelection";
-    private String type, lift, user;
+public class WeightSelection extends BaseFragment {
+    public static final String TITLE = "WeightSelection";
     private int digit1 = 0;
     private int digit2 = 0;
     private int digit3 = 0;
     private int reps = 0;
     private TextView sBarText;
-    private WeightTableAccessor weightTable;
-    private LiftTableAccessor liftTable;
+    private NumberPicker np1, np2, np3;
+    private static String lastType, lastLift;
+    private static long lastUser;
 
     /**
-     * Creates the Activity and sets up the data
-     * @param savedInstanceState The last saved state
+     * Creates the fragment
+     * @param inflater The inflater to inflate the layout
+     * @param container The container to put the Fragment inside of
+     * @param savedInstanceState The saved state
+     * @return The view to display
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG,"Launching Activity: Weight Selection");
-        setContentView(R.layout.weight_selection);
-        type = getIntent().getStringExtra("TYPE"); //Gets the type of lift from the Intent
-        lift = getIntent().getStringExtra("LIFT"); //Gets the lift name from the Intent
-        user = "Tyler"; //TODO: Actually add users, don't hard code them in
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.weight_selection, container, false);
 
-        setUpSeekBar();
-        setUpNumberPickers();
+        setUpSeekBar(view);
+        setUpNumberPickers(view);
 
-        weightTable = new WeightTableAccessor(this);
-        liftTable = new LiftTableAccessor(this);
-        for(int[] s : getPreviousWeights()) {
-            Log.d(TAG,"("+s[0]+" lbs "+s[1]+" reps)");
+        Button submit = view.findViewById(R.id.submitButton);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                submitWeight(view);
+            }
+        });
+        if(lastType == null || lastLift == null || lastUser != MainActivity.USER || !lastType.equals(MainActivity.TYPE) || !lastLift.equals(MainActivity.LIFT)) {
+            lastUser = MainActivity.USER;
+            lastType = MainActivity.TYPE;
+            lastLift = MainActivity.LIFT;
+
+            for (int[] s : getPreviousWeights(view)) {
+                Log.d("Debug", s[0] + " " + s[1]);
+            }
         }
+        return view;
     }
-    /**
-     * Cleans up the Activity and closes the Accessors
-     */
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG,"onDestroy() called for WeightSelection");
-        weightTable.close();
-        liftTable.close();
-        super.onDestroy();
-    }
+
     /**
      * Submits the weight into the database
      * @param view The Submit button
@@ -79,26 +83,30 @@ public class WeightSelection extends Activity {
     public void submitWeight(View view) {
         int weight = digit1*100+digit2*10+digit3;
         if(reps > 0 && weight > 0) {
-            boolean insertResult = weightTable.insert(user, type, lift, weight, reps);
-            if(insertResult) {
-                Toast.makeText(getApplicationContext(), "Submitted!", Toast.LENGTH_SHORT).show();
-                getPreviousWeights();
+            boolean insertResult = MainActivity.weightTable.insert(MainActivity.USER, MainActivity.TYPE, MainActivity.LIFT, weight, reps);
+            Cursor cursor = MainActivity.userTable.select(MainActivity.USER);
+            cursor.moveToFirst();
+            boolean userUpdateResult = MainActivity.userTable.updateData(MainActivity.USER,cursor.getString(UserTableAccessor.Columns.FIRST_NAME.ordinal()),cursor.getString(UserTableAccessor.Columns.LAST_NAME.ordinal()));
+            if(insertResult && userUpdateResult) {
+                Toast.makeText(getContext(), "Submitted!", Toast.LENGTH_SHORT).show();
+                getPreviousWeights(view.getRootView());
             }
             else
-                Toast.makeText(getApplicationContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
         }
         else if(reps <= 0)
-            Toast.makeText(getApplicationContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(getApplicationContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
     }
     /**
      * Initializes the 3 number pickers
+     * @param view The view that was inflated in onCreateView
      */
-    public void setUpNumberPickers() {
-        NumberPicker np1 = findViewById(R.id.numberPicker1);
-        NumberPicker np2 = findViewById(R.id.numberPicker2);
-        NumberPicker np3 = findViewById(R.id.numberPicker3);
+    public void setUpNumberPickers(View view) {
+        np1 = view.findViewById(R.id.numberPicker1);
+        np2 = view.findViewById(R.id.numberPicker2);
+        np3 = view.findViewById(R.id.numberPicker3);
 
         //Setting up first Number picker
         np1.setMinValue(0);
@@ -159,10 +167,11 @@ public class WeightSelection extends Activity {
     }
     /**
      * Initializes the seek bar
+     * @param view The view that was inflated in onCreateView
      */
-    public void setUpSeekBar() {
-        sBarText = findViewById(R.id.scrollBarText);
-        SeekBar sBar = findViewById(R.id.seekBar);
+    public void setUpSeekBar(View view) {
+        sBarText = view.findViewById(R.id.scrollBarText);
+        SeekBar sBar = view.findViewById(R.id.seekBar);
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             /**
              * Determines what happens when the progress is changed
@@ -199,21 +208,23 @@ public class WeightSelection extends Activity {
 
     /**
      * Gets the 3 previous weights to display
+     * @param view The view that was inflated in onCreateView
      * @return An ArrayList<int[]> containing the previous weights. Each int[] is an entry set up like: [weight, reps]
      */
-    public ArrayList<int[]> getPreviousWeights() {
-        Cursor c = weightTable.select(user,type,lift, weightTable.getColumnNames()[0]+" DESC","3");
+    public ArrayList<int[]> getPreviousWeights(View view) {
+        Cursor c = MainActivity.weightTable.select(MainActivity.USER,MainActivity.TYPE,MainActivity.LIFT, MainActivity.weightTable.getColumnNames()[0]+" DESC","3");
         ArrayList<int[]> result = new ArrayList<>(3);
         while(c.moveToNext()) {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
             result.add(arr);
         }
-        TextView weight1 = findViewById(R.id.pastWeightText1);
-        TextView weight2 = findViewById(R.id.pastWeightText2);
-        TextView weight3 = findViewById(R.id.pastWeightText3);
-        TextView rep1 = findViewById(R.id.pastRepText1);
-        TextView rep2 = findViewById(R.id.pastRepText2);
-        TextView rep3 = findViewById(R.id.pastRepText3);
+        TextView weight1 = view.findViewById(R.id.pastWeightText1);
+        TextView weight2 = view.findViewById(R.id.pastWeightText2);
+        TextView weight3 = view.findViewById(R.id.pastWeightText3);
+        TextView rep1 = view.findViewById(R.id.pastRepText1);
+        TextView rep2 = view.findViewById(R.id.pastRepText2);
+        TextView rep3 = view.findViewById(R.id.pastRepText3);
+
         switch (result.size()) {
             case 0: //No previous weights
                 weight1.setText(getResources().getString(R.string.null_lbs));
@@ -257,5 +268,25 @@ public class WeightSelection extends Activity {
                 break;
         }
         return result;
+    }
+
+    /**
+     * Reloads the Fragment. Specifically updates the previous weights if User/Type/Lift is changed
+     */
+    public void reload() {
+        if(lastType == null || lastLift == null || lastUser != MainActivity.USER || !lastType.equals(MainActivity.TYPE) || !lastLift.equals(MainActivity.LIFT)) {
+            lastUser = MainActivity.USER;
+            lastType = MainActivity.TYPE;
+            lastLift = MainActivity.LIFT;
+
+            getPreviousWeights(getView());
+            digit1 = np1.getValue();
+            digit2 = np2.getValue();
+            digit3 = np3.getValue();
+        }
+    }
+    @Override
+    public String getTitle() {
+        return TITLE;
     }
 }
