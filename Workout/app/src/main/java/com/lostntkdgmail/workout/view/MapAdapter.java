@@ -1,6 +1,7 @@
 package com.lostntkdgmail.workout.view;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -68,26 +70,67 @@ public class MapAdapter extends BaseAdapter {
                 LinearLayout inner = new LinearLayout(context);
                 inner.setOrientation(LinearLayout.VERTICAL);
 
-                for (Map<String, String> innerMap : mData.values()) {
-                    if (innerMap.size() > 0) {
-                        for (String val : innerMap.values()) {
-                            TextView currOuter = new TextView(context);
-                            TextView currMiddle = new TextView(context);
-                            TextView currInner = new TextView(context);
+                for(String outerKey : mData.keySet()) {
+                    Map<String, String> innerMap_ = mData.get(outerKey);
+                    if(innerMap_.size() > 0) {
+                        TextView currOuter_ = new TextView(context);
+                        currOuter_.setText(outerKey);
+                        myRoot.addView(currOuter_);
 
-                            currMiddle.setPadding(25, 0,0,0);
-                            currInner.setPadding(50, 0, 0, 0);
+                        for(String innerKey_ : (mData.get(outerKey)).keySet()){
+                            TextView currMiddle_ = new TextView(context);
+                            currMiddle_.setPadding(25,0,0,0);
+                            currMiddle_.setText(innerKey_);
+                            myRoot.addView(currMiddle_);
 
-                            currOuter.setText((String) getKeyFromValue(mData, innerMap));
-                            currMiddle.setText((String) getKeyFromValue(innerMap, val));
-                            currInner.setText(val);
+                            // get ALL SETS of this type and lift
+                            Cursor c = MainActivity.weightTable.select(MainActivity.USER,outerKey,innerKey_, MainActivity.weightTable.getColumnNames()[0]+" DESC", "-1");
+                            ArrayList<String> result_ = new ArrayList<>();
+                            while(c.moveToNext()) {
+                                String arr = c.getString(6) + " repetitions of " + c.getString(5) + " LBS";
+                                result_.add(arr);
+                            }
 
-                            myRoot.addView(currOuter);
-                            myRoot.addView(currMiddle);
-                            myRoot.addView(currInner);
+
+                            for(String listItem : result_) {
+                                TextView currInner_ = new TextView(context);
+                                currInner_.setPadding(50, 0, 0, 0);
+                                currInner_.setText(listItem);
+                                myRoot.addView(currInner_);
+                            }
                         }
                     }
                 }
+
+
+
+
+
+
+                //for (Map<String, String> innerMap : mData.values()) {
+                //    if (innerMap.size() > 0) {
+                //        for (String val : innerMap.values()) {
+                //            // get the key of the value from the outer table, then inner table
+                //            String outerKey = (String) getKeyFromValue(mData, innerMap);
+                //            String middleKey = (String) getKeyFromValue(innerMap, val);
+
+                //            TextView currOuter = new TextView(context);
+                //            TextView currMiddle = new TextView(context);
+                //            TextView currInner = new TextView(context);
+
+                //            currMiddle.setPadding(25, 0,0,0);
+                //            currInner.setPadding(50, 0, 0, 0);
+
+                //            currOuter.setText(outerKey);
+                //            currMiddle.setText(middleKey);
+                //            currInner.setText(val);
+
+                //            myRoot.addView(currOuter);
+                //            myRoot.addView(currMiddle);
+                //            myRoot.addView(currInner);
+                //        }
+                //    }
+                //}
             }
         viewMade = true;
         return result;
