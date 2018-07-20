@@ -254,6 +254,9 @@ public class MainActivity extends FragmentActivity {
      */
     public void updateViewHistory(Date date){
         ((ViewHistoryFragment)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
-        //((ViewHistoryFragment)pagerAdapter.getItem(pagerAdapter.getFragmentIndex(ViewHistoryFragment.TITLE))).initList(date);
+    }
+
+    public boolean getLiftDates(Date date) {
+        return weightTable.hasLiftOnDate(date);
     }
 }

@@ -59,7 +59,7 @@ public class MapAdapter extends BaseAdapter {
         //TODO: if not checked by this boolean the view will be added many times, fix dis
             if(!viewMade) {
                 TextView dateDisplay = result.findViewById(R.id.dateDisplay);
-                dateDisplay.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(date));
+                dateDisplay.setText(new SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(date));
 
                 LinearLayout myRoot =  result.findViewById(R.id.my_root);
                 LinearLayout inner = new LinearLayout(context);
@@ -86,6 +86,7 @@ public class MapAdapter extends BaseAdapter {
                                 currInner.setPadding(50, 0, 0, 0);
                                 currInner.setText(listItem);
                                 myRoot.addView(currInner);
+                                myRoot.setPadding(10,10,10,10);
                             }
                         }
                     }

@@ -29,7 +29,7 @@ import java.util.Locale;
 public class CalendarFragment extends BaseFragment {
 
     public static final String TITLE = "ViewEntries";
-    private static final DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+    private static final DateFormat dateFormatter = new SimpleDateFormat("MMMM, yyyy", Locale.US);
 
     private ImageView previousButton, nextButton;
     private TextView currentDate;
@@ -62,7 +62,7 @@ public class CalendarFragment extends BaseFragment {
         return view;
     }
 
-    private void setPreviousButtonClickEvent(){
+    private void setPreviousButtonClickEvent() {
         previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +71,7 @@ public class CalendarFragment extends BaseFragment {
             }
         });
     }
-    private void setNextButtonClickEvent(){
+    private void setNextButtonClickEvent() {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +80,7 @@ public class CalendarFragment extends BaseFragment {
             }
         });
     }
-    private void setGridCellClickEvents(){
+    private void setGridCellClickEvents() {
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -93,7 +93,8 @@ public class CalendarFragment extends BaseFragment {
             }
         });
     }
-    private void setUpCalendarAdapter(){
+
+    private void setUpCalendarAdapter() {
         List<Date> dayValueInCells = new ArrayList<>();
         mQuery = new LiftTableAccessor(getContext());
         List<EventObjects> mEvents = mQuery.getAllLifts();

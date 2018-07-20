@@ -201,4 +201,28 @@ public class WeightTableAccessor extends DatabaseAccessor {
         return result;
     }
 
+    public boolean hasLiftOnDate(Date date_) {
+        Log.d(TAG, "select called");
+        String date = dateFormatter.format(date_);
+        StringBuilder builder = new StringBuilder();
+        builder.append("SELECT * FROM " + TABLE_NAME + " WHERE");
+
+        if(MainActivity.USER > 0) {
+            builder.append(" ").append(Columns.USER.name()).append(" = '").append(MainActivity.USER).append("'");
+            if(date != null)
+                builder.append(" AND");
+        }
+        if(date != null) {
+            builder.append(" ").append(Columns.DATE.name()).append(" = '").append(date).append("'");
+        }
+
+        String sql = builder.toString();
+
+        Cursor cursor = readableDb.rawQuery(sql, new String[0]);
+
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
+        return result;
+    }
+
 }

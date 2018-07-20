@@ -9,14 +9,19 @@ package com.lostntkdgmail.workout.data_entry;
 //TODO: Add info about lift/type/user on the weight selection page
 //TODO: Add what types of lifts were performed in the calendar
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
@@ -27,7 +32,12 @@ import com.lostntkdgmail.workout.database.UserTableAccessor;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * The Fragment for selecting a weight
@@ -42,6 +52,7 @@ public class WeightSelection extends BaseFragment {
     private NumberPicker np1, np2, np3;
     private static String lastType, lastLift;
     private static long lastUser;
+
 
     /**
      * Creates the fragment
@@ -73,6 +84,7 @@ public class WeightSelection extends BaseFragment {
                 Log.d("Debug", s[0] + " " + s[1]);
             }
         }
+
         return view;
     }
 
@@ -172,6 +184,10 @@ public class WeightSelection extends BaseFragment {
     public void setUpSeekBar(View view) {
         sBarText = view.findViewById(R.id.scrollBarText);
         SeekBar sBar = view.findViewById(R.id.seekBar);
+        sBarText.setText(sBar.getProgress() + " reps");
+        reps = sBar.getProgress();
+
+
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             /**
              * Determines what happens when the progress is changed
@@ -179,6 +195,7 @@ public class WeightSelection extends BaseFragment {
              * @param value The value of the seek bar
              * @param fromUser True if the value was changed by the user
              */
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
                 reps = value;
@@ -203,7 +220,7 @@ public class WeightSelection extends BaseFragment {
                 sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
             }
         });
-        sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
+        //sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
     }
 
     /**
@@ -285,8 +302,10 @@ public class WeightSelection extends BaseFragment {
             digit3 = np3.getValue();
         }
     }
+
     @Override
     public String getTitle() {
         return TITLE;
     }
+
 }
