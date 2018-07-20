@@ -3,18 +3,21 @@ package com.lostntkdgmail.workout.data_entry;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
+import com.lostntkdgmail.workout.users.NewUser;
 
 import java.util.Objects;
 
@@ -28,6 +31,7 @@ public class LiftSelection extends BaseFragment {
     private TextView text;
     private static String[] lifts;
     private static String lastType;
+    public static boolean newInitialized = false, editInitialized = false;
 
     /**
      * Creates the fragment
@@ -44,6 +48,18 @@ public class LiftSelection extends BaseFragment {
         text.setText(MainActivity.TYPE);
         if(lastType == null)
             lastType = MainActivity.TYPE;
+
+        Button newUser = view.findViewById(R.id.newLiftButton);
+        newUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!newInitialized) {
+                    ((MainActivity) getActivity()).addFragment(new NewLift(), NewLift.TITLE);
+                    newInitialized = true;
+                }
+                ((MainActivity) getActivity()).setViewPager(NewLift.TITLE);
+            }
+        });
         return view;
     }
     /**

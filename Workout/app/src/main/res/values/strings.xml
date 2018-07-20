@@ -24,8 +24,8 @@
     <string name="delete_user">Delete User</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="new_lift">New Lift</string>
-    <string name="lift_name">Lift Name</string>
+    <string name="new_lift">New Workout</string>
+    <string name="lift_name">Workout Name</string>
     <string name="type_name">Type Name</string>
     <string name="new_type">New Lift Category</string>
 

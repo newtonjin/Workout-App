@@ -7,12 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.main.MainActivity;
 import com.lostntkdgmail.workout.view.EventObjects;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -183,6 +185,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
          legs = new String[]{resources.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
          shoulders = new String[]{resources.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
         String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
+
         for (String[] arr : lifts) {
             String name = arr[0];
             arr[0] = null;
@@ -195,6 +198,21 @@ public class LiftTableAccessor extends DatabaseAccessor {
             }
         }
         return true;
+    }
+
+    public boolean addLift(String type, String lift) {
+        for(int i = 0; i < lifts.length; i++) {
+            if(lifts[i].equals(type)){
+                String[] temp = new String[lifts[i].length + 1];
+                for(int j = 0; j < lifts[i].length; j++) {
+                    temp[j] = lifts[i][j];
+                }
+                temp[lifts[i].length + 1] = lift;
+                lifts[i] = temp;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

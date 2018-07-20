@@ -9,19 +9,14 @@ package com.lostntkdgmail.workout.data_entry;
 //TODO: Add info about lift/type/user on the weight selection page
 //TODO: Add what types of lifts were performed in the calendar
 
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
@@ -32,12 +27,7 @@ import com.lostntkdgmail.workout.database.UserTableAccessor;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * The Fragment for selecting a weight
@@ -52,7 +42,6 @@ public class WeightSelection extends BaseFragment {
     private NumberPicker np1, np2, np3;
     private static String lastType, lastLift;
     private static long lastUser;
-
 
     /**
      * Creates the fragment
@@ -93,7 +82,7 @@ public class WeightSelection extends BaseFragment {
      * @param view The Submit button
      */
     public void submitWeight(View view) {
-        int weight = digit1*100+digit2*10+digit3;
+        int weight = (digit1 * 100) + (digit2 * 10) + digit3;
         if(reps > 0 && weight > 0) {
             boolean insertResult = MainActivity.weightTable.insert(MainActivity.USER, MainActivity.TYPE, MainActivity.LIFT, weight, reps);
             Cursor cursor = MainActivity.userTable.select(MainActivity.USER);
@@ -104,12 +93,12 @@ public class WeightSelection extends BaseFragment {
                 getPreviousWeights(view.getRootView());
             }
             else
-                Toast.makeText(getContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Failed to submit", Toast.LENGTH_SHORT).show();
         }
         else if(reps <= 0)
-            Toast.makeText(getContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Number of reps can't be zero!", Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(getContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"The weight can't be zero!", Toast.LENGTH_SHORT).show();
     }
     /**
      * Initializes the 3 number pickers

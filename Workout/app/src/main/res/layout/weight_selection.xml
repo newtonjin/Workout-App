@@ -83,14 +83,14 @@
         android:id="@+id/pastRepText3" />
 
     <NumberPicker
-    android:id="@+id/numberPicker1"
-    android:layout_width="wrap_content"
-    android:layout_height="120dp"
-    android:descendantFocusability="blocksDescendants"
-    android:layout_centerVertical="true"
-    android:layout_toStartOf="@+id/numberPicker2"
-    android:solidColor="@color/colorPrimary"
-    android:background="@color/colorPrimary"/>
+        android:id="@+id/numberPicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:descendantFocusability="blocksDescendants"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/numberPicker2"
+        android:solidColor="@color/colorPrimary"
+        android:background="@color/colorPrimary" />
 
     <NumberPicker
         android:id="@+id/numberPicker2"
@@ -146,7 +146,6 @@
         android:background="@color/submitButton"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault"
         android:textSize="30sp"
-        android:textColor="@color/textPrimary"
-        />
+        android:textColor="@color/textPrimary" />
 
 </RelativeLayout>
