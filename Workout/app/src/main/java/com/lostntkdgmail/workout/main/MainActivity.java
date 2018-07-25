@@ -259,4 +259,15 @@ public class MainActivity extends FragmentActivity {
     public boolean getLiftDates(Date date) {
         return weightTable.hasLiftOnDate(date);
     }
+
+    public void addLift(String lift) {
+        liftTable.addLift(TYPE, lift);
+        ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).updateList();
+    }
+
+    public boolean deleteLift(String lift) {
+        Boolean b = liftTable.deleteLift(TYPE, lift);
+        ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).updateList();
+        return b;
+    }
 }

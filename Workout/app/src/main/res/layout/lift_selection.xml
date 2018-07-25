@@ -18,15 +18,14 @@
         />
 
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:id="@+id/liftList"
+        android:layout_width="match_parent"
+        android:layout_height="338dp"
         android:layout_below="@+id/selectLiftText"
-        android:textSize="25sp"
-        android:textAlignment="center"
+        android:layout_marginTop="50dp"
         android:background="@color/colorPrimary"
-       >
+        android:textAlignment="center"
+        android:textSize="25sp">
 
     </ListView>
 
@@ -34,9 +33,16 @@
         android:id="@+id/newLiftButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/liftList"
+        android:layout_alignParentStart="true"
+        android:text="Add Workout" />
+
+    <Button
+        android:id="@+id/deleteLiftButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/liftList"
-        android:text="Add Workout" />
+        android:text="Remove Workout" />
 
 </RelativeLayout>

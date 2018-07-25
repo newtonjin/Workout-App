@@ -7,7 +7,8 @@
     <string name="default_reps">0 reps</string>
     <string name="default_weights">0 lbs</string>
     <string name="previous_weights">Previous Weights</string>
-    <string name="arms">Arms</string>
+    <string name="biceps">Biceps</string>
+    <string name="triceps">Triceps</string>
     <string name="back">Back</string>
     <string name="chest">Chest</string>
     <string name="forearms">Forearms</string>

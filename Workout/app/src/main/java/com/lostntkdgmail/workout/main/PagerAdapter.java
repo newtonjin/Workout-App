@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
+import com.lostntkdgmail.workout.data_entry.DeleteLift;
 import com.lostntkdgmail.workout.data_entry.LiftSelection;
 import com.lostntkdgmail.workout.data_entry.NewLift;
 import com.lostntkdgmail.workout.data_entry.TypeSelection;
@@ -77,6 +78,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return new CalendarFragment();
             case(NewLift.TITLE):
                 return new NewLift();
+            case(DeleteLift.TITLE):
+                return new DeleteLift();
             default:
                 throw new RuntimeException("Item does not exist: " + currentFrame);
         }
@@ -112,6 +115,10 @@ public class PagerAdapter extends FragmentPagerAdapter {
      */
     public int getFragmentIndex(String title) {
         return fragmentTagList.indexOf(title);
+    }
+
+    public Fragment getFragmentByTitle(String title) {
+        return fragmentList.get(fragmentTagList.indexOf(title));
     }
 
     /**

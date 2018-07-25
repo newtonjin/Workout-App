@@ -2,8 +2,6 @@ package com.lostntkdgmail.workout.data_entry;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,37 +14,26 @@ import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
-public class NewLift extends BaseFragment {
-    public static final String TITLE = "NewLift";
-
-
-    public NewLift() {
-        //required empty constructor
-    }
+public class DeleteLift extends BaseFragment {
+    public static final String TITLE = "DeleteLift";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.new_lift, container, false);
+        View view = inflater.inflate(R.layout.delete_lift, container, false);
+        Button deleteButton = view.findViewById(R.id.liftDeleteButton);
         final TextInputLayout inputBox = view.findViewById(R.id.liftNameInput);
         final EditText input = inputBox.getEditText();
-        Button submit = view.findViewById(R.id.liftSubmitButton);
 
-        submit.setOnClickListener(new View.OnClickListener() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!inputBox.getEditText().getText().toString().equals("")){
-                    Toast.makeText(getContext(),inputBox.getEditText().getText().toString() + " has been added as a workout!", Toast.LENGTH_SHORT).show();
-                    ((MainActivity)getActivity()).addLift(input.getText().toString());
-                }
+                if(((MainActivity)getActivity()).deleteLift(input.getText().toString()))
+                Toast.makeText(getContext(),inputBox.getEditText().getText().toString() + " has been deleted!", Toast.LENGTH_SHORT).show();
+
             }
         });
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -59,18 +46,9 @@ public class NewLift extends BaseFragment {
         super.onDetach();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public String getTitle() {
-        return TITLE;
-    }
-
-    @Override
-    public void reload() {
-        super.reload();
+        return null;
     }
 }

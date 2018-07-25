@@ -1,6 +1,7 @@
 package com.lostntkdgmail.workout.data_entry;
 
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.BaseFragment;
@@ -31,7 +33,8 @@ public class LiftSelection extends BaseFragment {
     private TextView text;
     private static String[] lifts;
     private static String lastType;
-    public static boolean newInitialized = false, editInitialized = false;
+    public static boolean newInitialized = false, delInitialized = false;
+    private ArrayAdapter<String> adapter;
 
     /**
      * Creates the fragment
@@ -49,8 +52,10 @@ public class LiftSelection extends BaseFragment {
         if(lastType == null)
             lastType = MainActivity.TYPE;
 
-        Button newUser = view.findViewById(R.id.newLiftButton);
-        newUser.setOnClickListener(new View.OnClickListener() {
+        Button newLift = view.findViewById(R.id.newLiftButton);
+        Button delLift = view.findViewById(R.id.deleteLiftButton);
+
+        newLift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!newInitialized) {
@@ -58,6 +63,17 @@ public class LiftSelection extends BaseFragment {
                     newInitialized = true;
                 }
                 ((MainActivity) getActivity()).setViewPager(NewLift.TITLE);
+            }
+        });
+
+        delLift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!delInitialized) {
+                    ((MainActivity) getActivity()).addFragment(new DeleteLift(), DeleteLift.TITLE);
+                    delInitialized = true;
+                }
+                ((MainActivity) getActivity()).setViewPager(DeleteLift.TITLE);
             }
         });
         return view;
@@ -72,7 +88,7 @@ public class LiftSelection extends BaseFragment {
             lastType = MainActivity.TYPE;
         }
         liftList = view.findViewById(R.id.liftList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
+        adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
         liftList.setAdapter(adapter);
 
         liftList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,11 +113,13 @@ public class LiftSelection extends BaseFragment {
         });
         return view;
     }
+
     /**
      * Reloads the Fragment. Specifically updates the list of lifts to reflect the current type
      */
     public void reload() {
-        if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
+        //if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
+        if(getContext() != null) {
             lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
             lastType = MainActivity.TYPE;
             ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
@@ -110,8 +128,9 @@ public class LiftSelection extends BaseFragment {
         }
     }
 
-    public String[] getLifts() {
-        return lifts;
+    public void updateList() {
+        lifts = ((MainActivity)getActivity()).liftTable.getLifts(MainActivity.TYPE);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
