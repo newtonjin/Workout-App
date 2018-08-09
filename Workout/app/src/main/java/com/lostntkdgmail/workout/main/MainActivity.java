@@ -14,7 +14,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.data_entry.DeleteLift;
 import com.lostntkdgmail.workout.data_entry.LiftSelection;
+import com.lostntkdgmail.workout.data_entry.NewLift;
 import com.lostntkdgmail.workout.data_entry.TypeSelection;
 
 import com.lostntkdgmail.workout.data_entry.WeightSelection;
@@ -173,6 +175,8 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+
+
     /**
      * Determines what happens when the Activity is destroyed. Closes the database accessors
      */
@@ -265,9 +269,10 @@ public class MainActivity extends FragmentActivity {
         ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).updateList();
     }
 
-    public boolean deleteLift(String lift) {
-        Boolean b = liftTable.deleteLift(TYPE, lift);
+    public void deleteLift(String lift) {
+        liftTable.deleteLift(TYPE, lift);
         ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).updateList();
-        return b;
     }
+
+
 }

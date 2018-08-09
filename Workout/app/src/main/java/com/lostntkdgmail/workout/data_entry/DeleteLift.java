@@ -27,9 +27,10 @@ public class DeleteLift extends BaseFragment {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(((MainActivity)getActivity()).deleteLift(input.getText().toString()))
-                Toast.makeText(getContext(),inputBox.getEditText().getText().toString() + " has been deleted!", Toast.LENGTH_SHORT).show();
-
+                if(!inputBox.getEditText().getText().toString().equals("")){
+                    Toast.makeText(getContext(),inputBox.getEditText().getText().toString() + " has been deleted!", Toast.LENGTH_SHORT).show();
+                    ((MainActivity)getActivity()).deleteLift(input.getText().toString());
+                }
             }
         });
 

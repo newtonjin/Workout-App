@@ -48,9 +48,9 @@ public class LiftSelection extends BaseFragment {
         View view = inflater.inflate(R.layout.lift_selection, container, false);
         view = setUpListView(view);
         text = view.findViewById(R.id.selectLiftText);
-        text.setText(MainActivity.TYPE);
+        text.setText(((MainActivity)getActivity()).TYPE);
         if(lastType == null)
-            lastType = MainActivity.TYPE;
+            lastType = ((MainActivity)getActivity()).TYPE;
 
         Button newLift = view.findViewById(R.id.newLiftButton);
         Button delLift = view.findViewById(R.id.deleteLiftButton);
@@ -84,7 +84,7 @@ public class LiftSelection extends BaseFragment {
      */
     public View setUpListView(View view) {
         if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
-            lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
+            lifts = ((MainActivity)getActivity()).liftTable.getLifts(MainActivity.TYPE);
             lastType = MainActivity.TYPE;
         }
         liftList = view.findViewById(R.id.liftList);
@@ -104,9 +104,9 @@ public class LiftSelection extends BaseFragment {
                 String lift = (String)liftList.getItemAtPosition(position);
                 Log.d("Debug","Selected: " + lift);
 
-                MainActivity.LIFT = lift;
+                ((MainActivity)getActivity()).LIFT = lift;
                 int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getItemPosition(WeightSelection.TITLE);
-                MainActivity.currentPos++;
+                ((MainActivity)getActivity()).currentPos++;
                 ((MainActivity)getActivity()).setViewPager(WeightSelection.TITLE);
 
             }
@@ -130,6 +130,9 @@ public class LiftSelection extends BaseFragment {
 
     public void updateList() {
         lifts = ((MainActivity)getActivity()).liftTable.getLifts(MainActivity.TYPE);
+        if(adapter == null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
+        }
         adapter.notifyDataSetChanged();
     }
 

@@ -33,7 +33,7 @@
         android:id="@+id/newLiftButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/liftList"
+        android:layout_above="@+id/deleteLiftButton"
         android:layout_alignParentStart="true"
         android:text="Add Workout" />
 
