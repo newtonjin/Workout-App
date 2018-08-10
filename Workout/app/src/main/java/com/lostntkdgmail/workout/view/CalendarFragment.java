@@ -71,6 +71,7 @@ public class CalendarFragment extends BaseFragment {
             }
         });
     }
+
     private void setNextButtonClickEvent() {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +81,7 @@ public class CalendarFragment extends BaseFragment {
             }
         });
     }
+
     private void setGridCellClickEvents() {
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,7 +91,6 @@ public class CalendarFragment extends BaseFragment {
                 //calls to update the view history and set as the current fragment
                 ((MainActivity)getActivity()).updateViewHistory((Date) parent.getItemAtPosition(position));
                 ((MainActivity)getActivity()).setViewPager(ViewHistoryFragment.TITLE);
-
             }
         });
     }

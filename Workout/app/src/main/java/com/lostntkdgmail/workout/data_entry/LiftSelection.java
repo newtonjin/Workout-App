@@ -2,8 +2,10 @@ package com.lostntkdgmail.workout.data_entry;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +21,6 @@ import android.widget.Toast;
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
-import com.lostntkdgmail.workout.users.NewUser;
 
 import java.util.Objects;
 
@@ -31,9 +32,9 @@ public class LiftSelection extends BaseFragment {
     public static final String TITLE = "LiftSelection";
     private ListView liftList;
     private TextView text;
-    private static String[] lifts;
+    public static String[] lifts;
     private static String lastType;
-    public static boolean newInitialized = false, delInitialized = false;
+    public static boolean newInitialized = false, EInitialized = false;
     private ArrayAdapter<String> adapter;
 
     /**
@@ -48,12 +49,13 @@ public class LiftSelection extends BaseFragment {
         View view = inflater.inflate(R.layout.lift_selection, container, false);
         view = setUpListView(view);
         text = view.findViewById(R.id.selectLiftText);
-        text.setText(((MainActivity)getActivity()).TYPE);
-        if(lastType == null)
-            lastType = ((MainActivity)getActivity()).TYPE;
+        text.setText(MainActivity.TYPE);
 
-        Button newLift = view.findViewById(R.id.newLiftButton);
-        Button delLift = view.findViewById(R.id.deleteLiftButton);
+        if(lastType == null)
+            lastType = MainActivity.TYPE;
+
+        FloatingActionButton newLift = view.findViewById(R.id.newLiftButton);
+
 
         newLift.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,16 +68,6 @@ public class LiftSelection extends BaseFragment {
             }
         });
 
-        delLift.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!delInitialized) {
-                    ((MainActivity) getActivity()).addFragment(new DeleteLift(), DeleteLift.TITLE);
-                    delInitialized = true;
-                }
-                ((MainActivity) getActivity()).setViewPager(DeleteLift.TITLE);
-            }
-        });
         return view;
     }
     /**
@@ -83,32 +75,34 @@ public class LiftSelection extends BaseFragment {
      * @param view The View that was inflated in onCreateView
      */
     public View setUpListView(View view) {
-        if(lifts == null || !MainActivity.TYPE.equals(lastType)) {
-            lifts = ((MainActivity)getActivity()).liftTable.getLifts(MainActivity.TYPE);
-            lastType = MainActivity.TYPE;
+        if(lifts == null) {
+            lifts = ((MainActivity)getActivity()).liftTable.getLifts(((MainActivity)getActivity()).TYPE);
         }
         liftList = view.findViewById(R.id.liftList);
-        adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
-        liftList.setAdapter(adapter);
-
+        this.adapter = new ArrayAdapter<>(getActivity(), R.layout.lifts_list_item, R.id.liftListEntry, lifts);
+        liftList.setAdapter(this.adapter);
         liftList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            /**
-             * Determines what happens when one of the Items is selected
-             * @param adapterView The adapter view
-             * @param view The ListView
-             * @param position The position of the view in the adapter
-             * @param id The row id of the selected item
-             */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String lift = (String)liftList.getItemAtPosition(position);
-                Log.d("Debug","Selected: " + lift);
+                String lift = (String) liftList.getItemAtPosition(position);
+                Log.d("Debug", "Selected: " + lift);
 
-                ((MainActivity)getActivity()).LIFT = lift;
+                MainActivity.LIFT = lift;
                 int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getItemPosition(WeightSelection.TITLE);
-                ((MainActivity)getActivity()).currentPos++;
-                ((MainActivity)getActivity()).setViewPager(WeightSelection.TITLE);
+                MainActivity.currentPos++;
+                ((MainActivity) getActivity()).setViewPager(WeightSelection.TITLE);
 
+            }
+        });
+        FloatingActionButton newLift = view.findViewById(R.id.newLiftButton);
+        newLift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!newInitialized) {
+                    ((MainActivity) getActivity()).addFragment(new NewLift(), NewLift.TITLE);
+                    newInitialized = true;
+                }
+                ((MainActivity) getActivity()).setViewPager(NewLift.TITLE);
             }
         });
         return view;
@@ -122,7 +116,7 @@ public class LiftSelection extends BaseFragment {
         if(getContext() != null) {
             lifts = MainActivity.liftTable.getLifts(MainActivity.TYPE);
             lastType = MainActivity.TYPE;
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
+            this.adapter = new ArrayAdapter<>(getActivity(), R.layout.lifts_list_item, R.id.liftListEntry, lifts);
             liftList.setAdapter(adapter);
             text.setText(MainActivity.TYPE);
         }
@@ -130,14 +124,21 @@ public class LiftSelection extends BaseFragment {
 
     public void updateList() {
         lifts = ((MainActivity)getActivity()).liftTable.getLifts(MainActivity.TYPE);
-        if(adapter == null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getContext()), R.layout.list_item, R.id.listEntry, lifts);
-        }
-        adapter.notifyDataSetChanged();
+        this.adapter.notifyDataSetChanged();
     }
 
     @Override
     public String getTitle(){
         return TITLE;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

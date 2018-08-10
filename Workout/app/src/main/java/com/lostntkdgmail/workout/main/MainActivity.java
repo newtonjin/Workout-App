@@ -11,14 +11,13 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
-import com.lostntkdgmail.workout.data_entry.DeleteLift;
+import com.lostntkdgmail.workout.data_entry.EditLift;
 import com.lostntkdgmail.workout.data_entry.LiftSelection;
-import com.lostntkdgmail.workout.data_entry.NewLift;
 import com.lostntkdgmail.workout.data_entry.TypeSelection;
-
 import com.lostntkdgmail.workout.data_entry.WeightSelection;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.database.UserTableAccessor;
@@ -63,6 +62,8 @@ public class MainActivity extends FragmentActivity {
         LIFT = liftTable.getLifts(TYPE)[0];
         USER = Long.parseLong(userTable.getAllIds()[0]);
         setContentView(R.layout.activity_main);
+
+        System.out.println("00ۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗ");
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
@@ -266,12 +267,66 @@ public class MainActivity extends FragmentActivity {
 
     public void addLift(String lift) {
         liftTable.addLift(TYPE, lift);
-        ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).updateList();
+        refreshLiftSelection();
     }
 
-    public void deleteLift(String lift) {
-        liftTable.deleteLift(TYPE, lift);
+    public void refreshLiftSelection() {
         ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).updateList();
+        ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).reload();
+    }
+
+    /**
+     * Method called from the ImageButton in LiftSelection
+     *  @param button The edit button
+     */
+    public void onEditLiftClick(View button) {
+        View parentRow = (View)button.getParent();
+        ListView listView = (ListView)parentRow.getParent();
+        int position = listView.getPositionForView(parentRow);
+        EditLift.lift = LiftSelection.lifts[position];
+        if(!LiftSelection.EInitialized) {
+            addFragment(new EditLift(), EditLift.TITLE);
+            LiftSelection.EInitialized = true;
+        }
+        setViewPager(EditLift.TITLE);
+    }
+
+    /**
+     * Method called from the ImageButton in LiftSelection
+     *  @param button The delete button
+     */
+    public void onDeleteLiftClick(View button) {
+        View parentRow = (View)button.getParent();
+        ListView listView = (ListView)parentRow.getParent();
+        final int position = listView.getPositionForView(parentRow);
+        final String lift = liftTable.getLifts(TYPE)[position];
+
+        Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new Builder(this);
+        }
+        builder.setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete \""+lift+"\" and all logs associated with that workout??")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //liftTable.deleteData(liftTable.getLifts(TYPE)[position]);
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(LiftSelection.TITLE);
+                        liftTable.deleteLift(TYPE, lift);
+                        ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).updateList();
+                        ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).reload();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+
     }
 
 

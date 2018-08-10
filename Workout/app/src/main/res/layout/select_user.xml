@@ -11,7 +11,8 @@
         android:text="@string/users"
         android:layout_marginTop="53dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        />
 
     <ListView
         android:layout_width="match_parent"

@@ -94,12 +94,12 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @param lift The name of the lift
      * @return True if it was successful
      */
-    public boolean updateData(String id,String type,String lift) {
+    public boolean updateData(long id, String type, String lift) {
         Log.d(TAG,"Replacing id: " + id + " with: " + type +" "+ lift + " into " + TABLE_NAME);
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.TYPE.name(),type);
         contentValues.put(Columns.LIFT.name(),lift);
-        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
+        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?",new String[] { "" + id });
         if(num > 0)
             return true;
         else {
