@@ -121,7 +121,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @return Cursor object with all selected values
      */
     public Cursor select(long user, String type, String lift) {
-        return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC",null);
+        return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC","0");
     }
 
     /**
@@ -130,30 +130,24 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param user The current User
      * @param date The date of the lift
      * @param type The type of lift
-     * @param lift The name of the lift
+     * @param oldLift The name of the old lift
+     * @param newLift The name of the new lift
      * @param weight The weight being lifted
      * @param reps The number of reps
      * @return True if the update was successful
      */
-    public boolean updateData(String id,String user,String date, String type,String lift, int weight, int reps) {
-        Log.d(TAG,"Replacing id: " + id + " with: " + user +" "+ date +" "+ type +" "+ lift +" "+ weight +" "+ reps + " into " + TABLE_NAME);
+    public boolean updateData(String user, String date, String type, String newLift, String oldLift) {
+        Log.d(TAG,"Replacing " + oldLift + " with: " + user + " " + date + " " + type + " " + newLift);
+        System.out.println("Replacing " + oldLift + " with: " + user + " " + date + " " + type + " " + newLift);
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Columns.USER.name(),user);
-        contentValues.put(Columns.DATE.name(),date);
-        contentValues.put(Columns.TYPE.name(),type);
-        contentValues.put(Columns.LIFT.name(),lift);
-        contentValues.put(Columns.WEIGHT.name(),weight);
-        contentValues.put(Columns.REPS.name(),reps);
-        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
-        if(num > 0)
-            return true;
-        else {
-            Log.d(TAG,"Update affected: " + num + " rows");
-            return false;
-        }
+        contentValues.put(Columns.LIFT.name(), newLift);
+
+        String whereClause = Columns.LIFT.name() + " = " + oldLift;
+        int num = writableDb.update(TABLE_NAME, contentValues, whereClause, null);
+        Log.d(TAG,"Update affected: " + num + " rows");
+        return num > 0;
     }
 
-    //TODO: update the query to include USER
     public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type, long user) {
         Log.d(TAG, "select called");
         String date = dateFormatter.format(datePicked);

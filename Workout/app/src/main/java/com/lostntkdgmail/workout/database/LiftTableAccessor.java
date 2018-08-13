@@ -91,22 +91,28 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * Updates an entry in the table
      * @param id The id of the entry
      * @param type The type of lift
-     * @param lift The name of the lift
+     * @param newLift The name of the replacement lift
+     * @param oldLift the name of the replaced lift
      * @return True if it was successful
      */
-    public boolean updateData(long id, String type, String lift) {
-        Log.d(TAG,"Replacing id: " + id + " with: " + type +" "+ lift + " into " + TABLE_NAME);
+    public boolean updateData(long id, String type, String newLift, String oldLift) {
+        Log.d(TAG,"Replacing lift: " + oldLift + " with: " + " " + newLift + " into " + TABLE_NAME);
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Columns.TYPE.name(),type);
-        contentValues.put(Columns.LIFT.name(),lift);
-        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?",new String[] { "" + id });
-        if(num > 0)
-            return true;
-        else {
+        contentValues.put(Columns.LIFT.name(), newLift);
+        String whereClause =  Columns.TYPE.name() + " = '" + type + "' AND " + Columns.LIFT.name() + " = '" + oldLift + "'";
+
+        Cursor checkExists = select(type, oldLift);
+        if(checkExists.getCount() > 0) {
+            int num = writableDb.update(TABLE_NAME, contentValues, whereClause, null);
             Log.d(TAG,"Update affected: " + num + " rows");
-            return false;
+            return num > 0;
+        } else {
+            Log.d(TAG, oldLift + " was not found in the database, inserting it under " + newLift);
+            return insert(type, newLift);
+
         }
     }
+
     /**
      * Used to select things inside of the table
      * @param type The type of lift
