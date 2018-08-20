@@ -45,6 +45,8 @@
     <string name="null_lbs">-- lbs</string>
 
     <string name="null_reps">-- reps</string>
+    <string name="edit_workout">Edit Workout</string>
+    <string name="new_workout_name">New Workout Name</string>
     <plurals name="reps">
         <item quantity="zero">-- reps</item>
         <item quantity="one">%d rep</item>

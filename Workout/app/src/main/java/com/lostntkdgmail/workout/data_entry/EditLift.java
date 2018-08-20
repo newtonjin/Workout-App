@@ -39,6 +39,8 @@ public class EditLift extends BaseFragment {
         View view = inflater.inflate(R.layout.edit_lift, container, false);
         Button submit = view.findViewById(R.id.editLiftSubmitButton);
 
+        TextInputEditText editLiftInput = view.findViewById(R.id.editText);
+        editLiftInput.setText(((MainActivity)getActivity()).LIFT);
 
 
         submit.setOnClickListener(new View.OnClickListener() {

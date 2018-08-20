@@ -126,26 +126,25 @@ public class WeightTableAccessor extends DatabaseAccessor {
 
     /**
      * Updates an entry inside of the table
-     * @param id The id of the entry being updated
      * @param user The current User
      * @param date The date of the lift
      * @param type The type of lift
      * @param oldLift The name of the old lift
      * @param newLift The name of the new lift
-     * @param weight The weight being lifted
-     * @param reps The number of reps
      * @return True if the update was successful
      */
     public boolean updateData(String user, String date, String type, String newLift, String oldLift) {
         Log.d(TAG,"Replacing " + oldLift + " with: " + user + " " + date + " " + type + " " + newLift);
         System.out.println("Replacing " + oldLift + " with: " + user + " " + date + " " + type + " " + newLift);
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Columns.LIFT.name(), newLift);
 
-        String whereClause = Columns.LIFT.name() + " = " + oldLift;
-        int num = writableDb.update(TABLE_NAME, contentValues, whereClause, null);
-        Log.d(TAG,"Update affected: " + num + " rows");
-        return num > 0;
+        String sql = "UPDATE " + TABLE_NAME + " SET " + Columns.LIFT.name() + " = '" + newLift + "' WHERE " + Columns.LIFT.name() + " = '" + oldLift + "';";
+        writableDb.execSQL(sql);
+
+        Cursor cursor = readableDb.rawQuery(sql, new String[0]);
+        while(cursor.moveToNext()) {
+            System.out.println(cursor.getString(0));
+        }
+        return cursor.getCount() > 0;
     }
 
     public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type, long user) {
@@ -193,6 +192,12 @@ public class WeightTableAccessor extends DatabaseAccessor {
             result.add(arr);
         }
         return result;
+    }
+
+    public boolean deleteLiftbyName(String lift) {
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE " + Columns.LIFT.name() + " = '" + lift + "';";
+        writableDb.execSQL(sql);
+        return (readableDb.query(TABLE_NAME, new String[]{Columns.LIFT.name()}, Columns.LIFT.name() + " = '" + lift + "'", null, null, null, null).getCount() == 0);
     }
 
     public boolean hasLiftOnDate(Date date_) {

@@ -26,13 +26,13 @@ public class LiftTableAccessor extends DatabaseAccessor {
     private boolean b = false;
     private static final String TABLE_NAME = "lift";
     private static final String TAG = "LiftTableAccessor";
-    public String[] biceps = new String[]{"Biceps", "Concentration Curls", "Dumbbell Curls", "Barbell Curls"};
-    public String[] triceps = new String[]{"Triceps", "Overhead Extensions", "Skull crushers", "Close Grip Bench", "Pulley Pushdowns"};
-    public String[] back = new String[]{"Back", "Lawnmowers", "Seated Rows", "Straight Arm Push Downs"};
-    public String[] chest = new String[]{"Chest", "Flys", "Incline Flys", "Incline Bench", "Bench"};
-    public String[] forearms = new String[]{"Forearms", "Dangling Wrist Curls", "Wrist Curls"};
-    public String[] legs = new String[]{"Legs", "Lunges", "Deadlifts", "Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
-    public String[] shoulders = new String[]{"Shoulders", "Shrugs", "Overhead Press", "Arnold OHP", "Lateral Raises"};
+    public String[] biceps = new String[]{resources.getString(R.string.biceps), "Concentration Curls", "Dumbbell Curls", "Barbell Curls"};
+    public String[] triceps = new String[]{resources.getString(R.string.triceps), "Overhead Extensions", "Skull crushers", "Close Grip Bench", "Pulley Pushdowns"};
+    public String[] back = new String[]{resources.getString(R.string.back), "Lawnmowers", "Seated Rows", "Straight Arm Push Downs"};
+    public String[] chest = new String[]{resources.getString(R.string.chest), "Flys", "Incline Flys", "Incline Bench", "Bench"};
+    public String[] forearms = new String[]{resources.getString(R.string.forearms), "Dangling Wrist Curls", "Wrist Curls"};
+    public String[] legs = new String[]{resources.getString(R.string.legs), "Lunges", "Deadlifts", "Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+    public String[] shoulders = new String[]{resources.getString(R.string.shoulders), "Shrugs", "Overhead Press", "Arnold OHP", "Lateral Raises"};
     String[][] lifts = {back, biceps, chest, forearms, legs, shoulders, triceps};
 
     /**

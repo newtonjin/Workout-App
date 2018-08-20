@@ -284,6 +284,7 @@ public class MainActivity extends FragmentActivity {
         ListView listView = (ListView)parentRow.getParent();
         int position = listView.getPositionForView(parentRow);
         EditLift.lift = LiftSelection.lifts[position];
+        LIFT = LiftSelection.lifts[position];
         if(!LiftSelection.EInitialized) {
             addFragment(new EditLift(), EditLift.TITLE);
             LiftSelection.EInitialized = true;
@@ -309,16 +310,17 @@ public class MainActivity extends FragmentActivity {
         }
         builder.setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete \""+lift+"\" and all logs associated with that workout??")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.yes, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //liftTable.deleteData(liftTable.getLifts(TYPE)[position]);
                         Fragment fragment = getSupportFragmentManager().findFragmentByTag(LiftSelection.TITLE);
                         liftTable.deleteLift(TYPE, lift);
+                        System.out.println("WEIGHT TABLE DELETION FOR " + lift + " = " + weightTable.deleteLiftbyName(lift) + " ~=~=~=~=~=~=~=~");
                         ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).updateList();
                         ((LiftSelection)PagerAdapter.fragmentList.get(pagerAdapter.getFragmentIndex(LiftSelection.TITLE))).reload();
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(android.R.string.no, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }

@@ -56,34 +56,6 @@ public class ViewHistoryFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_history, container, false);
         listory = view.findViewById(R.id.listory);
-
-        //tvw=(TextView)view.findViewById(R.id.textView1);
-        //eText=(EditText) view.findViewById(R.id.editText1);
-        //eText.setInputType(InputType.TYPE_NULL);
-        //date = Calendar.getInstance().getTime();
-        //eText.setText(formatter.format(date));
-        //eText.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        final Calendar cldr = Calendar.getInstance();
-        //        int day = cldr.get(Calendar.DAY_OF_MONTH);
-        //        int month = cldr.get(Calendar.MONTH);
-        //        int year = cldr.get(Calendar.YEAR);
-        //        // date picker dialog
-        //        picker = new DatePickerDialog(getContext(),
-        //                new DatePickerDialog.OnDateSetListener() {
-        //                    @Override
-        //                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//
-        //                        cldr.set(year, monthOfYear, dayOfMonth);
-        //                        date = cldr.getTime();
-        //                        eText.setText(formatter.format(date));
-        //                    }
-        //                }, year, month, day);
-        //        picker.show();
-        //    }
-        //});
-
         this.view = view;
         return view;
     }
