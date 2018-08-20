@@ -7,12 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.main.MainActivity;
 import com.lostntkdgmail.workout.view.EventObjects;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -21,15 +23,17 @@ import java.util.Locale;
  * An Accessor used to access the Lift table in the workout database
  */
 public class LiftTableAccessor extends DatabaseAccessor {
+    private boolean b = false;
     private static final String TABLE_NAME = "lift";
     private static final String TAG = "LiftTableAccessor";
-    public String[] arms = new String[]{resources.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
-    public String[] back = new String[]{resources.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
-    public String[] chest = new String[]{resources.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
-    public String[] forearms = new String[]{resources.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
-    public String[] legs = new String[]{resources.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
-    public String[] shoulders = new String[]{resources.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
-    String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
+    public String[] biceps = new String[]{resources.getString(R.string.biceps), "Concentration Curls", "Dumbbell Curls", "Barbell Curls"};
+    public String[] triceps = new String[]{resources.getString(R.string.triceps), "Overhead Extensions", "Skull crushers", "Close Grip Bench", "Pulley Pushdowns"};
+    public String[] back = new String[]{resources.getString(R.string.back), "Lawnmowers", "Seated Rows", "Straight Arm Push Downs"};
+    public String[] chest = new String[]{resources.getString(R.string.chest), "Flys", "Incline Flys", "Incline Bench", "Bench"};
+    public String[] forearms = new String[]{resources.getString(R.string.forearms), "Dangling Wrist Curls", "Wrist Curls"};
+    public String[] legs = new String[]{resources.getString(R.string.legs), "Lunges", "Deadlifts", "Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
+    public String[] shoulders = new String[]{resources.getString(R.string.shoulders), "Shrugs", "Overhead Press", "Arnold OHP", "Lateral Raises"};
+    String[][] lifts = {back, biceps, chest, forearms, legs, shoulders, triceps};
 
     /**
      * The columns of the table
@@ -46,7 +50,8 @@ public class LiftTableAccessor extends DatabaseAccessor {
      */
     public LiftTableAccessor(Context context) {
         super(context, TABLE_NAME, col);
-        if(getNumberOfRows() < 1) {
+        if(getNumberOfRows() < 1 && !b) {
+            b = true;
             fillWithData();
         }
     }
@@ -75,7 +80,7 @@ public class LiftTableAccessor extends DatabaseAccessor {
 
         long result = writableDb.insert(TABLE_NAME,null ,contentValues);
         if(result == -1) {
-            Log.d(TAG, "Failed to inserted");
+            Log.d(TAG, "Failed to insert");
             return false;
         }
         Log.d(TAG, "Successfully inserted");
@@ -86,22 +91,28 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * Updates an entry in the table
      * @param id The id of the entry
      * @param type The type of lift
-     * @param lift The name of the lift
+     * @param newLift The name of the replacement lift
+     * @param oldLift the name of the replaced lift
      * @return True if it was successful
      */
-    public boolean updateData(String id,String type,String lift) {
-        Log.d(TAG,"Replacing id: " + id + " with: " + type +" "+ lift + " into " + TABLE_NAME);
+    public boolean updateData(long id, String type, String newLift, String oldLift) {
+        Log.d(TAG,"Replacing lift: " + oldLift + " with: " + " " + newLift + " into " + TABLE_NAME);
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Columns.TYPE.name(),type);
-        contentValues.put(Columns.LIFT.name(),lift);
-        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
-        if(num > 0)
-            return true;
-        else {
+        contentValues.put(Columns.LIFT.name(), newLift);
+        String whereClause =  Columns.TYPE.name() + " = '" + type + "' AND " + Columns.LIFT.name() + " = '" + oldLift + "'";
+
+        Cursor checkExists = select(type, oldLift);
+        if(checkExists.getCount() > 0) {
+            int num = writableDb.update(TABLE_NAME, contentValues, whereClause, null);
             Log.d(TAG,"Update affected: " + num + " rows");
-            return false;
+            return num > 0;
+        } else {
+            Log.d(TAG, oldLift + " was not found in the database, inserting it under " + newLift);
+            return insert(type, newLift);
+
         }
     }
+
     /**
      * Used to select things inside of the table
      * @param type The type of lift
@@ -176,13 +187,8 @@ public class LiftTableAccessor extends DatabaseAccessor {
      * @return True if it was successful
      */
     public boolean fillWithData() {
-         arms = new String[]{resources.getString(R.string.arms), "Arm Extensions", "Skull crunches", "Lean Over Curls", "Lawnmowers", "Close Grip Bench", "Dumbbell Curls", "Barbell Curls"};
-         back = new String[]{resources.getString(R.string.back), "Pull Press", "Toe Touches", "Dead lift"};
-         chest = new String[]{resources.getString(R.string.chest), "Flys", "Push Press", "Upright Rows", "Incline Bench", "Bench"};
-         forearms = new String[]{resources.getString(R.string.forearms), "Holding Weight", "Dangling Wrist Curls", "Wrist Curls"};
-         legs = new String[]{resources.getString(R.string.legs), "Dumbbell Lunges", "Barbell Lunges", "Standing Calf Raises", "Seated Calf Raises", "Leg Extensions", "Leg Press", "Leg Curls", "Front Squats", "Squats"};
-         shoulders = new String[]{resources.getString(R.string.shoulders), "Shrugs", "Shoulder Press"};
-        String[][] lifts = {arms, back, chest, forearms, legs, shoulders};
+        String[][] lifts = {biceps, triceps, back, chest, forearms, legs, shoulders};
+
         for (String[] arr : lifts) {
             String name = arr[0];
             arr[0] = null;
@@ -194,6 +200,26 @@ public class LiftTableAccessor extends DatabaseAccessor {
                 }
             }
         }
+        return true;
+    }
+
+    public boolean addLift(String type, String lift) {
+        return insert(type, lift);
+    }
+
+    public boolean deleteLift(String type, String lift) {
+        return delete(type, lift);
+    }
+
+    private boolean delete(String type, String lift) {
+        Log.d(TAG,"Deleting: \"" + type +", "+ lift +"\" from \"" + TABLE_NAME + "\"");
+
+        long result = writableDb.delete(TABLE_NAME,Columns.LIFT.name() + "='" + lift + "' AND " + Columns.TYPE.name() + "='" + type + "'",null);
+        if(result == -1) {
+            Log.d(TAG, "Failed to delete");
+            return false;
+        }
+        Log.d(TAG, "Successfully deleted");
         return true;
     }
 
@@ -212,23 +238,24 @@ public class LiftTableAccessor extends DatabaseAccessor {
         return types.toArray(new String[types.size()]);
     }
 
-    /**
-     * Gets an array of all lifts of the given type
-     * @param type The type of lift
-     * @return An array containing all lifts for the given type
-     */
-    public String[] getLifts(String type) {
-        Log.d(TAG, "Getting lifts for: "+type);
-        String[] c = {Columns.LIFT.name()};
-        String[] sel = {type};
-        Cursor cursor = readableDb.query(true, TABLE_NAME,c,Columns.TYPE.name()+" =?",sel,null,null,Columns.TYPE.name()+" ASC",null);
-        ArrayList<String> types = new ArrayList<>();
-        while(cursor.moveToNext()) {
-            types.add(cursor.getString(0));
-        }
-        cursor.close();
-        return types.toArray(new String[types.size()]);
-    }
+
+     /**
+      * Gets an array of all lifts of the given type
+      * @param type The type of lift
+      * @return An array containing all lifts for the given type
+      */
+     public String[] getLifts(String type) {
+         Log.d(TAG, "Getting lifts for: "+type);
+         String[] c = {Columns.LIFT.name()};
+         String[] sel = {type};
+         Cursor cursor = readableDb.query(true, TABLE_NAME,c,Columns.TYPE.name()+" =?",sel,null,null,Columns.TYPE.name()+" ASC",null);
+         ArrayList<String> types = new ArrayList<>();
+         while(cursor.moveToNext()) {
+             types.add(cursor.getString(0));
+         }
+         cursor.close();
+         return types.toArray(new String[types.size()]);
+     }
 
     public String[][] getLifts() {
         return lifts;

@@ -10,10 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.lostntkdgmail.workout.R;
+import com.lostntkdgmail.workout.main.MainActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 public class GridAdapter extends ArrayAdapter {
 
     //TODO increase the height of each box
@@ -42,12 +48,19 @@ public class GridAdapter extends ArrayAdapter {
         int currentMonth = currentDate.get(Calendar.MONTH) + 1;
         int currentYear = currentDate.get(Calendar.YEAR);
         View view = convertView;
-        if(view == null){
+        if(view == null) {
             view = mInflater.inflate(R.layout.single_cell_layout, parent, false);
         }
-        if(displayMonth == currentMonth && displayYear == currentYear){
-            view.setBackgroundColor(Color.parseColor("#000000"));
-        }else{
+        if(displayMonth == currentMonth && displayYear == currentYear) {
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            if(((MainActivity)getContext()).getLiftDates(mDate)) {
+                view.setBackgroundColor(Color.parseColor("#90C048"));
+                System.out.println(formatter.format(mDate) + " IS A DATE WITH LIFTS");
+            } else {
+                view.setBackgroundColor(Color.parseColor("#000000"));
+                System.out.println(formatter.format(mDate) + " IS NOT A DATE WITH LIFTS");
+            }
+        } else {
             view.setBackgroundColor(Color.parseColor("#373737"));
         }
         //Add day to calendar
@@ -56,15 +69,17 @@ public class GridAdapter extends ArrayAdapter {
         //Add events to the calendar
         TextView eventIndicator = (TextView)view.findViewById(R.id.event_id);
         Calendar eventCalendar = Calendar.getInstance();
-        for(int i = 0; i < allEvents.size(); i++){
+        for(int i = 0; i < allEvents.size(); i++) {
             eventCalendar.setTime(allEvents.get(i).getDate());
             if(dayValue == eventCalendar.get(Calendar.DAY_OF_MONTH) && displayMonth == eventCalendar.get(Calendar.MONTH) + 1
-                    && displayYear == eventCalendar.get(Calendar.YEAR)){
+                    && displayYear == eventCalendar.get(Calendar.YEAR)) {
+
                 eventIndicator.setBackgroundColor(Color.parseColor("#FF4081"));
             }
         }
         return view;
     }
+
     @Override
     public int getCount() {
         return monthlyDates.size();

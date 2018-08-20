@@ -73,6 +73,7 @@ public class WeightSelection extends BaseFragment {
                 Log.d("Debug", s[0] + " " + s[1]);
             }
         }
+
         return view;
     }
 
@@ -81,7 +82,7 @@ public class WeightSelection extends BaseFragment {
      * @param view The Submit button
      */
     public void submitWeight(View view) {
-        int weight = digit1*100+digit2*10+digit3;
+        int weight = (digit1 * 100) + (digit2 * 10) + digit3;
         if(reps > 0 && weight > 0) {
             boolean insertResult = MainActivity.weightTable.insert(MainActivity.USER, MainActivity.TYPE, MainActivity.LIFT, weight, reps);
             Cursor cursor = MainActivity.userTable.select(MainActivity.USER);
@@ -92,12 +93,12 @@ public class WeightSelection extends BaseFragment {
                 getPreviousWeights(view.getRootView());
             }
             else
-                Toast.makeText(getContext(),"Failed to submit",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Failed to submit", Toast.LENGTH_SHORT).show();
         }
         else if(reps <= 0)
-            Toast.makeText(getContext(),"Number of reps can't be zero!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Number of reps can't be zero!", Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(getContext(),"The weight can't be zero!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"The weight can't be zero!", Toast.LENGTH_SHORT).show();
     }
     /**
      * Initializes the 3 number pickers
@@ -172,6 +173,10 @@ public class WeightSelection extends BaseFragment {
     public void setUpSeekBar(View view) {
         sBarText = view.findViewById(R.id.scrollBarText);
         SeekBar sBar = view.findViewById(R.id.seekBar);
+        sBarText.setText(sBar.getProgress() + " reps");
+        reps = sBar.getProgress();
+
+
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             /**
              * Determines what happens when the progress is changed
@@ -179,6 +184,7 @@ public class WeightSelection extends BaseFragment {
              * @param value The value of the seek bar
              * @param fromUser True if the value was changed by the user
              */
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
                 reps = value;
@@ -203,7 +209,7 @@ public class WeightSelection extends BaseFragment {
                 sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
             }
         });
-        sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
+        //sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
     }
 
     /**
@@ -285,8 +291,10 @@ public class WeightSelection extends BaseFragment {
             digit3 = np3.getValue();
         }
     }
+
     @Override
     public String getTitle() {
         return TITLE;
     }
+
 }

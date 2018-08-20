@@ -1,23 +1,33 @@
 package com.lostntkdgmail.workout.view;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,6 +40,12 @@ public class ViewHistoryFragment extends BaseFragment {
     private ListView listory;
     private MapAdapter adapter;
     private Context mContext;
+    private Date date;
+    private DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+    private DatePickerDialog picker;
+    private EditText eText;
+    private Button btnGet;
+    private TextView tvw;
 
 
     public ViewHistoryFragment() {
@@ -40,7 +56,6 @@ public class ViewHistoryFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_history, container, false);
         listory = view.findViewById(R.id.listory);
-
         this.view = view;
         return view;
     }

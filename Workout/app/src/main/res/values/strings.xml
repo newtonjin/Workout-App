@@ -4,10 +4,11 @@
     <string name="select_workout_type">Select Workout Type</string>
     <string name="select_weight">Select Weight</string>
     <string name="submit_button">Submit</string>
-    <string name="default_reps">100 reps</string>
-    <string name="default_weights">100 lbs</string>
+    <string name="default_reps">0 reps</string>
+    <string name="default_weights">0 lbs</string>
     <string name="previous_weights">Previous Weights</string>
-    <string name="arms">Arms</string>
+    <string name="biceps">Biceps</string>
+    <string name="triceps">Triceps</string>
     <string name="back">Back</string>
     <string name="chest">Chest</string>
     <string name="forearms">Forearms</string>
@@ -24,8 +25,8 @@
     <string name="delete_user">Delete User</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="new_lift">New Lift</string>
-    <string name="lift_name">Lift Name</string>
+    <string name="new_lift">New Workout</string>
+    <string name="lift_name">Workout Name</string>
     <string name="type_name">Type Name</string>
     <string name="new_type">New Lift Category</string>
 
@@ -44,6 +45,8 @@
     <string name="null_lbs">-- lbs</string>
 
     <string name="null_reps">-- reps</string>
+    <string name="edit_workout">Edit Workout</string>
+    <string name="new_workout_name">New Workout Name</string>
     <plurals name="reps">
         <item quantity="zero">-- reps</item>
         <item quantity="one">%d rep</item>

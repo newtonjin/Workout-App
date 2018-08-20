@@ -83,14 +83,14 @@
         android:id="@+id/pastRepText3" />
 
     <NumberPicker
-    android:id="@+id/numberPicker1"
-    android:layout_width="wrap_content"
-    android:layout_height="120dp"
-    android:descendantFocusability="blocksDescendants"
-    android:layout_centerVertical="true"
-    android:layout_toStartOf="@+id/numberPicker2"
-    android:solidColor="@color/colorPrimary"
-    android:background="@color/colorPrimary"/>
+        android:id="@+id/numberPicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:descendantFocusability="blocksDescendants"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/numberPicker2"
+        android:solidColor="@color/colorPrimary"
+        android:background="@color/colorPrimary" />
 
     <NumberPicker
         android:id="@+id/numberPicker2"
@@ -112,23 +112,27 @@
         android:solidColor="@color/colorPrimary"
         android:background="@color/colorPrimary" />
 
+    <!--Might remove this and try a number pad input-->
     <SeekBar
+        android:id="@+id/seekBar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/numberPicker1"
-        android:layout_marginTop="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="154sp"
         android:max="20"
-        android:id="@+id/seekBar" />
+        android:gravity="center"
+        android:progress="10"/>
 
     <TextView
         android:id="@+id/scrollBarText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:text="@string/default_reps"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignTop="@+id/seekBar"
-        android:layout_marginTop="28dp" />
+        android:layout_marginBottom="111dp"
+        android:text="@string/default_reps"
+        android:textSize="25sp" />
 
     <Button
         android:text="@string/submit_button"
@@ -142,7 +146,6 @@
         android:background="@color/submitButton"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault"
         android:textSize="30sp"
-        android:textColor="@color/textPrimary"
-        />
+        android:textColor="@color/textPrimary" />
 
 </RelativeLayout>

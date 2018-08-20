@@ -121,39 +121,32 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @return Cursor object with all selected values
      */
     public Cursor select(long user, String type, String lift) {
-        return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC",null);
+        return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC","0");
     }
 
     /**
      * Updates an entry inside of the table
-     * @param id The id of the entry being updated
      * @param user The current User
      * @param date The date of the lift
      * @param type The type of lift
-     * @param lift The name of the lift
-     * @param weight The weight being lifted
-     * @param reps The number of reps
+     * @param oldLift The name of the old lift
+     * @param newLift The name of the new lift
      * @return True if the update was successful
      */
-    public boolean updateData(String id,String user,String date, String type,String lift, int weight, int reps) {
-        Log.d(TAG,"Replacing id: " + id + " with: " + user +" "+ date +" "+ type +" "+ lift +" "+ weight +" "+ reps + " into " + TABLE_NAME);
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Columns.USER.name(),user);
-        contentValues.put(Columns.DATE.name(),date);
-        contentValues.put(Columns.TYPE.name(),type);
-        contentValues.put(Columns.LIFT.name(),lift);
-        contentValues.put(Columns.WEIGHT.name(),weight);
-        contentValues.put(Columns.REPS.name(),reps);
-        int num = writableDb.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
-        if(num > 0)
-            return true;
-        else {
-            Log.d(TAG,"Update affected: " + num + " rows");
-            return false;
+    public boolean updateData(String user, String date, String type, String newLift, String oldLift) {
+        Log.d(TAG,"Replacing " + oldLift + " with: " + user + " " + date + " " + type + " " + newLift);
+        System.out.println("Replacing " + oldLift + " with: " + user + " " + date + " " + type + " " + newLift);
+
+        String sql = "UPDATE " + TABLE_NAME + " SET " + Columns.LIFT.name() + " = '" + newLift + "' WHERE " + Columns.LIFT.name() + " = '" + oldLift + "';";
+        writableDb.execSQL(sql);
+
+        Cursor cursor = readableDb.rawQuery(sql, new String[0]);
+        while(cursor.moveToNext()) {
+            System.out.println(cursor.getString(0));
         }
+        return cursor.getCount() > 0;
     }
 
-    //TODO: update the query to include USER
     public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type, long user) {
         Log.d(TAG, "select called");
         String date = dateFormatter.format(datePicked);
@@ -198,6 +191,36 @@ public class WeightTableAccessor extends DatabaseAccessor {
             String arr = c.getString(6) + " repetitions of " + c.getString(5) + " LBS";
             result.add(arr);
         }
+        return result;
+    }
+
+    public boolean deleteLiftbyName(String lift) {
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE " + Columns.LIFT.name() + " = '" + lift + "';";
+        writableDb.execSQL(sql);
+        return (readableDb.query(TABLE_NAME, new String[]{Columns.LIFT.name()}, Columns.LIFT.name() + " = '" + lift + "'", null, null, null, null).getCount() == 0);
+    }
+
+    public boolean hasLiftOnDate(Date date_) {
+        Log.d(TAG, "select called");
+        String date = dateFormatter.format(date_);
+        StringBuilder builder = new StringBuilder();
+        builder.append("SELECT * FROM " + TABLE_NAME + " WHERE");
+
+        if(MainActivity.USER > 0) {
+            builder.append(" ").append(Columns.USER.name()).append(" = '").append(MainActivity.USER).append("'");
+            if(date != null)
+                builder.append(" AND");
+        }
+        if(date != null) {
+            builder.append(" ").append(Columns.DATE.name()).append(" = '").append(date).append("'");
+        }
+
+        String sql = builder.toString();
+
+        Cursor cursor = readableDb.rawQuery(sql, new String[0]);
+
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
         return result;
     }
 
