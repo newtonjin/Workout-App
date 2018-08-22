@@ -9,39 +9,60 @@ package com.lostntkdgmail.workout.data_entry;
 //TODO: Add info about lift/type/user on the weight selection page
 //TODO: Add what types of lifts were performed in the calendar
 
+import android.app.DatePickerDialog;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
+import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
+import android.view.View.OnKeyListener;
 
 import com.lostntkdgmail.workout.R;
 import com.lostntkdgmail.workout.database.UserTableAccessor;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * The Fragment for selecting a weight
  */
 public class WeightSelection extends BaseFragment {
     public static final String TITLE = "WeightSelection";
-    private int digit1 = 0;
-    private int digit2 = 0;
-    private int digit3 = 0;
+    //private int digit1 = 0;
+    //private int digit2 = 0;
+    //private int digit3 = 0;
     private int reps = 0;
     private TextView sBarText;
     private NumberPicker np1, np2, np3;
     private static String lastType, lastLift;
     private static long lastUser;
+    private View view;
+    EditText editDate;
+    Calendar myCalendar = Calendar.getInstance();
+    String dateFormat = "dd MMMM yyyy";
+    DatePickerDialog.OnDateSetListener date;
+    SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
 
     /**
      * Creates the fragment
@@ -52,7 +73,81 @@ public class WeightSelection extends BaseFragment {
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.weight_selection, container, false);
+        view = inflater.inflate(R.layout.weight_selection, container, false);
+
+        TextView workoutTextView = view.findViewById(R.id.workoutTextView);
+        workoutTextView.setText("Adding to " + ((MainActivity)getActivity()).TYPE + " - " + ((MainActivity)getActivity()).LIFT);
+
+        TextInputLayout set = view.findViewById(R.id.setInput);
+        TextInputLayout rep = view.findViewById(R.id.repInput);
+        TextInputLayout weight = view.findViewById(R.id.weightInput);
+
+
+        editDate = (EditText) view.findViewById(R.id.pickDate);
+
+        // init - set date to current date
+        long currentdate = System.currentTimeMillis();
+        String dateString = sdf.format(currentdate);
+        editDate.setText(dateString);
+
+        // set calendar date and update editDate
+        date = new DatePickerDialog.OnDateSetListener() {
+
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDate();
+            }
+
+        };
+
+        // onclick - popup datepicker
+        editDate.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+
+
+        View.OnKeyListener enterPressEvent = new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    submitWeight();
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        set.getEditText().setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        set.setOnKeyListener(enterPressEvent);
+        set.setHintEnabled(false);
+        set.getEditText().setCursorVisible(false);
+
+        rep.getEditText().setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        rep.setOnKeyListener(enterPressEvent);
+        rep.setHintEnabled(false);
+        rep.getEditText().setCursorVisible(false);
+
+        weight.getEditText().setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        weight.setOnKeyListener(enterPressEvent);
+        weight.setHintEnabled(false);
+        weight.getEditText().setCursorVisible(false);
 
         setUpSeekBar(view);
         setUpNumberPickers(view);
@@ -61,9 +156,11 @@ public class WeightSelection extends BaseFragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitWeight(view);
+                submitWeight();
             }
         });
+
+
         if(lastType == null || lastLift == null || lastUser != MainActivity.USER || !lastType.equals(MainActivity.TYPE) || !lastLift.equals(MainActivity.LIFT)) {
             lastUser = MainActivity.USER;
             lastType = MainActivity.TYPE;
@@ -77,12 +174,20 @@ public class WeightSelection extends BaseFragment {
         return view;
     }
 
+    private void updateDate() {
+        editDate.setText(sdf.format(myCalendar.getTime()));
+    }
+
     /**
      * Submits the weight into the database
-     * @param view The Submit button
      */
-    public void submitWeight(View view) {
-        int weight = (digit1 * 100) + (digit2 * 10) + digit3;
+    public void submitWeight() {
+        //int weight = (digit1 * 100) + (digit2 * 10) + digit3;
+
+        int weight = Integer.parseInt(((TextInputLayout)view.findViewById(R.id.weightInput)).getEditText().getText().toString());
+        if(reps == 0) {
+            setUpSeekBar(view);
+        }
         if(reps > 0 && weight > 0) {
             boolean insertResult = MainActivity.weightTable.insert(MainActivity.USER, MainActivity.TYPE, MainActivity.LIFT, weight, reps);
             Cursor cursor = MainActivity.userTable.select(MainActivity.USER);
@@ -90,7 +195,7 @@ public class WeightSelection extends BaseFragment {
             boolean userUpdateResult = MainActivity.userTable.updateData(MainActivity.USER,cursor.getString(UserTableAccessor.Columns.FIRST_NAME.ordinal()),cursor.getString(UserTableAccessor.Columns.LAST_NAME.ordinal()));
             if(insertResult && userUpdateResult) {
                 Toast.makeText(getContext(), "Submitted!", Toast.LENGTH_SHORT).show();
-                getPreviousWeights(view.getRootView());
+                //getPreviousWeights(view.getRootView());
             }
             else
                 Toast.makeText(getContext(),"Failed to submit", Toast.LENGTH_SHORT).show();
@@ -105,110 +210,114 @@ public class WeightSelection extends BaseFragment {
      * @param view The view that was inflated in onCreateView
      */
     public void setUpNumberPickers(View view) {
-        np1 = view.findViewById(R.id.numberPicker1);
-        np2 = view.findViewById(R.id.numberPicker2);
-        np3 = view.findViewById(R.id.numberPicker3);
+       //np1 = view.findViewById(R.id.numberPicker1);
+       //np2 = view.findViewById(R.id.numberPicker2);
+       //np3 = view.findViewById(R.id.numberPicker3);
 
-        //Setting up first Number picker
-        np1.setMinValue(0);
-        np1.setMaxValue(9);
-        np1.setValue(0);
-        np1.setWrapSelectorWheel(true);
-        np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+       ////Setting up first Number picker
+       //np1.setMinValue(0);
+       //np1.setMaxValue(9);
+       //np1.setValue(0);
+       //np1.setWrapSelectorWheel(true);
+       //np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             /**
              * Sets what happens when a value is changed
              * @param picker The number picker
              * @param oldVal The last value
              * @param newVal The new value
              */
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
-                //Display the newly selected number from picker
-                digit1 = newVal;
-            }
-        });
+        //    @Override
+        //    public void onValueChange(NumberPicker picker, int oldVal, int newVal){
+        //        //Display the newly selected number from picker
+        //        digit1 = newVal;
+        //    }
+        //});
 
         //Setting up second Number picker
-        np2.setMinValue(0);
-        np2.setMaxValue(9);
-        np2.setValue(0);
-        np2.setWrapSelectorWheel(true);
-        np2.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            /**
-             * Sets what happens when a value is changed
-             * @param picker The number picker
-             * @param oldVal The last value
-             * @param newVal The new value
-             */
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
-                //Display the newly selected number from picker
-                digit2 = newVal;
-            }
-        });
+        //np2.setMinValue(0);
+        //np2.setMaxValue(9);
+        //np2.setValue(0);
+        //np2.setWrapSelectorWheel(true);
+        //np2.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        //    /**
+        //     * Sets what happens when a value is changed
+        //     * @param picker The number picker
+        //     * @param oldVal The last value
+        //     * @param newVal The new value
+        //     */
+        //    @Override
+        //    public void onValueChange(NumberPicker picker, int oldVal, int newVal){
+        //        //Display the newly selected number from picker
+        //        digit2 = newVal;
+        //    }
+        //});
 
         //Setting up third Number picker
-        np3.setMinValue(0);
-        np3.setMaxValue(9);
-        np3.setValue(0);
-        np3.setWrapSelectorWheel(true);
-        np3.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            /**
-             * Sets what happens when a value is changed
-             * @param picker The number picker
-             * @param oldVal The last value
-             * @param newVal The new value
-             */
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
-                //Display the newly selected number from picker
-                digit3 = newVal;
-            }
-        });
+        //np3.setMinValue(0);
+        //np3.setMaxValue(9);
+        //np3.setValue(0);
+        //np3.setWrapSelectorWheel(true);
+        //np3.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        //    /**
+        //     * Sets what happens when a value is changed
+        //     * @param picker The number picker
+        //     * @param oldVal The last value
+        //     * @param newVal The new value
+        //     */
+        //    @Override
+        //    public void onValueChange(NumberPicker picker, int oldVal, int newVal){
+        //        //Display the newly selected number from picker
+        //        digit3 = newVal;
+        //    }
+        //});
     }
     /**
      * Initializes the seek bar
      * @param view The view that was inflated in onCreateView
      */
     public void setUpSeekBar(View view) {
-        sBarText = view.findViewById(R.id.scrollBarText);
-        SeekBar sBar = view.findViewById(R.id.seekBar);
-        sBarText.setText(sBar.getProgress() + " reps");
-        reps = sBar.getProgress();
+        //sBarText = view.findViewById(R.id.scrollBarText);
+        //SeekBar sBar = view.findViewById(R.id.seekBar);
+        //sBarText.setText(sBar.getProgress() + " reps");
+        try {
+            reps = Integer.parseInt(((TextInputLayout) view.findViewById(R.id.repInput)).getEditText().getText().toString());
+        } catch (NumberFormatException e) {
+            System.out.println("Set up seek bar called before submit button pressed\n" + e.getMessage());
+        }
 
 
-        sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            /**
-             * Determines what happens when the progress is changed
-             * @param seekBar The seek bar
-             * @param value The value of the seek bar
-             * @param fromUser True if the value was changed by the user
-             */
+        //sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        //    /**
+        //     * Determines what happens when the progress is changed
+        //     * @param seekBar The seek bar
+        //     * @param value The value of the seek bar
+        //     * @param fromUser True if the value was changed by the user
+        //     */
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
-                reps = value;
-                sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
-            }
+        //    @Override
+        //    public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
+        //        reps = value;
+        //        sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
+        //    }
 
             /**
              * Determines what happens when the user starts to touch the seek bar (currently nothing)
              * @param seekBar The seek bar
              */
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            //@Override
+            //public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
+            //}
 
             /**
              * Determines what happens when the user stops touching the bar
              * @param seekBar The seek bar
              */
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
-            }
-        });
+        //    @Override
+        //    public void onStopTrackingTouch(SeekBar seekBar) {
+        //        sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
+        //    }
+        //});
         //sBarText.setText(getResources().getQuantityString(R.plurals.reps,reps,reps));
     }
 
@@ -224,55 +333,55 @@ public class WeightSelection extends BaseFragment {
             int[] arr = {Integer.parseInt(c.getString(5)),Integer.parseInt(c.getString(6))};
             result.add(arr);
         }
-        TextView weight1 = view.findViewById(R.id.pastWeightText1);
-        TextView weight2 = view.findViewById(R.id.pastWeightText2);
-        TextView weight3 = view.findViewById(R.id.pastWeightText3);
-        TextView rep1 = view.findViewById(R.id.pastRepText1);
-        TextView rep2 = view.findViewById(R.id.pastRepText2);
-        TextView rep3 = view.findViewById(R.id.pastRepText3);
+        //TextView weight1 = view.findViewById(R.id.pastWeightText1);
+        //TextView weight2 = view.findViewById(R.id.pastWeightText2);
+        //TextView weight3 = view.findViewById(R.id.pastWeightText3);
+        //TextView rep1 = view.findViewById(R.id.pastRepText1);
+        //TextView rep2 = view.findViewById(R.id.pastRepText2);
+        //TextView rep3 = view.findViewById(R.id.pastRepText3);
 
-        switch (result.size()) {
-            case 0: //No previous weights
-                weight1.setText(getResources().getString(R.string.null_lbs));
-                rep1.setText(getResources().getString(R.string.null_reps));
+        //switch (result.size()) {
+        //    case 0: //No previous weights
+        //        weight1.setText(getResources().getString(R.string.null_lbs));
+        //        rep1.setText(getResources().getString(R.string.null_reps));
 
-                weight2.setText(getResources().getString(R.string.null_lbs));
-                rep2.setText(getResources().getString(R.string.null_reps));
+        //        weight2.setText(getResources().getString(R.string.null_lbs));
+        //        rep2.setText(getResources().getString(R.string.null_reps));
 
-                weight3.setText(getResources().getString(R.string.null_lbs));
-                rep3.setText(getResources().getString(R.string.null_reps));
-                break;
-            case 1: //Only 1 previous weight
-                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
-                rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
+        //        weight3.setText(getResources().getString(R.string.null_lbs));
+        //        rep3.setText(getResources().getString(R.string.null_reps));
+        //        break;
+        //    case 1: //Only 1 previous weight
+        //        weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
+        //        rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
 
-                weight2.setText(getResources().getString(R.string.null_lbs));
-                rep2.setText(getResources().getString(R.string.null_reps));
+        //        weight2.setText(getResources().getString(R.string.null_lbs));
+        //        rep2.setText(getResources().getString(R.string.null_reps));
 
-                weight1.setText(getResources().getString(R.string.null_lbs));
-                rep1.setText(getResources().getString(R.string.null_reps));
-                break;
-            case 2: //Only 2 previous weights
-                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
-                rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
+        //        weight1.setText(getResources().getString(R.string.null_lbs));
+        //        rep1.setText(getResources().getString(R.string.null_reps));
+        //        break;
+        //    case 2: //Only 2 previous weights
+        //        weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
+        //        rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
 
-                weight2.setText(getResources().getString(R.string.lbs,result.get(1)[0]));
-                rep2.setText(getResources().getQuantityString(R.plurals.reps,result.get(1)[1],result.get(1)[1]));
+        //        weight2.setText(getResources().getString(R.string.lbs,result.get(1)[0]));
+        //        rep2.setText(getResources().getQuantityString(R.plurals.reps,result.get(1)[1],result.get(1)[1]));
 
-                weight1.setText(getResources().getString(R.string.null_lbs));
-                rep1.setText(getResources().getString(R.string.null_reps));
-                break;
-            default: //All 3 previous weights
-                weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
-                rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
+        //        weight1.setText(getResources().getString(R.string.null_lbs));
+        //        rep1.setText(getResources().getString(R.string.null_reps));
+        //        break;
+        //    default: //All 3 previous weights
+        //        weight3.setText(getResources().getString(R.string.lbs,result.get(0)[0]));
+        //        rep3.setText(getResources().getQuantityString(R.plurals.reps,result.get(0)[1],result.get(0)[1]));
 
-                weight2.setText(getResources().getString(R.string.lbs,result.get(1)[0]));
-                rep2.setText(getResources().getQuantityString(R.plurals.reps,result.get(1)[1],result.get(1)[1]));
+        //        weight2.setText(getResources().getString(R.string.lbs,result.get(1)[0]));
+        //        rep2.setText(getResources().getQuantityString(R.plurals.reps,result.get(1)[1],result.get(1)[1]));
 
-                weight1.setText(getResources().getString(R.string.lbs,result.get(2)[0]));
-                rep1.setText(getResources().getQuantityString(R.plurals.reps,result.get(2)[1],result.get(2)[1]));
-                break;
-        }
+        //        weight1.setText(getResources().getString(R.string.lbs,result.get(2)[0]));
+        //        rep1.setText(getResources().getQuantityString(R.plurals.reps,result.get(2)[1],result.get(2)[1]));
+        //        break;
+        //}
         return result;
     }
 
@@ -286,9 +395,12 @@ public class WeightSelection extends BaseFragment {
             lastLift = MainActivity.LIFT;
 
             getPreviousWeights(getView());
-            digit1 = np1.getValue();
-            digit2 = np2.getValue();
-            digit3 = np3.getValue();
+            //
+            // digit1 = np1.getValue();
+            //
+            // digit2 = np2.getValue();
+            //
+            // digit3 = np3.getValue();
         }
     }
 

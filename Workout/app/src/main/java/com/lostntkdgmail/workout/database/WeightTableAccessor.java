@@ -135,15 +135,12 @@ public class WeightTableAccessor extends DatabaseAccessor {
      */
     public boolean updateData(String user, String date, String type, String newLift, String oldLift) {
         Log.d(TAG,"Replacing " + oldLift + " with: " + user + " " + date + " " + type + " " + newLift);
-        System.out.println("Replacing " + oldLift + " with: " + user + " " + date + " " + type + " " + newLift);
 
         String sql = "UPDATE " + TABLE_NAME + " SET " + Columns.LIFT.name() + " = '" + newLift + "' WHERE " + Columns.LIFT.name() + " = '" + oldLift + "';";
         writableDb.execSQL(sql);
 
         Cursor cursor = readableDb.rawQuery(sql, new String[0]);
-        while(cursor.moveToNext()) {
-            System.out.println(cursor.getString(0));
-        }
+
         return cursor.getCount() > 0;
     }
 

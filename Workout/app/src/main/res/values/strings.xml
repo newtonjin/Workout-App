@@ -47,6 +47,12 @@
     <string name="null_reps">-- reps</string>
     <string name="edit_workout">Edit Workout</string>
     <string name="new_workout_name">New Workout Name</string>
+    <string name="sets">Sets</string>
+    <string name="repetitions">Repetitions</string>
+    <string name="weight">Weight</string>
+    <string name="workout">Workout</string>
+    <string name="_0">0</string>
+    <string name="today">Today</string>
     <plurals name="reps">
         <item quantity="zero">-- reps</item>
         <item quantity="one">%d rep</item>
