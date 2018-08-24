@@ -55,10 +55,8 @@ public class GridAdapter extends ArrayAdapter {
             DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
             if(((MainActivity)getContext()).getLiftDates(mDate)) {
                 view.setBackgroundColor(Color.parseColor("#90C048"));
-                System.out.println(formatter.format(mDate) + " IS A DATE WITH LIFTS");
             } else {
                 view.setBackgroundColor(Color.parseColor("#000000"));
-                System.out.println(formatter.format(mDate) + " IS NOT A DATE WITH LIFTS");
             }
         } else {
             view.setBackgroundColor(Color.parseColor("#373737"));

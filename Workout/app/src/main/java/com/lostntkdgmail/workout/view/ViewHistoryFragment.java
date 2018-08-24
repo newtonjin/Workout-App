@@ -75,7 +75,6 @@ public class ViewHistoryFragment extends BaseFragment {
         adapter = new MapAdapter(qResults, getContext(), types, ((MainActivity)getActivity()).liftTable.getLifts(), datePicked);
         listory.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        System.out.println(qResults.size());
     }
 
     @Override

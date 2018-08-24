@@ -53,6 +53,7 @@
     <string name="workout">Workout</string>
     <string name="_0">0</string>
     <string name="today">Today</string>
+    <string name="_1">1</string>
     <plurals name="reps">
         <item quantity="zero">-- reps</item>
         <item quantity="one">%d rep</item>

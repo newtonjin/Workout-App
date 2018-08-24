@@ -86,8 +86,6 @@ public class CalendarFragment extends BaseFragment {
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "Clicked " + parent.getItemAtPosition(position), Toast.LENGTH_LONG).show();
-
                 //calls to update the view history and set as the current fragment
                 ((MainActivity)getActivity()).updateViewHistory((Date) parent.getItemAtPosition(position));
                 ((MainActivity)getActivity()).setViewPager(ViewHistoryFragment.TITLE);

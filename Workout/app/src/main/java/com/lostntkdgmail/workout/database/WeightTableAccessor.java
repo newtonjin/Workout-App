@@ -2,6 +2,7 @@ package com.lostntkdgmail.workout.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.lostntkdgmail.workout.main.MainActivity;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -56,26 +58,32 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param reps The number of reps
      * @return True if the insertion was successful
      */
-    public boolean insert(long user,String type,String lift, int weight, int reps) {
-        Date now = new Date();
-        String printDate = dateFormatter.format(now);
+    public boolean insert(long user,String type,String lift, int weight, int reps, int sets, Date datePicked) {
+        String printDate = dateFormatter.format(datePicked);
 
-        Log.d(TAG,"Inserting: \"" + user +", "+ printDate +", "+ type +", "+ lift +", "+ weight +", "+ reps + "\" into \"" + TABLE_NAME + "\"");
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Columns.USER.name(),user);
-        contentValues.put(Columns.DATE.name(),printDate);
-        contentValues.put(Columns.TYPE.name(),type);
-        contentValues.put(Columns.LIFT.name(),lift);
-        contentValues.put(Columns.WEIGHT.name(),weight);
-        contentValues.put(Columns.REPS.name(),reps);
-        long result = writableDb.insert(TABLE_NAME,null ,contentValues);
-        if(result == -1) {
-            Log.d(TAG, "Failed to inserted");
-            return false;
+            System.out.println("~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~");
+            System.out.printf("INSERTING SET %d TIMES\n \nUSER: %d\nDATE: %s\nTYPE: %s\nLIFT: %s\nREPS: %s\nWEIGHT: %s\n", sets, user, printDate, type, lift, reps, weight);
+            System.out.println("~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~");
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(Columns.USER.name(), user);
+            contentValues.put(Columns.DATE.name(), printDate);
+            contentValues.put(Columns.TYPE.name(), type);
+            contentValues.put(Columns.LIFT.name(), lift);
+            contentValues.put(Columns.WEIGHT.name(), weight);
+            contentValues.put(Columns.REPS.name(), reps);
+
+        for(int i = 0; i < sets; i++) {
+            long result = writableDb.insert(TABLE_NAME, null, contentValues);
+            if (result == -1) {
+                Log.d(TAG, "Failed to inserted");
+                return false;
+            }
         }
-        Log.d(TAG, "Successfully inserted");
+        Log.d(TAG, "Successfully inserted all entries");
         return true;
     }
+
+
     /**
      * Used to select things from inside of the table. Values can be left at null to not filter the data by those columns, however user, type, and lift cannot all be null. One has to be non null.
      * @param user The user to be selected
@@ -84,31 +92,41 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @param sorting SQLite sorting algorithm
      * @return Cursor object with all selected values
      */
-    public Cursor select(long user, String type, String lift, String sorting, String limit) { //TODO: change limit to int eventually
-        Log.d(TAG, "select called");
-        if(user < 0 && type == null && lift == null) {
+    public Cursor select(long user, String type, String lift, String sorting, String limit, Date date) { //TODO: change limit to int eventually
+        //Log.d(TAG, "select called");
+
+        if(user < 0 && type == null && lift == null && date == null) {
             Log.d(TAG, "All values passed to select are null");
             return null;
         }
+
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT * FROM "+TABLE_NAME + " WHERE");
-        if(user > 0) {
-            builder.append(" ").append(Columns.USER.name()).append(" = '").append(user).append("'");
-            if(type != null || lift != null)
-                builder.append(" AND");
-        }
-        if(type != null) {
-            builder.append(" ").append(Columns.TYPE.name()).append(" = '").append(type).append("'");
-            if(lift != null)
-                builder.append(" AND");
-        }
+
+        //"WHERE 42=42 ..." is there so there's no need to worry if you should add an AND into the string or not, you will need to in every case.
+        builder.append("SELECT * FROM "+TABLE_NAME + " WHERE 42=42");
+
+        if(user > 0)
+            builder.append(" AND ").append(Columns.USER.name()).append(" = '").append(user).append("'");
+
+        if(type != null)
+            builder.append(" AND ").append(Columns.TYPE.name()).append(" = '").append(type).append("'");
+
         if(lift != null)
-            builder.append(" ").append(Columns.LIFT.name()).append(" = '").append(lift).append("'");
+            builder.append(" AND ").append(Columns.LIFT.name()).append(" = '").append(lift).append("'");
+
+        if(date != null)
+            builder.append(" AND ").append(Columns.DATE.name()).append(" = '").append(dateFormatter.format(date)).append("'");
+
         if(sorting != null)
             builder.append(" ORDER BY ").append(sorting);
+
         if(Integer.parseInt(limit) > -1)
             builder.append(" LIMIT ").append(limit);
+
         String sql = builder.toString();
+        System.out.println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+        System.out.println(sql);
+        System.out.println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
         Log.d(TAG, "Executing query: "+ sql);
         return readableDb.rawQuery(sql, new String[0]);
     }
@@ -121,7 +139,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
      * @return Cursor object with all selected values
      */
     public Cursor select(long user, String type, String lift) {
-        return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC","0");
+        return select(user,type,lift, Columns.USER.name() + " ASC, " + Columns.TYPE.name() + " ASC, " + Columns.LIFT.name() + " ASC, " + Columns.DATE+ " ASC, " + Columns.ID + " ASC","0", Calendar.getInstance().getTime());
     }
 
     /**
@@ -140,8 +158,10 @@ public class WeightTableAccessor extends DatabaseAccessor {
         writableDb.execSQL(sql);
 
         Cursor cursor = readableDb.rawQuery(sql, new String[0]);
+        boolean b = cursor.getCount() > 0;
 
-        return cursor.getCount() > 0;
+        cursor.close();
+        return b;
     }
 
     public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type, long user) {
@@ -182,7 +202,7 @@ public class WeightTableAccessor extends DatabaseAccessor {
 
     public ArrayList<String> getAllSets(String type, String lift) {
         // get ALL SETS of this type and lift
-        Cursor c = MainActivity.weightTable.select(MainActivity.USER, type, lift, null, "-1");
+        Cursor c = MainActivity.weightTable.select(MainActivity.USER, type, lift, null, "-1", Calendar.getInstance().getTime());
         ArrayList<String> result = new ArrayList<>();
         while(c.moveToNext()) {
             String arr = c.getString(6) + " repetitions of " + c.getString(5) + " LBS";
@@ -213,6 +233,10 @@ public class WeightTableAccessor extends DatabaseAccessor {
         }
 
         String sql = builder.toString();
+
+        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+        System.out.println(sql);
+        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
         Cursor cursor = readableDb.rawQuery(sql, new String[0]);
 

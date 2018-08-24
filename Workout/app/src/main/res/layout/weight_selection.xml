@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:hint="@string/_0" />
+            android:hint="@string/_1" />
     </android.support.design.widget.TextInputLayout>
 
 
