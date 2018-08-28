@@ -87,9 +87,10 @@ public class LiftSelection extends BaseFragment {
                 String lift = (String) liftList.getItemAtPosition(position);
                 Log.d("Debug", "Selected: " + lift);
 
-                MainActivity.LIFT = lift;
+                MainActivity.LIFT = (String)liftList.getItemAtPosition(position);
+
                 int index = ((MainActivity) Objects.requireNonNull(getActivity())).getPagerAdapter().getItemPosition(WeightSelection.TITLE);
-                MainActivity.currentPos++;
+                ((MainActivity)getActivity()).currentPos++;
                 ((MainActivity) getActivity()).setViewPager(WeightSelection.TITLE);
 
             }

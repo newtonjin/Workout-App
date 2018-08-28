@@ -47,7 +47,7 @@ public class WeightSelection extends BaseFragment {
     private int reps = 0;
     private TextView sBarText;
     private NumberPicker np1, np2, np3;
-    private static String lastType, lastLift;
+    public static String lastType, lastLift;
     private static long lastUser;
     private View view;
     EditText editDate;
@@ -69,6 +69,9 @@ public class WeightSelection extends BaseFragment {
 
         TextView workoutTextView = view.findViewById(R.id.workoutTextView);
         workoutTextView.setText("Adding to " + ((MainActivity)getActivity()).TYPE + " - " + ((MainActivity)getActivity()).LIFT);
+
+        String test1 = ((MainActivity)getActivity()).LIFT;
+        String test2 = MainActivity.LIFT;
 
         TextInputLayout set = view.findViewById(R.id.setInput);
         TextInputLayout rep = view.findViewById(R.id.repInput);
@@ -233,8 +236,6 @@ public class WeightSelection extends BaseFragment {
             lastUser = MainActivity.USER;
             lastType = MainActivity.TYPE;
             lastLift = MainActivity.LIFT;
-
-            getPreviousWeights(getView());
         }
     }
 
