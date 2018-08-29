@@ -171,7 +171,11 @@ public class WeightTableAccessor extends DatabaseAccessor {
 
         while(cursor.moveToNext()) {
             ArrayList<String> sets = new ArrayList<>();
-            sets.add(cursor.getString(5) + " repetitions of " + cursor.getString(4) + " lbs");
+            Cursor setsCursor = select(user, type, cursor.getString(3), null, null, datePicked);
+            while(setsCursor.moveToNext()) {
+                sets.add(cursor.getString(5) + " repetitions of " + cursor.getString(4) + " lbs");
+            }
+
             returnMap.put(cursor.getString(3), sets);
         }
 
