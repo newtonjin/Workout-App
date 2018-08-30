@@ -3,6 +3,7 @@ package com.lostntkdgmail.workout.view;
 import android.content.Context;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +56,17 @@ public class GridAdapter extends ArrayAdapter {
             DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
             if(((MainActivity)getContext()).getLiftDates(mDate)) {
                 view.setBackgroundColor(Color.parseColor("#90C048"));
+                view.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.greencircle));
+                view.setPadding(0, 26, 0, 0);
             } else {
-                view.setBackgroundColor(Color.parseColor("#000000"));
+                view.setBackgroundColor(Color.parseColor("#252525"));
+                view.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.graycircle));
+                view.setPadding(0, 26, 0, 0);
             }
         } else {
-            view.setBackgroundColor(Color.parseColor("#373737"));
+            view.setBackgroundColor(Color.parseColor("#000000"));
+            view.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.circle));
+            view.setPadding(0, 26, 0, 0);
         }
         //Add day to calendar
         TextView cellNumber = (TextView)view.findViewById(R.id.calendar_date_id);

@@ -5,12 +5,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!-- android:background="@drawable/circle" -->
+
     <TextView
         android:id="@+id/calendar_date_id"
-        android:layout_width="wrap_content"
+        android:layout_width="58dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingBottom="10sp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="22sp"
         android:paddingTop="25sp"
         android:text="@string/last_date"
         android:textSize="20sp"
@@ -20,7 +24,6 @@
         android:id="@+id/event_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:gravity="end"
         android:orientation="horizontal">
 
