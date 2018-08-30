@@ -40,12 +40,6 @@ public class ViewHistoryFragment extends BaseFragment {
     private ListView listory;
     private MapAdapter adapter;
     private Context mContext;
-    private Date date;
-    private DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
-    private DatePickerDialog picker;
-    private EditText eText;
-    private Button btnGet;
-    private TextView tvw;
 
 
     public ViewHistoryFragment() {

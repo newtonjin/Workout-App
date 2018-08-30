@@ -2,6 +2,7 @@ package com.lostntkdgmail.workout.view;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,8 @@ public class MapAdapter extends BaseAdapter {
             if(!viewMade) {
                 TextView dateDisplay = result.findViewById(R.id.dateDisplay);
                 dateDisplay.setText(new SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(date));
+                dateDisplay.setPadding(0,0,0,40);
+                dateDisplay.setTextSize(25);
 
                 LinearLayout myRoot =  result.findViewById(R.id.my_root);
                 LinearLayout inner = new LinearLayout(context);
@@ -71,22 +74,42 @@ public class MapAdapter extends BaseAdapter {
                     if(innerMap.size() > 0) {
                         TextView currOuter = new TextView(context);
                         currOuter.setText(outerKey);
+                        currOuter.setGravity(Gravity.CENTER);
+                        currOuter.setTextSize(24);
                         myRoot.addView(currOuter);
 
                         // iterating the map<lift, List<Weights & reps>>
                         for(String innerKey : (mData.get(outerKey)).keySet()){
                             TextView currMiddle = new TextView(context);
-                            currMiddle.setPadding(25,0,0,0);
+                            currMiddle.setPadding(0,20,0,40);
+                            currMiddle.setGravity(Gravity.CENTER);
+                            currMiddle.setTextSize(18);
                             currMiddle.setText(innerKey);
                             myRoot.addView(currMiddle);
 
                             // iterating the weights and reps
                             for(String listItem : mData.get(outerKey).get(innerKey)) {
+                                int sets = 1;
+                                mData.get(outerKey).get(innerKey).remove(mData.get(outerKey).get(innerKey).indexOf(listItem));
+                                while (mData.get(outerKey).get(innerKey).contains(listItem)) {
+                                    sets++;
+                                    mData.get(outerKey).get(innerKey).remove(mData.get(outerKey).get(innerKey).indexOf(listItem));
+                                }
                                 TextView currInner = new TextView(context);
-                                currInner.setPadding(50, 0, 0, 0);
-                                currInner.setText(listItem);
+                                currInner.setPadding(0, 0, 0, 10);
+                                currInner.setGravity(Gravity.CENTER);
+                                currInner.setTextSize(14);
+                                if (sets == 1) {
+                                    currInner.setText(sets + "set of " + listItem);
+                                } else {
+                                    currInner.setText(sets + " sets of " + listItem);
+                                }
+
                                 myRoot.addView(currInner);
-                                myRoot.setPadding(10,10,10,10);
+                                myRoot.setPadding(10, 10, 10, 10);
+                                if (mData.get(outerKey).get(innerKey).size() <= 0) {
+                                    break;
+                                }
                             }
                         }
                     }
