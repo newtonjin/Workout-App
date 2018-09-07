@@ -10,6 +10,7 @@ package com.lostntkdgmail.workout.data_entry;
 //TODO: Add what types of lifts were performed in the calendar
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,6 +51,7 @@ public class WeightSelection extends BaseFragment {
     public static String lastType, lastLift;
     private static long lastUser;
     private View view;
+    private String currLift;
     EditText editDate;
     Calendar myCalendar = Calendar.getInstance();
     String dateFormat = "dd MMMM yyyy";
@@ -69,9 +71,6 @@ public class WeightSelection extends BaseFragment {
 
         TextView workoutTextView = view.findViewById(R.id.workoutTextView);
         workoutTextView.setText("Adding to " + ((MainActivity)getActivity()).TYPE + " - " + ((MainActivity)getActivity()).LIFT);
-
-        String test1 = ((MainActivity)getActivity()).LIFT;
-        String test2 = MainActivity.LIFT;
 
         TextInputLayout set = view.findViewById(R.id.setInput);
         TextInputLayout rep = view.findViewById(R.id.repInput);
@@ -166,6 +165,11 @@ public class WeightSelection extends BaseFragment {
         editDate.setText(sdf.format(myCalendar.getTime()));
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
     /**
      * Submits the weight into the database
      */
@@ -244,4 +248,8 @@ public class WeightSelection extends BaseFragment {
         return TITLE;
     }
 
+    public void updateLift() {
+        TextView workoutTextView = view.findViewById(R.id.workoutTextView);
+        workoutTextView.setText("Adding to " + ((MainActivity)getActivity()).TYPE + " - " + ((MainActivity)getActivity()).LIFT);
+    }
 }

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -87,20 +88,26 @@ public class MapAdapter extends BaseAdapter {
                             currMiddle.setText(innerKey);
                             myRoot.addView(currMiddle);
 
-                            // iterating the weights and reps
-                            for(String listItem : mData.get(outerKey).get(innerKey)) {
+                            // iterating the weights and reps, had to use iterator to avoid concurrent access exceptions
+                            Iterator<String> it = mData.get(outerKey).get(innerKey).iterator();
+                            while(it.hasNext()){
+                                String listItem = it.next();
+                                // compacts identical entries and increments the number of sets to be more readable
                                 int sets = 1;
-                                mData.get(outerKey).get(innerKey).remove(mData.get(outerKey).get(innerKey).indexOf(listItem));
+                                it.remove();
+                                // if the removed string still exists in the list, it must be a different set.
                                 while (mData.get(outerKey).get(innerKey).contains(listItem)) {
                                     sets++;
                                     mData.get(outerKey).get(innerKey).remove(mData.get(outerKey).get(innerKey).indexOf(listItem));
                                 }
+
                                 TextView currInner = new TextView(context);
                                 currInner.setPadding(0, 0, 0, 10);
                                 currInner.setGravity(Gravity.CENTER);
                                 currInner.setTextSize(14);
+
                                 if (sets == 1) {
-                                    currInner.setText(sets + "set of " + listItem);
+                                    currInner.setText(sets + " set of " + listItem);
                                 } else {
                                     currInner.setText(sets + " sets of " + listItem);
                                 }

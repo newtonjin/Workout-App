@@ -26,6 +26,8 @@ import java.util.Map;
  * An Accessor used to access the Weight Table in the Workout database
  */
 public class WeightTableAccessor extends DatabaseAccessor {
+
+
     public enum Columns {
         rowid, USER, DATE, TYPE, LIFT, WEIGHT, REPS
     }
@@ -161,6 +163,8 @@ public class WeightTableAccessor extends DatabaseAccessor {
     }
 
     public Map<String, ArrayList<String>> getLiftsByDate(Date datePicked, String type, long user) {
+        System.out.println("~~~~~~~~~~~~~~~ GET LIFTS BY DATE ~~~~~~~~~~~~~~~~~~");
+        System.out.println(type);
         Log.d(TAG, "getLiftsByDate called");
 
         Cursor cursor = select(user, type, null, null, null, datePicked);
@@ -173,9 +177,13 @@ public class WeightTableAccessor extends DatabaseAccessor {
             ArrayList<String> sets = new ArrayList<>();
             Cursor setsCursor = select(user, type, cursor.getString(3), null, null, datePicked);
             while(setsCursor.moveToNext()) {
-                sets.add(cursor.getString(5) + " repetitions of " + cursor.getString(4) + " lbs");
-            }
+                System.out.println("~~~~~~~~~INNER~~~~~~~~~~~~");
 
+                String debug = setsCursor.getString(5) + " repetitions of " + setsCursor.getString(4) + " lbs";
+                System.out.println(debug);
+                sets.add(debug);
+            }
+            setsCursor.close();
             returnMap.put(cursor.getString(3), sets);
         }
 
@@ -190,6 +198,13 @@ public class WeightTableAccessor extends DatabaseAccessor {
         writableDb.execSQL(sql);
         return (readableDb.query(TABLE_NAME, new String[]{Columns.LIFT.name()}, Columns.LIFT.name() + " = '" + lift + "'", null, null, null, null).getCount() == 0);
     }
+
+    public boolean deleteLiftByDate(Date datePicked_) {
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE " + Columns.DATE.name() + " = '" + dateFormatter.format(datePicked_) + "';";
+        writableDb.execSQL(sql);
+        return select(MainActivity.USER, null, null, null, null, datePicked_).getCount() == 0;
+    }
+
 
     public boolean hasLiftOnDate(Date date_) {
         Log.d(TAG, "select called");

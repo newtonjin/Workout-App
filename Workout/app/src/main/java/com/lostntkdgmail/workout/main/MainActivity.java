@@ -8,6 +8,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -47,6 +48,8 @@ public class MainActivity extends FragmentActivity {
     public static UserTableAccessor userTable;
     public static WeightTableAccessor weightTable;
     private BottomNavigationView navBar;
+
+
 
     /**
      * Determines what happens when the Activity is created. Sets up the menus, initializes the database accessors and various variables.
@@ -330,4 +333,8 @@ public class MainActivity extends FragmentActivity {
     }
 
 
+    public void updateWeightTitle() {
+        ((WeightSelection)pagerAdapter.getFragmentByTitle(WeightSelection.TITLE)).updateLift();
+
+    }
 }
