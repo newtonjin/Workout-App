@@ -1,5 +1,10 @@
 package com.lostntkdgmail.workout.main;
 
+/* Created by Tom Pedraza and Tyler Atkinson
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,8 +70,6 @@ public class MainActivity extends FragmentActivity {
         LIFT = liftTable.getLifts(TYPE)[0];
         USER = Long.parseLong(userTable.getAllIds()[0]);
         setContentView(R.layout.activity_main);
-
-        System.out.println("00ۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗۗ");
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 

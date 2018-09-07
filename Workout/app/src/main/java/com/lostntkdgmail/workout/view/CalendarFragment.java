@@ -1,5 +1,10 @@
 package com.lostntkdgmail.workout.view;
 
+/* Created by Tom Pedraza
+* Workout-App
+* https://github.com/tha7556/Workout-App
+*/
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;

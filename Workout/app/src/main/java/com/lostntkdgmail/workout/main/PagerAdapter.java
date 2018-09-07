@@ -1,5 +1,10 @@
 package com.lostntkdgmail.workout.main;
 
+/* Created by Tom Pedraza and Tyler Atkinson
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

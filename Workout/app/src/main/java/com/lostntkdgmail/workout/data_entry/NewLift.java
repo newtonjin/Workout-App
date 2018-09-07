@@ -1,5 +1,10 @@
 package com.lostntkdgmail.workout.data_entry;
 
+/* Created by Tom Pedraza and Tyler Atkinson
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;

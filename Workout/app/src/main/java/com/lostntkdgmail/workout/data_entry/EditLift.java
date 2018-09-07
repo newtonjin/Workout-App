@@ -1,6 +1,10 @@
 package com.lostntkdgmail.workout.data_entry;
 
-import android.database.Cursor;
+/* Created by Tom Pedraza
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -9,14 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lostntkdgmail.workout.R;
-import com.lostntkdgmail.workout.data_entry.LiftSelection;
-import com.lostntkdgmail.workout.database.LiftTableAccessor;
-import com.lostntkdgmail.workout.database.UserTableAccessor;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
 

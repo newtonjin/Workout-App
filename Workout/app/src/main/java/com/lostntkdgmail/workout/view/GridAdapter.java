@@ -1,5 +1,10 @@
 package com.lostntkdgmail.workout.view;
 
+/* Created by Tom Pedraza
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
 import android.content.Context;
 
 import android.graphics.Color;
@@ -23,8 +28,6 @@ import java.util.Locale;
 
 public class GridAdapter extends ArrayAdapter {
 
-    //TODO increase the height of each box
-    //TODO pass the full list of lifts here so it can be marked by the calendar
     private static final String TAG = GridAdapter.class.getSimpleName();
     private LayoutInflater mInflater;
     private List<Date> monthlyDates;

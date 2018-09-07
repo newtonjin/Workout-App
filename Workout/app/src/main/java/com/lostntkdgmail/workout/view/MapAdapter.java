@@ -1,5 +1,11 @@
 package com.lostntkdgmail.workout.view;
 
+/* Created by Tom Pedraza
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.Gravity;
@@ -58,7 +64,6 @@ public class MapAdapter extends BaseAdapter {
             result = convertView;
         }
 
-        //TODO: if not checked by this boolean the view will be added many times, fix dis
             if(!viewMade) {
                 TextView dateDisplay = result.findViewById(R.id.dateDisplay);
                 dateDisplay.setText(new SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(date));

@@ -1,5 +1,10 @@
 package com.lostntkdgmail.workout.data_entry;
 
+/* Created by Tom Pedraza and Tyler Atkinson
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
 //TODO: Add ability to view/edit/delete past entries
 //TODO: Add ability to edit types of workouts
 //TODO: Eventually add Landscape support, not sure how it currently behaves with different screen types, tablets?

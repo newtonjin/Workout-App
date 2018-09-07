@@ -1,5 +1,10 @@
 package com.lostntkdgmail.workout.users;
 
+/* Created by Tyler Atkinson
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;

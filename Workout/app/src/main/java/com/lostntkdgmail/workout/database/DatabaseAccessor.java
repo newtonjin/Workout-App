@@ -1,5 +1,10 @@
 package com.lostntkdgmail.workout.database;
 
+/* Created by Tyler Atkinson
+ * Workout-App
+ * https://github.com/tha7556/Workout-App
+ */
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;

@@ -1,41 +1,33 @@
 package com.lostntkdgmail.workout.view;
 
+/*
+* Created by Tom Pedraza
+* Workout-App
+* https://github.com/tha7556/Workout-App
+*/
+
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.lostntkdgmail.workout.R;
-import com.lostntkdgmail.workout.data_entry.LiftSelection;
-import com.lostntkdgmail.workout.database.LiftTableAccessor;
 import com.lostntkdgmail.workout.main.BaseFragment;
 import com.lostntkdgmail.workout.main.MainActivity;
-import com.lostntkdgmail.workout.main.PagerAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 public class ViewHistoryFragment extends BaseFragment {
 
@@ -100,14 +92,19 @@ public class ViewHistoryFragment extends BaseFragment {
     public void initList(Date datePicked) {
         this.datePicked = datePicked;
 
+        // types that map to lifts that map to db entries
         Map<String, Map<String, ArrayList<String>>> qResults = new HashMap<>();
         types = ((MainActivity)getActivity()).liftTable.getTypes();
         lifts = ((MainActivity)getActivity()).liftTable.getLifts();
 
+        //building the maps entries
         for(String type : types) {
+            //puts entries (separated by dates) the array list
             Map<String, ArrayList<String>> innerMap = ((MainActivity)getActivity()).weightTable.getLiftsByDate(this.datePicked, type, ((MainActivity)getActivity()).USER);
             qResults.put(type, innerMap);
         }
+
+        //refresh map adapter
         adapter = new MapAdapter(qResults, getContext(), types, ((MainActivity)getActivity()).liftTable.getLifts(), this.datePicked);
         listory.setAdapter(adapter);
         adapter.notifyDataSetChanged();
