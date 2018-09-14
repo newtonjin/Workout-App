@@ -104,6 +104,7 @@ public class MapAdapter extends BaseAdapter {
                                 while (mData.get(outerKey).get(innerKey).contains(listItem)) {
                                     sets++;
                                     mData.get(outerKey).get(innerKey).remove(mData.get(outerKey).get(innerKey).indexOf(listItem));
+                                    it = mData.get(outerKey).get(innerKey).iterator();
                                 }
 
                                 TextView currInner = new TextView(context);

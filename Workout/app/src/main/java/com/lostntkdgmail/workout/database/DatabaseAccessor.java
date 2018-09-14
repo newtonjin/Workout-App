@@ -5,6 +5,7 @@ package com.lostntkdgmail.workout.database;
  * https://github.com/tha7556/Workout-App
  */
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -26,6 +27,8 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     private final String[] col;
     protected SQLiteDatabase readableDb, writableDb;
     protected Resources resources;
+
+
 
     /**
      * Creates a new DatabaseAccessor
@@ -63,8 +66,24 @@ public abstract class DatabaseAccessor extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { //TODO: This wipes the database completely, modifying would be better
         if(oldVersion < newVersion) {
             Log.d(TAG, "Upgrading Database: " + TABLE_NAME + " from version: " + oldVersion + " to version: " + newVersion);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(db);
+            //db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            //onCreate(db);
+            Cursor oldDB = db.query(TABLE_NAME, null, null, null, null, null, null);
+            Cursor newDB = readableDb.query(TABLE_NAME, null, null, null, null, null, null);
+            int cols = oldDB.getColumnCount();
+            int rows = oldDB.getCount();
+            if (newDB.getColumnCount() != cols && newDB.getCount() != rows) {
+                while (oldDB.moveToNext()) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(WeightTableAccessor.Columns.USER.name(), oldDB.getString(0));
+                    cv.put(WeightTableAccessor.Columns.DATE.name(), oldDB.getString(1));
+                    cv.put(WeightTableAccessor.Columns.TYPE.name(), oldDB.getString(2));
+                    cv.put(WeightTableAccessor.Columns.LIFT.name(), oldDB.getString(3));
+                    cv.put(WeightTableAccessor.Columns.WEIGHT.name(), oldDB.getString(4));
+                    cv.put(WeightTableAccessor.Columns.REPS.name(), oldDB.getString(5));
+                    writableDb.insert(TABLE_NAME, null, null);
+                }
+            }
         }
     }
 
